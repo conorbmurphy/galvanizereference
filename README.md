@@ -1,10 +1,20 @@
 # Galvanize Reference #
-This is designed to be a catch-all for reference documents during my time at Galvanize
+
+This is designed to be a catch-all reference tool for my time in Galvanize's Data Science Immersive program.  Others might find it of use as well.
 
 ---
 
 ## Python ##
 
+#### Data Types ####
+
+#### Subsetting ####
+
+#### Built-in Functions ####
+
+#### List Comprehension ####
+
+#### Lambda Functions ####
 ---
 
 ### Python Packages - numpy ###
@@ -35,6 +45,8 @@ This is designed to be a catch-all for reference documents during my time at Gal
 
 ---
 
-## Note on Style ##
+## Note on Style and Other Tools ##
 
 https://www.python.org/dev/peps/pep-0008/
+jupyter
+iPython
