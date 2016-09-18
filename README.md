@@ -6,6 +6,17 @@ This is designed to be a catch-all reference tool for my time in Galvanize's Dat
 
 ## Python ##
 
+There are many different programming paradigms such as declarative, functional, and procedural.  Object-oriented programming (OOP) languages (and Python in particular) allows for much of the functionality of these other paradigms.  One of the values of OOP is encapsulation, which makes working in teams easy.  Objects are a combination of state and behavior.  The benefits of OOP include:
+
+* Readability
+* Complexity management (scoping)
+* Testability
+* Isolated modifications
+* DRY code (don't repeat yourself)
+* Confidence
+
+OOP has classes and objects.  A class is a combination of state and behaviors.  Python has a logic where everybody can access anything, making it difficult to obfuscate code.  This makes Python particularly adept for the open source community.
+
 #### Data Types ####
 
 * `string:` immutable
@@ -112,6 +123,46 @@ Hashing allows us to retrieve information much more quickly because we can go di
 * `zip()`:
 * `__import__()`:
 
+#### Classes ####
+
+To make a class:
+
+class MapPoint(object): # This is extending from the object class (inheratance)
+     def __init__(self):
+          self.x = None
+          self.y = None
+     def lon(self): # This is a method, or a function w/in a class
+          return self.x
+
+Magic methods allow you to define things like printing and comparing values:
+
+def __cmp__(self, other):
+     if self._fullness < other._fullness:
+          return -1 # This is a convention
+     elif self._fullness > other._fullness:
+          return 1
+     elif self._fullness == other._fullness:
+          return 0
+     else:
+          raise ValueError(“Couldn’t compare {} to {}”.format(self, other))
+
+A decorator is a way to say that you're going to access some attribute of a class as though it's not a function.  This is not a function; it's encapsulated.
+@property
+def full(self):
+     return self._fullness == self._capacity
+
+@property
+def empty(self):
+     return self._fullness == 0
+
+Basic vocabulary regarding classes:
+
+* `encapsulation` is the idea that you don’t need to worry about the specifics of how a given thing is working.  
+* `composition` is the idea that things can be related (fruit to backpacks, for instance).  
+* `Inheritance` is where children take the quality of their parents
+* `Polymorphism` is where you customize a given behavior for a child
+
+Reference: http://www.rafekettler.com/magicmethods.html
 
 #### List Comprehension ####
 
@@ -121,17 +172,25 @@ Lambda functions are for defining functions without a name:
      lambda x, y : x + y
      map(lambda x: x**2)
 
-#### Classes ####
-
-@property # decorator
-Magic methods: http://www.rafekettler.com/magicmethods.html
 
 #### Testing and Debugging ####
-1. Use test_[file to test].py
-2. Use `from unittest import TestCase`
+* add this in line you're examining: import pdb; pdb.set_trace()
+* Use test_[file to test].py when labeling test files
+* Use `from unittest import TestCase`
 
-add this in line you're examining: import pdb; pdb.set_trace()
+
 nosetests
+
+from unittest import TestCase
+
+class OOPTests(TestCase):
+
+     def test_backpack(self):
+          pack = Backpack()
+          x = 1
+          pack.throw_in(x)
+          self.assertIn(1, pack._items)
+You need assertions in unittest in order to test things.
 
 #### A Note on Style ####
 
@@ -145,6 +204,15 @@ pep8 help # at the terminal, this will help you evaluate your code for pep8
 Use this block to run code if the .py doc is called directly but not if imported as a module:
   if __name__ == ‘__main__’:
     [Code to run if called directly here]
+
+There’s a package called flake8 which combines pep8 (the style guide) with flake (with code introspection, eg flagging calling a variable you didn’t define).  You should be able to install this for Atom
+
+#### Common Errors ####
+
+Here are some common errors to avoid:
+
+* `AttributeError`: Thrown when you call an attribute an object doesn't have
+* `ZeroError`: Thrown when dividing by a zero
 
 ---
 
@@ -264,3 +332,4 @@ Sniffer which wraps nose tests so every time you save a file it will automatical
 ## Interview Questions Topics ##
 
 Runtime analysis is a popular interview topic: do you understand the concequences of what you’ve written?  Use generators and dicts when possible.
+You need to know the basics of OOP in interviews.  A common interview question is how to design a game: start with designing classes.
