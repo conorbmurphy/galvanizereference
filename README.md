@@ -22,7 +22,7 @@ OOP has classes and objects.  A class is a combination of state and behaviors.  
 #### Data Types ####
 
 * `string:` immutable
-..* string = string['abc']; str[-1] # note indexing is cardinal, not oridinal like R
+  * string = string['abc']; str[-1] # note indexing is cardinal, not oridinal like R
 * `tuple:` immutable
 * `int:` immutable
 * `float:` immutable
