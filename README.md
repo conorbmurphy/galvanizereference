@@ -259,7 +259,7 @@ Objects:
  * `inventory.T`: Transpose of inventory
  * `inventory.price`: Returns a series of that column
  * `inventory.drop(['pear'], axis = 0)`: deletes row 'pear'
- * `inventory.drop(['price'], axis = 1)`: deletes column 'price'
+ * `inventory.drop(['price'], axis = 1, inplace = True)`: deletes column 'price' and applies to current df
 
 Common functions:
 
@@ -267,6 +267,19 @@ Common functions:
 * `prices.std()`
 * `prices.median()`
 * `prices.describe()`
+* `pd.concat(frames)`: Concats a list of objects
+* `pd.merge(self, right, on = 'key')`: joins df's.  Can specify left_on, right_on if column names are different.  You can also specify how for inner or outer.
+
+**Split-apply-combine** is a strategy for working on groups of data where you split the data based upon a given characteristic, apply a function, and combine it into a new object.
+
+      `inventory = pd.DataFrame({'price': [1, 2, 3, 4, 5], 'inventory': prices.index})`
+      `inventory['abovemean'] = inventory.price > 2.5`
+
+* `grouped = inventory.groupby('abovemean')`: creates groupby object
+* `grouped.aggregate(np.sum)`: aggregates the sum of those above the mean versus below the mean
+* `grouped.transform(lambda x: x - x.mean())`: tranforms groups by lambda equation
+* `grouped.filter(lambda x: len(x)>2)`: filters by lambda function
+* `grouped.apply(sum)`: applies sum to each column by `abovemean`
 
 ---
 
@@ -286,7 +299,20 @@ Combinatoric generators
 
 ### Python Packages - matbplotlib ###
 
-import matplotlib.pyplot as plt
+Matplotlib is the defacto choice for plotting in python.  There's also Plotly, Bokeh, Seaborne, Pandas, and ggplot (port of R package).  Seaborne and Pandas were both built on matplotlib.  Import it using `import matplotlib.pyplot as plt`.
+
+There are three levels it can be accesed on:
+
+1. plt - minimal, fast interface
+2. OO interface w/ pyplot - fine-grained control over figure, axes, etc
+3. pure OO interface - embed plots in GUI applications (will probably never use)
+
+      x_data = np.arange(0, 4, .011)
+      y_data = np.sin(x_data)
+      plt.plot(x_data, y_data)
+      plt.show
+
+The objects involved are the figure and axes.  We can call individual axes, but normally we deal with them together.  The figure defines the area on which we can draw.  The axes is how we plot specific data.
 
 ---
 
@@ -425,6 +451,7 @@ Sniffer which wraps nose tests so every time you save a file it will automatical
 
 ## Interview Questions Topics ##
 
+* Narrative: why do you want to be a data scientist?
 * Runtime analysis:
   * do you understand the concequences of what you’ve written?  Use generators and dicts when possible.
   * Indexes can speed up queries (btree is common, allowing you to subdivide values.)
