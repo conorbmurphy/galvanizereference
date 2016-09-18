@@ -2,6 +2,8 @@
 
 This is designed to be a catch-all reference tool for my time in Galvanize's Data Science Immersive program.  Others might find it of use as well.
 
+The main responsibilities of a data scientist are ideation, SQL, feature engineering, modeling, and presentation.  In practice, data scientists spend a good majority of their time in SQL.
+
 ---
 
 ## Python ##
@@ -20,7 +22,7 @@ OOP has classes and objects.  A class is a combination of state and behaviors.  
 #### Data Types ####
 
 * `string:` immutable
-** string = string['abc']; str[-1] # note indexing is cardinal, not oridinal like R
+..* string = string['abc']; str[-1] # note indexing is cardinal, not oridinal like R
 * `tuple:` immutable
 * `int:` immutable
 * `float:` immutable
@@ -331,5 +333,6 @@ Sniffer which wraps nose tests so every time you save a file it will automatical
 
 ## Interview Questions Topics ##
 
-Runtime analysis is a popular interview topic: do you understand the concequences of what you’ve written?  Use generators and dicts when possible.
-You need to know the basics of OOP in interviews.  A common interview question is how to design a game: start with designing classes.
+* Runtime analysis is a popular interview topic: do you understand the concequences of what you’ve written?  Use generators and dicts when possible.
+* You need to know the basics of OOP in interviews.  A common interview question is how to design a game: start with designing classes.
+* SQL will be addressed on all interviews
