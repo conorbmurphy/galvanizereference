@@ -131,24 +131,24 @@ Hashing allows us to retrieve information much more quickly because we can go di
 
 To make a class:
 
-  class MapPoint(object): # This is extending from the object class (inheratance)
-       def __init__(self):
-            self.x = None
-            self.y = None
-       def lon(self): # This is a method, or a function w/in a class
-            return self.x
+      class MapPoint(object): # This is extending from the object class (inheratance)
+           def __init__(self):
+                self.x = None
+                self.y = None
+           def lon(self): # This is a method, or a function w/in a class
+                return self.x
 
 Magic methods allow you to define things like printing and comparing values:
 
-  def __cmp__(self, other):
-       if self._fullness < other._fullness:
-            return -1 # This is a convention
-       elif self._fullness > other._fullness:
-            return 1
-       elif self._fullness == other._fullness:
-            return 0
-       else:
-            raise ValueError(“Couldn’t compare {} to {}”.format(self, other))
+      def __cmp__(self, other):
+           if self._fullness < other._fullness:
+                return -1 # This is a convention
+           elif self._fullness > other._fullness:
+                return 1
+           elif self._fullness == other._fullness:
+                return 0
+           else:
+                raise ValueError(“Couldn’t compare {} to {}”.format(self, other))
 
 A decorator is a way to say that you're going to access some attribute of a class as though it's not a function.  This is not a function; it's encapsulated.
 @property
@@ -189,7 +189,7 @@ from unittest import TestCase
 
 class OOPTests(TestCase):
 
-     def test_backpack(self):
+      def test_backpack(self):
           pack = Backpack()
           x = 1
           pack.throw_in(x)
