@@ -20,6 +20,7 @@ OOP has classes and objects.  A class is a combination of state and behaviors.  
 #### Data Types ####
 
 * `string:` immutable
+** string = string['abc']; str[-1] # note indexing is cardinal, not oridinal like R
 * `tuple:` immutable
 * `int:` immutable
 * `float:` immutable
@@ -27,7 +28,6 @@ OOP has classes and objects.  A class is a combination of state and behaviors.  
 * `dict:` mutable, uses append, a series of hashable key/value pairs.
 * `set:` mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set).
 
-string = string['abc']; str[-1] # note indexing is cardinal, not oridinal like R
 tuple = (5, 3, 8); tuple[3]
   tuple2 = (tuple, 2, 14) # nested tuple
 list = [5, 5, 7, 1]; list[2]
