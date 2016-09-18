@@ -21,23 +21,25 @@ OOP has classes and objects.  A class is a combination of state and behaviors.  
 
 #### Data Types ####
 
-* `string:` immutable
+* `string`: immutable
   * string = string['abc']; str[-1] # note indexing is cardinal, not oridinal like R
-* `tuple:` immutable
-* `int:` immutable
-* `float:` immutable
-* `list:` mutable, uses append
-* `dict:` mutable, uses append, a series of hashable key/value pairs.
-* `set:` mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set).
+* `tuple`: immutable
+  * tuple = (5, 3, 8); tuple[3]
+  * tuple2 = (tuple, 2, 14) # nested tuple
+* `int`: immutable
+* `float`: immutable
+* `list`: mutable, uses append
+  * list = [5, 5, 7, 1]; list[2]
+  * list2 = [list, 23, list] # nested list
+* `dict`: mutable, uses append, a series of hashable key/value pairs.
+  * dict = {‘key’: 'value', 'first': 1};
+  * dict['first'];
+  * dict.keys(); dict.values();
+  * dict['newkey'] = 'value'
+* `set`: mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set).
 
-tuple = (5, 3, 8); tuple[3]
-  tuple2 = (tuple, 2, 14) # nested tuple
-list = [5, 5, 7, 1]; list[2]
-  list2 = [list, 23, list] # nested list
-dict = {‘key’: 'value', 'first': 1};
-  dict['first'];
-  dict.keys(); dict.values();
-  dict['newkey'] = 'value'
+
+
 
 Hashing allows us to retrieve information much more quickly because we can go directly to a value, similar to a card in a card catalogue.  
 
