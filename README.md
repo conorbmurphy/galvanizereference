@@ -2,7 +2,23 @@
 
 This is designed to be a catch-all reference tool for my time in Galvanize's Data Science Immersive program.  Others might find it of use as well.
 
-The main responsibilities of a data scientist are ideation, SQL, feature engineering, modeling, and presentation.  In practice, data scientists spend a good majority of their time in SQL.
+The main responsibilities of a data scientist are:
+
+1. ideation (experimental design)
+2. importing (SQL/postgres/psycopg2)
+ * defining the ideal dataset
+ * understanding your data compares to the ideal
+4. exploratory analysis (python/pandas)
+ * summaries
+ * missing data
+ * exploratory plots
+ * exploratory analyses
+4. data munging (pandas)
+5. feature engineering
+6. modeling
+7. presentation
+
+In practice, data scientists spend a good majority of their time in SQL.
 
 ---
 
@@ -229,10 +245,28 @@ Here are some common errors to avoid:
 
 ### Python Packages - pandas ###
 
-Data munging, python equivalent of dplyr.  
+Pandas is a library for data manipulation and analysis, the python equivalent of R's dplyr.  Pandas objects are based on numpy arrays so **vectorized options (e.g. apply) over iterative ones offer large performance increases.**
 
 Objects:
-1. `series:`
+
+* `series`: `prices = pd.Series([1, 2, 3, 4, 5], index = ['apple', 'pear', 'banana', 'mango', 'jackfruit'])``
+ * `prices.iloc[1:3]`: works on position, returns rows 1 stopping 1 before 3
+ * `prices.loc['pear']`: works on index, returns row 'pear'
+ * `prices.loc['pear':]`: Returns pear on
+ * `prices.ix[1:4]`: Similar but returns index and value
+ * `prices['inventory' > 20]`: subsets based on a boolean string
+* `dataframe`: `inventory = pd.DataFrame({'price': [1, 2, 3, 4, 5], 'inventory': prices.index})`
+ * `inventory.T`: Transpose of inventory
+ * `inventory.price`: Returns a series of that column
+ * `inventory.drop(['pear'], axis = 0)`: deletes row 'pear'
+ * `inventory.drop(['price'], axis = 1)`: deletes column 'price'
+
+Common functions:
+
+* `prices.mean()`
+* `prices.std()`
+* `prices.median()`
+* `prices.describe()`
 
 ---
 
@@ -262,22 +296,77 @@ import matplotlib.pyplot as plt
 
 ## SQL ##
 
-Access SQL through `sqlite3 [.sql file]` at the command line.
-Also accessible through postgres.
+SQL (Structured Query Language) is a special-purpose programming language designed for managing data held in relational database management systems (RDBMS).  In terms of market share, the following database engines are most popular: Oracle, MySQL, Microsoft SQL Server, and PostgreSQL (or simply Postgres, the open source counterpart to the other, more popular proprietary products).  While Postgres is the database system we will be working with, psql is the command-line program which can be used to enter SQL queries directly or execute them from a file.
 
+Steps to setting up a local database using psql (you can also access SQL using sqlite3 [filename.sql]):
 
-There are a few types of joins:
+1. Open Postgres
+2. Type `psql` at the command line
+3. Type `CREATE DATABASE [name];`
+4. Quit psql (`\q`)
+5. Navigate to where the .sql file is stored
+6. Type `psql [name] < [filename.sql]`
+7. Type `psql readychef`
 
-1. `INNER JOIN:` joins based on rows that appear in both tables.  This is the default for saying simply JOIN
+Basic commands:
+
+* `\d`: returns the name of all tables in the database
+* `\d [table]`: returns table schema
+* `;`: excecutes a query
+* `\help` or `\?`: help
+* `\q`: quit
+
+**To understand SQL, you must understand SELECT statements.**  All SQL queries have three main ingredients:
+
+1. `SELECT`: What data do you want?
+2. `FROM`: Where do you want that data from?
+3. `WHERE`: Under what conditions?
+
+The order of evaluation of a SQL SELECT statement is as follows:
+
+1. `FROM + JOIN`: first the product of all tables is formed
+2. `WHERE`: the where clause filters rows that do not meet the search condition
+3. `GROUP BY + (COUNT, SUM, etc)`: the rows are grouped using the columns in the group by clause and the aggregation functions are applied on the grouping
+4. `HAVING`: like the WHERE clause, but can be applied after aggregation
+5. `SELECT`: the targeted list of columns are evaluated and returned
+6. `DISTINCT`: duplicate rows are eliminated
+7. `ORDER BY`: the resulting rows are sorted
+
+Here are some common commands on SELECT statements:
+
+* `*`
+* `COUNT`
+* `MAX or MIN`
+* `DISTINCT`
+* `SUM`
+
+Other:
+
+* `GROUP BY`: subsets by this value
+* `ORDER BY [value] DESC`: orders result
+* `HAVING`:
+* `CASE WHEN gender = 'F' THEN 'female' ELSE 'male' END AS gender_r`: this is SQL's if/else construction.  This is good for dealing with null values
+
+Joins are used to query across multiple tables using foreign keys.  **Every join has two segments: the tables to join and the columns to match.**  There are three types of joins that should be imagined as a venn diagram:
+
+1. `INNER JOIN:` joins based on rows that appear in both tables.  This is the default for saying simply JOIN and would bee the center portion of the venn diagram.
 ** SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name
 ** SELECT c.id, v.created at FROM customers as c, visits as v WEHRE c.id = v.customer_id # joins w/o specifying it's a join
-2. `LEFT OUTER JOIN:` joins based on all rows on the left table even if there are no values on the right table
-3. `RIGHT OUTER JOIN:` joins based on all rows on the left table even if there are no values on the right table
-4. `FULL OUTER JOIN:` joins all rows from both tables even if there are some in either the left or right tables that don't match
+2. `LEFT OUTER JOIN:` joins based on all rows on the left table even if there are no values on the right table.  A right join is possible too, but is only the inverse of a left join.  This would bee the left two sections of a venn diagram.
+3. `FULL OUTER JOIN:` joins all rows from both tables even if there are some in either the left or right tables that don't match.  This would be all three sections of a venn diagram.
 
 Resources:
-1. http://sqlzoo.net/wiki/SELECT_basics
-2. An illustrated explanation of joins: https://blog.codinghorror.com/a-visual-explanation-of-sql-joins/
+* http://sqlzoo.net/wiki/SELECT_basics
+* An illustrated explanation of joins: https://blog.codinghorror.com/a-visual-explanation-of-sql-joins/
+* Databases by market share: http://db-engines.com/en/ranking
+* SQL practice: https://pgexercises.com/
+
+### SQL using Pandas and Psycopg2 ###
+
+You can make connections to Postgres databases using psycopg2 including creating cursors for SQL queries, commit SQL actions, and close the cursor and connection.  **Commits are all or nothing: if they fail, no changes will be made to the database.**  You can set `autocommit = True` to automatticaly commit after each query.  A cursor points at the resulting output of a query and can only read each observation once.  If you want to see a previously read observation, you must rerun the query.
+
+**Beware of SQL injection where you add code.**  Use `%s` where possible, which will be examined by psychopg2 to make sure you're not injecting anything.  You can use ORM's like ruby on rails or the python equivalent jengo to take care of SQL injection too.
+
 
 ---
 
@@ -336,6 +425,11 @@ Sniffer which wraps nose tests so every time you save a file it will automatical
 
 ## Interview Questions Topics ##
 
-* Runtime analysis is a popular interview topic: do you understand the concequences of what you’ve written?  Use generators and dicts when possible.
+* Runtime analysis:
+  * do you understand the concequences of what you’ve written?  Use generators and dicts when possible.
+  * Indexes can speed up queries (btree is common, allowing you to subdivide values.)
+  * Vectorized options are more effective than iterative ones
 * You need to know the basics of OOP in interviews.  A common interview question is how to design a game: start with designing classes.
 * SQL will be addressed on all interviews
+  * What is the difference between WHERE and HAVING?  (HAVING is like WHERE but can be applied after an aggregation)
+  * Types of joins
