@@ -438,6 +438,56 @@ fg brings the suspended process to the foreground
 
 ---
 
+## Probability ##
+
+Probability theory is the study of uncertainty.  There are two general camps: frequentist and Bayesian.
+
+### Set Operations ###
+
+A set is a range of all possible outcomes or events, also called the sampling space and can be discrete or continuous.  It is useful to think of set operations in the context of venn diagram.  Union is all of a venn diagram of A and B, intersection is the center portion, difference is the A portion and complement is the B portion.
+
+* `Union`: $ A \cup B = \{x: x \in A \vee x\in B\}$ - The union of sets A and B is x such that x is in A or x is in B.
+* `Intersection`: $ A \cap B = \{x: x \in A \wedge x\in B\}$ - The intersection is x such that x is in A and in B.
+* `Difference`: $ A \setminus B = \{x: x \in A \wedge x \notin B\}$ - The difference is x such that x is in A and not in B.
+* `Complement`: $ A^C = \{x: x\notin A\} $ - Complement is x such that x is in A and in B.
+* `Null (empty) set`: $ \emptyset $
+
+DeMorgan's Law converts and's to or's.  The tetris-looking symbol is for 'not.'
+
+* $ \neg (A \vee B) \iff \neg A \wedge \neg B $
+* $ \neg (A \wedge B) \iff \neg A \vee \neg B $
+
+### Key Definitions ###
+
+* `S`: sample space
+* `s`:
+* `X`:
+* `x`:
+* `mu`: population mean
+* `xbar`: sample mean
+* `i.i.d.`: independent, identically distributed (refers to when draws from X are not dependent on previous draws and fall into the same distribution)
+* `lambda`:
+
+### Bayes Theorum ###
+
+$$
+P(B|A) = \frac{P(A|B)P(B)}{P(A)}
+$$
+
+### Combinatorics ###
+
+Combinatorics is the mathematics of ordering and choosing sets.  
+
+Factorial
+Combinations
+Permutations
+
+---
+
+## Statistics ##
+
+---
+
 ## Note on Style and Other Tools ##
 
 
