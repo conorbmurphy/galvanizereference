@@ -307,10 +307,11 @@ There are three levels it can be accesed on:
 2. OO interface w/ pyplot - fine-grained control over figure, axes, etc
 3. pure OO interface - embed plots in GUI applications (will probably never use)
 
+      plt.figure
       x_data = np.arange(0, 4, .011)
       y_data = np.sin(x_data)
       plt.plot(x_data, y_data)
-      plt.show
+      plt.show()
 
 The objects involved are the figure and axes.  We can call individual axes, but normally we deal with them together.  The figure defines the area on which we can draw.  The axes is how we plot specific data.
 
@@ -467,6 +468,10 @@ DeMorgan's Law converts and's to or's.  The tetris-looking symbol is for 'not.'
 * `xbar`: sample mean
 * `i.i.d.`: independent, identically distributed (refers to when draws from X are not dependent on previous draws and fall into the same distribution)
 * `lambda`:
+
+Hat means it refers to the sample, not the population
+
+Maximum Likelihood Estimation (MLE) chooses the parameter(s) that maximize the likelihood of observing our given sample. 
 
 ### Bayes Theorum ###
 
