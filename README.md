@@ -315,6 +315,16 @@ There are three levels it can be accesed on:
 
 The objects involved are the figure and axes.  We can call individual axes, but normally we deal with them together.  The figure defines the area on which we can draw.  The axes is how we plot specific data.
 
+add lines
+multiple plots
+
+      fig, ax_list = plt.subplots(4, 2)
+      for ax, flips in zip(ax_list.flatten(), value):
+        x_value = [data changed by value]
+        y_value = [data changed by value]
+        ax.plot(x_value, y_value)
+
+
 ---
 
 ### Python Packages - sklearn/statsmodels ###
@@ -460,18 +470,35 @@ DeMorgan's Law converts and's to or's.  The tetris-looking symbol is for 'not.'
 
 ### Key Definitions ###
 
+|                    | Population  | Sample   |
+|--------------------|:-----------:|---------:|
+| size               | N           | n |
+| mean               | mu          | xbar |
+| variance           | sigma**2    | s**2 |
+| standard deviation | sigma       | s |
+| proportion         | \pi         | p ("little pea") |
+
+
 * `S`: sample space
 * `s`:
 * `X`:
 * `x`:
-* `mu`: population mean
-* `xbar`: sample mean
+
 * `i.i.d.`: independent, identically distributed (refers to when draws from X are not dependent on previous draws and fall into the same distribution)
+* `\alpha`: threshold for rejecting a hypothesis
+* `\beta`:
 * `lambda`:
 
 Hat means it refers to the sample, not the population
 
-Maximum Likelihood Estimation (MLE) chooses the parameter(s) that maximize the likelihood of observing our given sample. 
+Maximum Likelihood Estimation (MLE) chooses the parameter(s) that maximize the likelihood of observing our given sample.
+
+|                     | H<sub>0</sub> is true    | H<sub>0</sub> is false  |
+| ------------------- |:-------------:| -----:|
+| Fail to reject H<sub>0</sub>   | correctly accept | Type II error/beta |
+| Reject H<sub>0</sub>           | Type I error/alpha      |   correctly reject* |
+
+* This is 1-beta or pi **this is the domain of power**
 
 ### Bayes Theorum ###
 
@@ -491,16 +518,27 @@ Permutations
 
 ## Statistics ##
 
+
+### Power ###
+
+Power visualized: http://rpsychologist.com/d3/NHST/
+
 ---
 
 ## Note on Style and Other Tools ##
 
 
-jupyter
+jupyter notebook
 Markdown: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 Atom: command / hashes out text
+For not having to specify integer division: from __future__ import division
 
 Sniffer which wraps nose tests so every time you save a file it will automatically run the tests - pip install sniffer nose-timer
+
+Visualization:
+* Tableau
+* D3.js - based in javascript
+* Shiny
 
 ---
 
@@ -515,3 +553,4 @@ Sniffer which wraps nose tests so every time you save a file it will automatical
 * SQL will be addressed on all interviews
   * What is the difference between WHERE and HAVING?  (HAVING is like WHERE but can be applied after an aggregation)
   * Types of joins
+* Confounding factors in experimental design
