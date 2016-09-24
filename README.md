@@ -477,9 +477,9 @@ DeMorgan's Law converts and's to or's.  The tetris-looking symbol is for 'not.'
 |--------------------|:-----------:|---------:|
 | size               | N           | n        |
 | mean               | mu          | xbar     |
-| variance           | sigma**2    | s**2     |
-| standard deviation | sigma       | s        |
-| proportion         | $\pi$  π     | p ("little pea") |
+| variance           | σ<sup>2</sup>    | s**2     |
+| standard deviation | σ       | s        |
+| proportion         | π      | p ("little pea") |
 
 
 * `S`: sample space, or a range of all possible outcomes (discrete or continuous)
