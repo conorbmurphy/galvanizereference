@@ -479,10 +479,10 @@ DeMorgan's Law converts and's to or's.  The tetris-looking symbol is for 'not.'
 | mean               | mu          | xbar     |
 | variance           | sigma**2    | s**2     |
 | standard deviation | sigma       | s        |
-| proportion         | $$\pi$$     | p ("little pea") |
+| proportion         | $\pi$     | p ("little pea") |
 
 
-* `S`: sample space
+* `S`: sample space, or a range of all possible outcomes (discrete or continuous)
 * `s`:
 * `X`:
 * `x`:
@@ -603,5 +603,6 @@ Common Interview Questions:
   * What is the difference between WHERE and HAVING?  (HAVING is like WHERE but can be applied after an aggregation)
   * Types of joins
 * Confounding factors in experimental design
+* Basic probability
 
 O'Reilly (Including salary averages): https://www.oreilly.com
