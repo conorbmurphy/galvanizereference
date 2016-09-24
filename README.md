@@ -454,30 +454,69 @@ fg brings the suspended process to the foreground
 
 ## Probability ##
 
-Probability theory is the study of uncertainty.  There are two general camps: frequentist and Bayesian.
+Probability is the measure of the likelihood that an event will occur.
 
-### Set Operations ###
+### Set Operations and Notation ###
 
 A set is a range of all possible outcomes or events, also called the sampling space and can be discrete or continuous.  It is useful to think of set operations in the context of venn diagram.  Union is all of a venn diagram of A and B, intersection is the center portion, difference is the A portion and complement is the B portion.
 
-* `Union`: $ A \cup B = \{x: x \in A \vee x\in B\}$ - The union of sets A and B is x such that x is in A or x is in B.
-* `Intersection`: $ A \cap B = \{x: x \in A \wedge x\in B\}$ - The intersection is x such that x is in A and in B.
-* `Difference`: $ A \setminus B = \{x: x \in A \wedge x \notin B\}$ - The difference is x such that x is in A and not in B.
-* `Complement`: $ A^C = \{x: x\notin A\} $ - Complement is x such that x is in A and in B.
-* `Null (empty) set`: $ \emptyset $
+* `Union`: A ∪ B = {x: x ∈ A ∨ x ∈ B} - The union of sets A and B is x such that x is in A or x is in B.
+* `Intersection`: A ∩ B = {x: x ∈ A ∧ x ∈ B } - The intersection is x such that x is in A and in B.
+* `Difference`: A ∖ B = {x: x ∈ A ∧ x ∉ B } - The difference is x such that x is in A and not in B.
+* `Complement`: A <sup>C</sup> = {x: x ∉ A} - The complement is x such that x is in A and in B.
+* `Null (empty) set`: ∅
 
 DeMorgan's Law converts and's to or's.  The tetris-looking symbol is for 'not.'
 
-* $ \neg (A \vee B) \iff \neg A \wedge \neg B $
-* $ \neg (A \wedge B) \iff \neg A \vee \neg B $
+* ¬(A ∨ B) ⟺ ¬A ∧ ¬B
+* ¬(A ∧ B) ⟺ ¬A ∨ ¬B
+
+Events are independent (A ⊥ B) if P(A ∩ B) = P(A)P(B) or (equivalently) P(A|B)=P(A).  Remember to think of a Venn Diagram in conceptualizing this.  This is conditional probaiblity.  
+
+### Combinatorics ###
+
+Combinatorics is the mathematics of ordering and choosing sets.  There are three basic approaches:
+
+1. `Factorial`: Take the factorial of n to determine the total possible ordering of the items given that all the items will be used.
+2. `Combinations`: The number of ways to choose k things given n options and that the order doesn't matter.
+3. `Permutations`: The number of ways to choose k things given n options and that the order does matter.
+
+Combinations: `n! / ((n-k)! * k!)`
+Permutations: `n! / (n-k)!`
+
+### Bayes Theorum ###
+
+Bayes theorum states that P(B|A) = P(A|B)P(B) / P(A).  The denominator here is a normalizing function computed by all the possible ways that A could happen.  Let's take the following example:
+
+The probability of a positive test result from a drug test given that one has doped is .99.  The probability of a positive test result given that they haven't doped is .05.  The probability of having doped is .005.  What is the probability of having doped given a positive test result?
+
+      P(+|doped) - .99
+      P(+|clean) - .05
+      P(doped) - .005
+
+      P(doped|+) = P(+|doped) * P(doped) / P(+)
+       = P(+|doped) * P(doped) / P(doped) * P(+|uses) + P(clean) * P(+|clean)
+       = (.99 * .005) / (.005 * .99 + (1-.005) * .05 )
+       = .09
+
+### Random Variables ###
+
+A **random variable** is a function that maps events in our sample space to some numerical quantity.  There are three general types of these functions:
+
+1. `Cumulative distribution function (CDF)`:
+2. `Probability mass function (PMF)`:
+3. `Probability density function (PDF)`:
+
+## Statistics ##
+Statistics is the study of the collection, analysis, interpretation, presentation, and organization of data.  There are two general camps: frequentist and Bayesian.
 
 ### Key Definitions ###
 
 |                    | Population  | Sample   |
 |--------------------|:-----------:|---------:|
 | size               | N           | n        |
-| mean               | mu          | xbar     |
-| variance           | σ<sup>2</sup>    | s**2     |
+| mean               | μ          | xbar     |
+| variance           | σ<sup>2</sup>    | s<sup>2</sup>     |
 | standard deviation | σ       | s        |
 | proportion         | π      | p ("little pea") |
 
@@ -549,21 +588,9 @@ Using **nonparametric** techniques allows us to model data that does not follow 
 
 ### Bayesian Statistics ###
 
-$$
-P(B|A) = \frac{P(A|B)P(B)}{P(A)}
-$$
 
-### Combinatorics ###
-
-Combinatorics is the mathematics of ordering and choosing sets.  
-
-Factorial
-Combinations
-Permutations
 
 ---
-
-## Statistics ##
 
 
 ### Power ###
@@ -604,5 +631,6 @@ Common Interview Questions:
   * Types of joins
 * Confounding factors in experimental design
 * Basic probability
+* Basic combinatorics
 
 O'Reilly (Including salary averages): https://www.oreilly.com
