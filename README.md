@@ -291,6 +291,7 @@ Linear algebra package
 
 ### Python Packages - scipy ###
 
+loc = mean
 ---
 
 ### Python Packages - itertools ###
@@ -299,7 +300,9 @@ Combinatoric generators
 
 ### Python Packages - matbplotlib ###
 
-Matplotlib is the defacto choice for plotting in python.  There's also Plotly, Bokeh, Seaborne, Pandas, and ggplot (port of R package).  Seaborne and Pandas were both built on matplotlib.  Import it using `import matplotlib.pyplot as plt`.
+`import matplotlib.pyplot as plt`
+
+Matplotlib is the defacto choice for plotting in python.  There's also Plotly, Bokeh, Seaborne, Pandas, and ggplot (port of R package).  Seaborne and Pandas were both built on matplotlib.
 
 There are three levels it can be accesed on:
 
@@ -472,11 +475,11 @@ DeMorgan's Law converts and's to or's.  The tetris-looking symbol is for 'not.'
 
 |                    | Population  | Sample   |
 |--------------------|:-----------:|---------:|
-| size               | N           | n |
-| mean               | mu          | xbar |
-| variance           | sigma**2    | s**2 |
-| standard deviation | sigma       | s |
-| proportion         | $$\pi$$         | p ("little pea") |
+| size               | N           | n        |
+| mean               | mu          | xbar     |
+| variance           | sigma**2    | s**2     |
+| standard deviation | sigma       | s        |
+| proportion         | $$\pi$$     | p ("little pea") |
 
 
 * `S`: sample space
@@ -500,7 +503,51 @@ Maximum Likelihood Estimation (MLE) chooses the parameter(s) that maximize the l
 
 * This is 1-beta or pi **this is the domain of power**
 
-### Bayes Theorum ###
+### Frequentist Statistics ###
+
+In frequentist statistics, there are four standard methods of estimation and sampling.
+
+#### Method of Moments (MOM) ####
+
+MOM has three main steps:
+
+1. Assume the underlying distribution (e.g. Poisson, Gamma, Exponential)
+2. Compute the relevant sample moments (e.g. mean, variance)
+3. Plug those sample moments into the PMF/PDF of the assumed distribution
+
+There are four main moments, each raised to a different power:
+
+1. `Mean/Expected value`: the central tendency of a distribution or random variable
+2. `Variance`: the expectation of the squared deviation of a random variable from its mean
+3. `Skewness`: a measure of asymmetry of a probability distribution about its mean.  Since it’s to the 3rd power, we care about whether it’s positive or negative.  
+4. `Kurtosis`: a measure of the "tailedness" of the probability distribution
+
+Example: your visitor log shows the following number of visits for each of the last seven days: [6, 4, 7, 4, 9, 3, 5].  What's the probability of have ing zero visits tomorrow?
+
+      lambda = np.mean([6, 4, 7, 4, 9, 3, 5])
+      scs.poisson(0, lambda)
+
+#### Maximum Likelihood Estimation (MLE) ####
+
+MLE has three main steps:
+
+1. Assume the underlying distribution (e.g. Poisson, Gamma, Exponential)
+2. Define the likelihood function
+3. Choose the parameter set that maximizes the likelihood function
+
+FILL THIS IN W/ THE LECTURE RECORDING!!
+
+#### Maximum a Posteriori (MAP) ####
+
+This is a Bayesian method that I mention here because it is the opposite of MLE in that it looks at your parameters given that you have a certain dataset.  MAP is proportionate to MLE with information on what you thought going into the analysis.  More on this under the Bayesian section.
+
+#### Kernel Density Estimation (KDE) ####
+
+Using **nonparametric** techniques allows us to model data that does not follow a known distribution.  KDE is a nonparametric technique that allows you to estimate the PDF of a random variable, making a histogram by summing kernel functions using curves instead of boxes.  In plotting with this method, there is a bias verses variance trade-off so choosing the best representation of the data is relatively subjective.  
+
+#### Common distributions? ####
+
+### Bayesian Statistics ###
 
 $$
 P(B|A) = \frac{P(A|B)P(B)}{P(A)}
@@ -528,7 +575,7 @@ Power visualized: http://rpsychologist.com/d3/NHST/
 ## Note on Style and Other Tools ##
 
 
-jupyter notebook
+jupyter notebook or Apache Zeppelin
 Markdown: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 Atom: command / hashes out text
 For not having to specify integer division: from __future__ import division
@@ -542,7 +589,9 @@ Visualization:
 
 ---
 
-## Interview Questions Topics ##
+## Career Pointers ##
+
+Common Interview Questions:
 
 * Narrative: why do you want to be a data scientist?
 * Runtime analysis:
@@ -554,3 +603,5 @@ Visualization:
   * What is the difference between WHERE and HAVING?  (HAVING is like WHERE but can be applied after an aggregation)
   * Types of joins
 * Confounding factors in experimental design
+
+O'Reilly (Including salary averages): https://www.oreilly.com
