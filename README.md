@@ -501,11 +501,21 @@ The probability of a positive test result from a drug test given that one has do
 
 ### Random Variables ###
 
-A **random variable** is a function that maps events in our sample space to some numerical quantity.  There are three general types of these functions:
+A **random variable** is a function that maps events in our sample space to some numerical quantity.  There are three general types of these functions in applied probability:
 
-1. `Cumulative distribution function (CDF)`:
-2. `Probability mass function (PMF)`:
-3. `Probability density function (PDF)`:
+1. `Probability mass function (PMF)`: Used for discrete random variables, the PMF return the probability of receiving that specific value.  Technically, the PMF encompasses both discrete and continuous variables.
+2. `Probability density function (PDF)`: Used exclusively for continuous random variables, the PDF returns the probability that a value is in a given range
+3. `Cumulative distribution function (CDF)`: tells us the probability that any draw will be less than a specific quantity (it's complement is the survivor function).  The CDF always stays constant or increases as x increases since it refers to the likelihood of a value less than it.  
+
+We can compute the **covariance** of two different variables using the following: `Cov[X,Y] = E[(x−E[X]) (y−E[Y])]`.  This is related to the **correlation** which is the covariance over the multiplication of their standard deviations: `Cov(X,Y) / σ(X)σ(Y)`.  Correlation puts covariance on a -1 to 1 scale, allowing you to see proportion.  These look uniquely at linear relationships.
+
+**Marginal distributions** take a possibly not independent multivariate distribution and considers only a single dimension.  By looking at the marginal distribution, you are able to **marginalize out** variables that have little covariance.  We always need to be thinking about the histograms of the two variables we're comparing as well as their intersect.
+
+The **conditional distribution** is the joint distribution divided by the marginal distribution evaluated at a given point.  The conditional distribution says that we know a height, what's the distribution of weight given that height?  In data science, this is *the* thing we want to know.
+
+The case of **Anscombe's quartet** shows us how statistics can often show us how poorly these statistics account for variance.  Correlation captures direction, not non-linearity, steep slopes, etc. This is why want to know the conditional distribution, not just summary stats.
+
+**Pearson correlation** evaluates linear relationships between two continuous variables.  The **Spearman correlation** evaluates the monotonic relationship between two continuous or ordinal variables without assuming the linearity of the variables.
 
 ## Statistics ##
 Statistics is the study of the collection, analysis, interpretation, presentation, and organization of data.  There are two general camps: frequentist and Bayesian.
@@ -520,6 +530,9 @@ Statistics is the study of the collection, analysis, interpretation, presentatio
 | standard deviation | σ       | s        |
 | proportion         | π      | p ("little pea") |
 
+Capital letters refer to random variables; lowercase refer to a specific realization.  `X` refers to all possible things that can happen in the population; `x` refers to draws from X.  
+
+Variance is calculated as the squared deviation of the mean: `var(x) = E[(x - μ)<sup>2</sup>]`.  σ<sup>2</sup> and s<sup>2</sup> are different in that s<sup>2</sup> is multiplied by 1/(n-1) because n-1 is considered to be the degrees of freedom and a sample tends to understate a true population variance.  Because you have a smaller sample, you expect the true variance to be larger.
 
 * `S`: sample space, or a range of all possible outcomes (discrete or continuous)
 * `s`:
@@ -541,6 +554,25 @@ Maximum Likelihood Estimation (MLE) chooses the parameter(s) that maximize the l
 | Reject H<sub>0</sub>           | Type I error/alpha      |   correctly reject* |
 
 * This is 1-beta or pi **this is the domain of power**
+
+### Common distributions ###
+
+Rules for choosing a good distribution:
+
+* Is data discrete or continuous?
+* Is data symmetric?
+* What limits are there on possible values for the data?
+* How likely are extreme values?
+
+* Discrete:
+ * Bernoulli: Model one instance of a success or failure trial (p)
+ * Binomial: Number of successes out of a number of trials (n), each with probability of success (p)
+ * Poisson: Model the number of events occurring in a fixed interval and events occur at an average rate (lambda) independently of the last event
+ * Geometric: Sequence of Bernoulli trials until first success (p)
+* Continuous:
+ * Uniform: Any of the values in the interval of a to b are equally likely
+ * Gaussian: Commonly occurring distribution shaped like a bell curve, often comes up because of the Central Limit Theorem
+ * Exponential: Model time between Poisson events where events occur continuously and independently
 
 ### Frequentist Statistics ###
 
@@ -584,7 +616,7 @@ This is a Bayesian method that I mention here because it is the opposite of MLE 
 
 Using **nonparametric** techniques allows us to model data that does not follow a known distribution.  KDE is a nonparametric technique that allows you to estimate the PDF of a random variable, making a histogram by summing kernel functions using curves instead of boxes.  In plotting with this method, there is a bias verses variance trade-off so choosing the best representation of the data is relatively subjective.  
 
-#### Common distributions? ####
+
 
 ### Bayesian Statistics ###
 
