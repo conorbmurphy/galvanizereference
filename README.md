@@ -286,12 +286,14 @@ Common functions:
 ### Python Packages - numpy ###
 
 Linear algebra package
+In calculating `np.std()`, be sure to specify `ddof = 1` when refering to the sample.
 
 ---
 
 ### Python Packages - scipy ###
 
 loc = mean
+scale = standard deviation
 ---
 
 ### Python Packages - itertools ###
@@ -442,9 +444,10 @@ Adding is building to a commit.  Ideally a commit would be a whole new feature/v
 * To cycle through previous commands: __UP ARROW__ / __DOWN ARROW__
 * `python -i oop.py`: opens python and imports oop.py
 * `which python`: Tells you the path the's executed with the command python
+* `Ctr-Z`: puts current process to the background.  
+* `fg`: brings the suspended process to the foreground
 
-Ctr-Z puts current process to the background.  
-fg brings the suspended process to the foreground
+You can also access your bash profile with `atom ~/.bash_profile`
 
 ---
 
@@ -499,6 +502,8 @@ The probability of a positive test result from a drug test given that one has do
        = (.99 * .005) / (.005 * .99 + (1-.005) * .05 )
        = .09
 
+The **base rate fallacy** is the effect of a small population that has a disease on your ability to accurately predict it.  For rare diseases, multiple tests must be done in order to accurately evaluate if a person has the disease due to this fallacy.  
+
 ### Random Variables ###
 
 A **random variable** is a function that maps events in our sample space to some numerical quantity.  There are three general types of these functions in applied probability:
@@ -518,7 +523,16 @@ The case of **Anscombe's quartet** shows us how statistics can often show us how
 **Pearson correlation** evaluates linear relationships between two continuous variables.  The **Spearman correlation** evaluates the monotonic relationship between two continuous or ordinal variables without assuming the linearity of the variables.
 
 ## Statistics ##
-Statistics is the study of the collection, analysis, interpretation, presentation, and organization of data.  There are two general camps: frequentist and Bayesian.
+
+Statistics is the study of the collection, analysis, interpretation, presentation, and organization of data.  There are two general camps: frequentist and Bayesian.  Bayesians are allowed to impose prior knowledge onto their analysis.  The difference between these two camps largely boils down to what is fixed versus what is not.  Frequentists think that data are a repeatable random sample where the underlying parameters remain constant.  Bayesians, by contrast, believe that the data, not the underlying parameters, are fixed.  There is an argument that the two camps are largely similar if no prior is imposed on the analysis.  Bayseian statistics require a lot of computationally intense programming.
+
+* Frequentist:
+** Point estimates and standard errors
+** Deduction from P(data|H0), by setting α in advance
+** P-value determines acceptance of H0 or H1
+* Bayesian:
+** Start with a prior π(θ) and calculate the posterior π(θ|data)
+** Broad descriptions
 
 ### Key Definitions ###
 
@@ -530,30 +544,17 @@ Statistics is the study of the collection, analysis, interpretation, presentatio
 | standard deviation | σ       | s        |
 | proportion         | π      | p ("little pea") |
 
-Capital letters refer to random variables; lowercase refer to a specific realization.  `X` refers to all possible things that can happen in the population; `x` refers to draws from X.  
+Capital letters refer to random variables; lowercase and values with a hat refer to a specific realization.  `X` refers to all possible things that can happen in the population; `x` refers to draws from X.  
 
-Variance is calculated as the squared deviation of the mean: `var(x) = E[(x - μ)<sup>2</sup>]`.  σ<sup>2</sup> and s<sup>2</sup> are different in that s<sup>2</sup> is multiplied by 1/(n-1) because n-1 is considered to be the degrees of freedom and a sample tends to understate a true population variance.  Because you have a smaller sample, you expect the true variance to be larger.
+Other vocabulary:
 
 * `S`: sample space, or a range of all possible outcomes (discrete or continuous)
-* `s`:
-* `X`:
-* `x`:
-
 * `i.i.d.`: independent, identically distributed (refers to when draws from X are not dependent on previous draws and fall into the same distribution)
-* `\alpha`: threshold for rejecting a hypothesis
-* `\beta`:
-* `lambda`:
-
-Hat means it refers to the sample, not the population
+* `α`: threshold for rejecting a hypothesis
+* `β`:
+* `λ`:
 
 Maximum Likelihood Estimation (MLE) chooses the parameter(s) that maximize the likelihood of observing our given sample.
-
-|                     | H<sub>0</sub> is true    | H<sub>0</sub> is false  |
-| ------------------- |:-------------:| -----:|
-| Fail to reject H<sub>0</sub>   | correctly accept | Type II error/beta |
-| Reject H<sub>0</sub>           | Type I error/alpha      |   correctly reject* |
-
-* This is 1-beta or pi **this is the domain of power**
 
 ### Common distributions ###
 
@@ -576,7 +577,7 @@ Rules for choosing a good distribution:
 
 ### Frequentist Statistics ###
 
-In frequentist statistics, there are four standard methods of estimation and sampling.
+In frequentist statistics, there are four standard methods of estimation and sampling, to be explored below.  Central to frequentist statistics is the **Central Limit Theorum (CLT)** which states that the sample mean converges on the true mean as the sample size increases.  Variance also decreases as the sample size increases.
 
 #### Method of Moments (MOM) ####
 
@@ -592,6 +593,8 @@ There are four main moments, each raised to a different power:
 2. `Variance`: the expectation of the squared deviation of a random variable from its mean
 3. `Skewness`: a measure of asymmetry of a probability distribution about its mean.  Since it’s to the 3rd power, we care about whether it’s positive or negative.  
 4. `Kurtosis`: a measure of the "tailedness" of the probability distribution
+
+Variance is calculated as the squared deviation of the mean: `var(x) = E[(x - μ)<sup>2</sup>]`.  σ<sup>2</sup> and s<sup>2</sup> are different in that s<sup>2</sup> is multiplied by 1/(n-1) because n-1 is considered to be the degrees of freedom and a sample tends to understate a true population variance.  Because you have a smaller sample, you expect the true variance to be larger.  The number of **degrees of freedom** is the number of values in the final calculation of a statistic that are free to vary.  The sample variance has N-1 degrees of freedom, since it is computed from N random scores minus the only 1 parameter estimated as intermediate step, which is the sample mean.
 
 Example: your visitor log shows the following number of visits for each of the last seven days: [6, 4, 7, 4, 9, 3, 5].  What's the probability of have ing zero visits tomorrow?
 
@@ -616,18 +619,73 @@ This is a Bayesian method that I mention here because it is the opposite of MLE 
 
 Using **nonparametric** techniques allows us to model data that does not follow a known distribution.  KDE is a nonparametric technique that allows you to estimate the PDF of a random variable, making a histogram by summing kernel functions using curves instead of boxes.  In plotting with this method, there is a bias verses variance trade-off so choosing the best representation of the data is relatively subjective.  
 
+#### Confidence Intervals ####
 
+Assuming normality, you would use the following for your 95% confidence interval:
+
+        xbar +- 1.96*(s / sqrt(n))
+
+Z tests can be conducted for a smaller sample size (n < 30) while T tests are generally reserved for lager sample sizes.
+
+Boostraping estimates the sampling distribution of an estimator by sampling with replacement from the original sample.  Bootstrapping is often used to estimate the standard errors and confidence intervals of an unknown parameter.  We bootstrap when the theoretical distribution of the statistical parameter is complicated or unknown (like wanting a confidence interval on a median or correlation), when n is too small, and we we favor accuracy over computational costs.  It comes with almost no assumptions.
+
+1. Start with your dataset of size n
+2. Sample from your dataset with replacement to create a bootstrap sample of size n
+3. Repeat step 2 a number of times (50 is good, though you often see 1k-10k)
+4. Each bootstrap sample can then be used as a separate dataset for estimation and model fitting (often using percentile instead of standard error)
+
+### Hypothesis Testing ###
+
+1. State the null (H<sub>0</sub>) hypothesis and the alternative (H<sub>1</sub>)
+2. Choose the level of significance (alpha)
+3. Choose an appropriate statistical test and find the test statistic
+4. Compute the p-value and either reject or fail to reject the H<sub>0</sub>
+
+The following maps out type I and II errors.
+
+|                     | H<sub>0</sub> is true    | H<sub>0</sub> is false  |
+| ------------------- |:-------------:| -----:|
+| Fail to reject H<sub>0</sub>   | correctly accept | Type II error/beta |
+| Reject H<sub>0</sub>           | Type I error/alpha      |   correctly reject* |
+
+* This is 1-beta or pi **this is the domain of power**
+
+The court of law worries about type I error while in medicine we worry about type II error.  Tech generally worries about Type I error (especially in A/B testing) since we don't want a worse product.  The **power** of a test is the probability of rejecting the null hypothesis given that it is false.  If you want a smaller type II error, you're going to get it at the expense of a larger type I error.  Power is the complement of beta.
+
+Use a **T test** when sigma is unknown and n < 30.  If you're not sure, just use a T test.  Scipy assumes that you're talking about a population.  You must set ddof = 1 for a sample.  A **Z test** is used for estimating a proportion.  **Welch's T Test** can be used when the variance is not equal (if unsure, set equal_var = False since it will only have a nominal effect on the result).
+
+The **Bonferroni Correction** reduces the alpha value we use based upon the test that we're correcting.  We divide alpha by the number of tests.  It is a conservative estimate.
+
+**Chi-squared tests** estimate whether two random variables are independent and estimate how closely an observed distribution matches an expected distribution (known as a goodness-of-fit test).  `chisquare` assumes a goodness-of-fit test while `chi1_contingency` assumes a contingency table.
+
+**Experimental design** must address confounding factors that might also account for the variance.  You want to minimize confounding factors but there is such thing as controlling for too many confounding factors.  You can get to the point that you can’t have any data because you’ve over controlled, for instance women in SF in tech in start-ups post series b funding etc.
+
+Power visualized: http://rpsychologist.com/d3/NHST/
 
 ### Bayesian Statistics ###
 
+The first step is always to specify a probability model for unknown parameter values that includes some prior knowledge about the parameters if available.  We then update this knowledge about the unknown parameters by conditioning this probability model on observed data.  You then evaluate the fit of the model to the data.  If you don’t specify a prior then you will likely have a very similar response than the frequentists.
 
+When we look at the posterior distribution, the denominator is just a normalizing constant.  The posterior is the new belief through the data that we’ve been given.  Priors come from published research, a researcher’s intuition, an expert option and non-informative prior.
+
+#### Bayesian A/B Testing ####
+
+In frequentist A/B testing, you can only reject or fail to reject.  You can't amass evidence for another hypothesis.  In Bayesian A/B testing, you can use a uniform distribution for an uninformative prior.  Depending on the study you're doing, an uninformative prior (which gives equal probability to all possible values) can be effectively the same as a frquentist approach.  If you use a bad prior, it will take longer to converge on the true value.  You can get a distribtuion from your test and then perform an element-wise comparison and take the mean to see where they overlap.  To test a 5% improvement, do element-wise plus .05.
+
+The **multi-armed bandit** is the question of which option you take given prior knowledge.  There are two operative terms.  **Exploitation** leverages your current knowledge in order to get the highest expected reward at that time.  **Exploration** is testing other options to determine how good each one is.  Multi-armed bandit is now a big part of reinforcement learning (a branch of AI) more than it is part of stats.  You can use this for dynamic A/B testing, budget allocation amongst competing projects, clinical trials, adaptive routing for networks minimizing delays, and reinforcement learning.
+
+**Regret** is teh difference between the maximal reward mean and the reward at time t.  You can never know what our actual regret is.  We don't know the true mean of a click-through rate, for instance.  Regret can be seen as how often you choose the suboptimal bandit (a cost function to minimize).
+
+There are four main multi-armed bandit algorithms:
+
+1. `Epsilon-Greedy`: Epsilon is the percent of time that we explore, frequently set at 10%.  Think of epsilon as how often you try a new restaurant.  Normally, you eat at your favorite spot but you want to choose a new one sometimes.  You try a new place, don’t like it, but it has low regret.
+2. `UCB1`: Part of a set of algorithms optimized by upper confidence.  The UCB1 greedily chooses the bandit with the highest expected payout but with a clever factor that automatically balances exploration and exploitation by calculating exploration logarithmically.  This is a zero-regret strategy.
+3. `Softmax`: creates a probability distribution over all the bandits in proportion to how good we think each lever is.  It’s a multi-dimensional sigmoid (a “squashing” function).  This is a probability matching algorithm.  Aneeling is where you vary tau as you go on, similar to lowering the temperature slowly when blowing glass or steel refining.
+4. `Bayesian bandit`: softmax has one distribution governing the process, here we have distributions that sum to the number of values in our distribution.
 
 ---
 
 
-### Power ###
-
-Power visualized: http://rpsychologist.com/d3/NHST/
 
 ---
 
