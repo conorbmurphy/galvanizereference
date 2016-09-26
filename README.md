@@ -453,6 +453,36 @@ You can also access your bash profile with `atom ~/.bash_profile`
 
 ## Linear Algebra ##
 
+Linear algebra is about being able to solve equations in a more efficient manner.  A matrix is a m row by n column brick of numbers.  A vector is a one-dimensional matrix.  You can initialize matrices and vectors using numpy as follows:
+
+        mat = np.array([[4, -5], [-2, 3]])
+        vect = np.array([-13, 9])
+        column_vect = np.array([[13], [9]])
+        np.ones((2, 4)) # Creates a 2 x 4 matrix of ones
+        np.zeros((3, 2))
+        mat.shape() # Returns the dimensions
+        vect.reshape(2, 1) # Transposes the column vector vect
+        mat' # Aliases the transpose (switches columns and rows) of mat
+        np.transpose(mat) # Copies the transpose
+        mat[1, 0] # returns -2
+        mat[1] # returns row
+        mat[:,1] # returns column
+        np.concatenate((mat, vect)) # adds vect to mat by adding a row (use axis = 1 to add as a new column)
+        mat + 1 # scalar operation (element-wise addition); can do w/ same-size matrices too
+
+Matrix multiplication can only happen when *the number of columns of the first matrix equals the number of rows in the second*.  The inner product, or **dot product**, is the summation of the corresponding entities of the two sequences of numbers (returning a single, scalar value).  This can be accomplished with `np.dot(A, B)`.  The **outer product** of a 4-dimensional column vector and a 4-dimensional row vector is a 4x4 matrix where each value is the product of the corresponding column/vector value.  **Matrix-matrix multiplication** is a series of vector-vector products:
+
+        A = [1, 2]
+            [3, 4]
+        B = [9, 7]
+            [5, 8]
+        AB = [1*9+2*5, 1*7+2*8]  =  [19, 23]
+            [3*9+4*5, 3*7+4*8]     [47, 53]
+
+An **identity matrix** is a square matrix with 1's along the diagonal and 0's everywhere else.
+
+BEGIN AGAIN AT AXIS-WISE https://github.com/zipfian/precourse/blob/master/Chapter_2_Linear_Algebra/notes.md
+
 ---
 
 ## Probability ##
