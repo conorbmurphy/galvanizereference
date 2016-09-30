@@ -281,6 +281,8 @@ Common functions:
 * `grouped.filter(lambda x: len(x)>2)`: filters by lambda function
 * `grouped.apply(sum)`: applies sum to each column by `abovemean`
 
+Working with datetime objects, you can do df.dt. and then hit tab to see the different options.  Similarly, df.str can give us all of our string functions.  
+
 ---
 
 ### Python Packages - numpy ###
@@ -333,6 +335,10 @@ multiple plots
 ---
 
 ### Python Packages - sklearn/statsmodels ###
+
+Statsmodels is the de facto library for performing regression tasks in Python.  
+`import statsmodels.api as sm`
+
 
 ---
 
@@ -470,7 +476,9 @@ Linear algebra is about being able to solve equations in a more efficient manner
         np.concatenate((mat, vect)) # adds vect to mat by adding a row (use axis = 1 to add as a new column)
         mat + 1 # scalar operation (element-wise addition); can do w/ same-size matrices too
 
-Matrix multiplication can only happen when *the number of columns of the first matrix equals the number of rows in the second*.  The inner product, or **dot product**, is the summation of the corresponding entities of the two sequences of numbers (returning a single, scalar value).  This can be accomplished with `np.dot(A, B)`.  The **outer product** of a 4-dimensional column vector and a 4-dimensional row vector is a 4x4 matrix where each value is the product of the corresponding column/vector value.  **Matrix-matrix multiplication** is a series of vector-vector products:
+Matrix multiplication can only happen when *the number of columns of the first matrix equals the number of rows in the second*.  The inner product, or **dot product**, is the summation of the corresponding entities of the two sequences of numbers (returning a single, scalar value).  This can be accomplished with `np.dot(A, B)`.  The **outer product** of a 4-dimensional column vector and a 4-dimensional row vector is a 4x4 matrix where each value is the product of the corresponding column/vector value.
+
+**Matrix-matrix multiplication** is a series of vector-vector products.  A 2x3 matrix times 3x2 matrix gives a 2x2 result where 1,1 of the result is the dot product of the first row of the first matrix and the first column of the second matrix:
 
         A = [1, 2]
             [3, 4]
@@ -479,7 +487,7 @@ Matrix multiplication can only happen when *the number of columns of the first m
         AB = [1*9+2*5, 1*7+2*8]  =  [19, 23]
             [3*9+4*5, 3*7+4*8]     [47, 53]
 
-An **identity matrix** is a square matrix with 1's along the diagonal and 0's everywhere else.
+An **identity matrix** is a square matrix with 1's along the diagonal and 0's everywhere else.  If you multiply any matrix by an identity matrix of the same size, you get the same matrix back.  There is no matrix division.  The **inverse** of a matrix is an alternative to division where you do 1 over the value of the given location.  A matrix multiplied by its inverse gives you an identity matrix.  A **transpose** is where the rows are exchanged for columns.
 
 BEGIN AGAIN AT AXIS-WISE https://github.com/zipfian/precourse/blob/master/Chapter_2_Linear_Algebra/notes.md
 
@@ -532,6 +540,8 @@ The probability of a positive test result from a drug test given that one has do
        = (.99 * .005) / (.005 * .99 + (1-.005) * .05 )
        = .09
 
+It's helpful to write this out a decision tree.  The denominator is the sum of all the possible ways you can get A, which means it's the sum of each final branch of the tree.
+
 The **base rate fallacy** is the effect of a small population that has a disease on your ability to accurately predict it.  For rare diseases, multiple tests must be done in order to accurately evaluate if a person has the disease due to this fallacy.  
 
 ### Random Variables ###
@@ -574,7 +584,7 @@ Statistics is the study of the collection, analysis, interpretation, presentatio
 | standard deviation | σ       | s        |
 | proportion         | π      | p ("little pea") |
 
-Capital letters refer to random variables; lowercase and values with a hat refer to a specific realization.  `X` refers to all possible things that can happen in the population; `x` refers to draws from X.  
+Capital letters refer to random variables; lowercase refers to a specific realization.  Variables with a hat often refer to a predicted value.  `X` refers to all possible things that can happen in the population; `x` refers to draws from X.  
 
 Other vocabulary:
 
@@ -649,6 +659,8 @@ This is a Bayesian method that I mention here because it is the opposite of MLE 
 
 Using **nonparametric** techniques allows us to model data that does not follow a known distribution.  KDE is a nonparametric technique that allows you to estimate the PDF of a random variable, making a histogram by summing kernel functions using curves instead of boxes.  In plotting with this method, there is a bias verses variance trade-off so choosing the best representation of the data is relatively subjective.  
 
+http://glowingpython.blogspot.com/2012/08/kernel-density-estimation-with-scipy.html
+
 #### Confidence Intervals ####
 
 Assuming normality, you would use the following for your 95% confidence interval:
@@ -715,7 +727,43 @@ There are four main multi-armed bandit algorithms:
 
 ---
 
+## Modeling ##
 
+### Linear Regression Introduction and Univariate ###
+
+In univariate linear regression, we are investigating the following equation:
+
+yˆ = βˆ0 + βˆ1x + ε
+
+Where ε is an error term with a mean of 0.
+
+**Residual** - the difference between the ith observed response and the ith response value that is predicted by our linear model (or ei = yi −yˆi).  The **residual sum of squares (RSS)** is then RSS = e21 + e22 + ··· + e2n or RSS = (y1 −βˆ0−βˆ1x1)2 + (y2 −βˆ0−βˆ1x2) +...+ (yn−βˆ0−βˆ1xn)2.
+
+Just like with estimated values, we can look at the standard error of our regression line to compute the range that the true population regression line likely falls within.  The **residual standard error (RSE)** is given by the formula RSE = sqrt(RSS/(n − 2)).  Using this SE, we can calculate the confidence interval, or, in other words, the bounds within which the true value likely falls.  We can use SE's to perform hypothesis tests on the coefficients.  Most commonly, we test the null hypothesis that there is no relationship between X and Y versus the alternative that there is a relationship (or H<sub>0</sub>: B<sub>1</sub> = 0 verus H<sub>1</sub>: B<sub>1</sub> != 0).
+
+See page 67 for more detail on computing the P-value.  Roughly p-value
+speaking, we interpret the p-value as follows: a small p-value indicates that
+it is unlikely to observe such a substantial association between the predictor
+and the response due to chance, in the absence of any real association
+between the predictor and the response. Hence, if we see a small p-value,
+68 3. Linear Regression
+then we can infer that there is an association between the predictor and the
+response. We reject the null hypothesis—that is, we declare a relationship
+to exist between X and Y —if the p-value is small enough. T
+
+linear relations versus polynomial terms
+
+**Assessing linear model fit** is normally done through two related terms: the RSE and the R**2 statistic.  The RSE estimates the standard deviation of ε, our error term.  It is roughly the average amount that our response will deviate from our regression line.  It is computed as sqrt((1/(n-2)) * RSS).  RSE is a measure of lack of model fit.
+
+Since RSE is in the units of Y, it is not always clear what constitutes a good value.  **R**2** takes the form of a proportion of variance explained by the model between 0 and 1.  The R**2 formula is 1 - (RSS/TSS) where TSS is the sum of (yi − y¯)**2 or the **total sum of squares.** In simple regression, it's possible to show that the squared correlation between X and Y and the R**2 value are identical, however this doesn't aexptend to multivariate regression.
+
+### Multivariate Regression ###
+
+Multivariate regression takes the following form:
+
+        Y = β0 + β1X1 + β2X2 + ··· + βpXp + ε
+
+While univariate regression uses ordinary least squares to predict the coefficents, multivariate regression uses multiple least squares streamlined with matrix algebra.  
 
 ---
 
