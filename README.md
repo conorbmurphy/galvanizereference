@@ -283,6 +283,8 @@ Common functions:
 
 Working with datetime objects, you can do df.dt. and then hit tab to see the different options.  Similarly, df.str can give us all of our string functions.  
 
+`crosstab` is similar to table in R
+
 ---
 
 ### Python Packages - numpy ###
@@ -764,6 +766,10 @@ Multivariate regression takes the following form:
         Y = β0 + β1X1 + β2X2 + ··· + βpXp + ε
 
 While univariate regression uses ordinary least squares to predict the coefficents, multivariate regression uses multiple least squares streamlined with matrix algebra.  
+
+### Logistic Regression
+
+**Gradient ascent** is built on the idea that if we want to find the maximum point on a function, the best way to move is in the direction of the gradient. Gradient descent is the same function except our formula subtracts as to minimize a function.
 
 ---
 
