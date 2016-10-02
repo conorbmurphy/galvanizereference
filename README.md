@@ -4,19 +4,15 @@ This is designed to be a catch-all reference tool for my time in Galvanize's Dat
 
 The main responsibilities of a data scientist are:
 
-1. ideation (experimental design)
-2. importing (SQL/postgres/psycopg2)
+1. `Ideation` (experimental design)
+2. `Importing` (SQL/postgres/psycopg2)
  * defining the ideal dataset
  * understanding your data compares to the ideal
-4. exploratory analysis (python/pandas)
- * summaries
- * missing data
- * exploratory plots
- * exploratory analyses
-4. data munging (pandas)
-5. feature engineering
-6. modeling
-7. presentation
+4. `Exploratory data analysis (EDA)` (python/pandas)
+4. `Data munging` (pandas)
+5. `Feature engineering`
+6. `Modeling`
+7. `Presentation`
 
 In practice, data scientists spend a good majority of their time in SQL.
 
@@ -304,9 +300,7 @@ scale = standard deviation
 
 Combinatoric generators
 
-### Python Packages - matbplotlib ###
-
-`import matplotlib.pyplot as plt`
+### Python Packages for Plotting - matbplotlib and seaborn ###
 
 Matplotlib is the defacto choice for plotting in python.  There's also Plotly, Bokeh, Seaborne, Pandas, and ggplot (port of R package).  Seaborne and Pandas were both built on matplotlib.
 
@@ -333,6 +327,14 @@ multiple plots
         y_value = [data changed by value]
         ax.plot(x_value, y_value)
 
+A useful plot from seaborn is heatmap and violin plot (which is the kde mirrored):
+
+      agg = cars.groupby(['origin'], cars['year'])
+      ax = sns.heatmap(agg.unstack(level = 'year'), annot = True) # Be sure to annotate so you know what your values are
+
+      fit, axes = plt.subplots(3, 2)
+      for ax, var in zip(axes.ravel(), num_vars):
+        sns.violinplot(y = var, data = cars, ax = ax)
 
 ---
 
@@ -459,9 +461,30 @@ You can also access your bash profile with `atom ~/.bash_profile`
 
 ---
 
+## Exploratory Data Analysis (EDA) ##
+
+EDA is the first cut analysis where you evaluate the following points:
+
+* What are the feature names and types?
+* Are there missing values?
+* Are the data types correct?
+* Are there outliers?
+* Which features are continuous and which are categorical?
+* What is the distribution of the features?
+* What is the distrubiton of the target?
+* How do the variables relate to one another?
+
+Some common functions to do this are `pd.head()`, `.describe()`, `.info()`, and `pd.crosstab()`.  If you see 'object' in the info result where you should have numbers, it is likely that you have a string hidden in the column somewhere.  When removing NA's, be sure that you don't drop any data that might be included in your final analysis.
+
+There are a few options for dealing with NA's, including deleting them from your dataset and imputing their values using prediction, mean, mode, etc.
+
+---
+
 ## Linear Algebra ##
 
-Linear algebra is about being able to solve equations in a more efficient manner.  A matrix is a m row by n column brick of numbers.  A vector is a one-dimensional matrix.  You can initialize matrices and vectors using numpy as follows:
+Linear algebra is about being able to solve equations in a more efficient manner.  A **scalar** (denoted by a lower-case, unbolded letter) has only magnitude (denoted as ||a||).  A **vector** (denoted by a lower-case, bold letter) is a one-dimensional matrix that has both magnitude and a heading.  **Distance** is the total area covered while **displacement** is the direct distance between your start and your end point.  A **matrix** is a m row by n column brick of numbers.  
+
+You can initialize matrices and vectors using numpy as follows:
 
         mat = np.array([[4, -5], [-2, 3]])
         vect = np.array([-13, 9])
@@ -478,9 +501,9 @@ Linear algebra is about being able to solve equations in a more efficient manner
         np.concatenate((mat, vect)) # adds vect to mat by adding a row (use axis = 1 to add as a new column)
         mat + 1 # scalar operation (element-wise addition); can do w/ same-size matrices too
 
-Matrix multiplication can only happen when *the number of columns of the first matrix equals the number of rows in the second*.  The inner product, or **dot product**, is the summation of the corresponding entities of the two sequences of numbers (returning a single, scalar value).  This can be accomplished with `np.dot(A, B)`.  The **outer product** of a 4-dimensional column vector and a 4-dimensional row vector is a 4x4 matrix where each value is the product of the corresponding column/vector value.
+Matrix multiplication can only happen when *the number of columns of the first matrix equals the number of rows in the second*.  The inner product, or **dot product**, for vectors is the summation of the corresponding entities of the two sequences of numbers (returning a single, scalar value).  This can be accomplished with `np.dot(A, B)`.  The **outer product** of a 4-dimensional column vector and a 4-dimensional row vector is a 4x4 matrix where each value is the product of the corresponding column/vector value.
 
-**Matrix-matrix multiplication** is a series of vector-vector products.  A 2x3 matrix times 3x2 matrix gives a 2x2 result where 1,1 of the result is the dot product of the first row of the first matrix and the first column of the second matrix:
+**Matrix-matrix multiplication** is a series of vector-vector products and is not communicative (meaning A*B != B*A).  A 2x3 matrix times 3x2 matrix gives a 2x2 result where 1,1 of the result is the dot product of the first row of the first matrix and the first column of the second matrix:
 
         A = [1, 2]
             [3, 4]
@@ -491,7 +514,10 @@ Matrix multiplication can only happen when *the number of columns of the first m
 
 An **identity matrix** is a square matrix with 1's along the diagonal and 0's everywhere else.  If you multiply any matrix by an identity matrix of the same size, you get the same matrix back.  There is no matrix division.  The **inverse** of a matrix is an alternative to division where you do 1 over the value of the given location.  A matrix multiplied by its inverse gives you an identity matrix.  A **transpose** is where the rows are exchanged for columns.
 
-BEGIN AGAIN AT AXIS-WISE https://github.com/zipfian/precourse/blob/master/Chapter_2_Linear_Algebra/notes.md
+**Axis-wise** operations aggregate over the whole matrix.  For example, `A.mean()` returns the mean for the whole matrix.  `A.mean(axis = 0)` returns a mean for every column.  **Rank** is defined as the number of linearly dependent rows or columns in a matrix, such as a column that's the summation of two others or a multiple of another.  A **feature matrix** is a matrix where each column represents a variable and each row a datapoint.  By convention, we use X to be our feature matrix and y to be our dependent variable.  
+
+An **orthogonal matrix** is important for statement of preference surveys. **Eigenvectors** and **eigenvalues** are good for page rank analysis.  The **stochastic matrix** is central to the Markov process, or a square matrix specifying the probabilities of going from one state to another such that every column of the matrix sums to 1.
+
 
 ---
 
@@ -733,31 +759,29 @@ There are four main multi-armed bandit algorithms:
 
 ### Linear Regression Introduction and Univariate ###
 
-In univariate linear regression, we are investigating the following equation:
+Linear regression is essentially fitting lines to data, originally coming from trying to predict child height to parent height.  In univariate linear regression, we are investigating the following equation:
 
 yˆ = βˆ0 + βˆ1x + ε
 
-Where ε is an error term with a mean of 0.
+Where ε is an error term that's iid and normally distributed with a mean of 0.
 
-**Residual** - the difference between the ith observed response and the ith response value that is predicted by our linear model (or ei = yi −yˆi).  The **residual sum of squares (RSS)** is then RSS = e21 + e22 + ··· + e2n or RSS = (y1 −βˆ0−βˆ1x1)2 + (y2 −βˆ0−βˆ1x2) +...+ (yn−βˆ0−βˆ1xn)2.
+**Ordinary Least Squares** is the most common method for estimating the unknown parameters in a linear regression with the goal of minimizing the sum of the squares of the differences between observed and predicted values.  The difference between the ith observed response and the ith response value that is predicted by our linear model (or ei = yi −yˆi) is called the **residual**.  The **residual sum of squares (RSS)** is a measure of over fit denoted by RSS = e21 + e22 + ··· + e2n or RSS = (y1 −βˆ0−βˆ1x1)2 + (y2 −βˆ0−βˆ1x2) +...+ (yn−βˆ0−βˆ1xn)2.
 
 Just like with estimated values, we can look at the standard error of our regression line to compute the range that the true population regression line likely falls within.  The **residual standard error (RSE)** is given by the formula RSE = sqrt(RSS/(n − 2)).  Using this SE, we can calculate the confidence interval, or, in other words, the bounds within which the true value likely falls.  We can use SE's to perform hypothesis tests on the coefficients.  Most commonly, we test the null hypothesis that there is no relationship between X and Y versus the alternative that there is a relationship (or H<sub>0</sub>: B<sub>1</sub> = 0 verus H<sub>1</sub>: B<sub>1</sub> != 0).
 
-See page 67 for more detail on computing the P-value.  Roughly p-value
-speaking, we interpret the p-value as follows: a small p-value indicates that
-it is unlikely to observe such a substantial association between the predictor
-and the response due to chance, in the absence of any real association
-between the predictor and the response. Hence, if we see a small p-value,
-68 3. Linear Regression
-then we can infer that there is an association between the predictor and the
-response. We reject the null hypothesis—that is, we declare a relationship
-to exist between X and Y —if the p-value is small enough. T
+**Mean squared error** takes the average of the distance between our expected and real values.  It is a good error metric but is not comparable across different datasets.  
+
+Roughly speaking, we interpret the **p-value** as follows: a small p-value indicates that it is unlikely to observe such a substantial association between the predictor and the response due to chance, in the absence of any real association between the predictor and the response. Hence, if we see a small p-value, then we can infer that there is an association between the predictor and the response. We reject the null hypothesis—that is, we declare a relationship to exist between X and Y —if the p-value is small enough.
+
+The **F-statistic** allows us to compare models to see if we can reduce it.  The F-test can also be used generally to see if the model is useful beyond just predicting the mean.  
 
 linear relations versus polynomial terms
 
 **Assessing linear model fit** is normally done through two related terms: the RSE and the R**2 statistic.  The RSE estimates the standard deviation of ε, our error term.  It is roughly the average amount that our response will deviate from our regression line.  It is computed as sqrt((1/(n-2)) * RSS).  RSE is a measure of lack of model fit.
 
-Since RSE is in the units of Y, it is not always clear what constitutes a good value.  **R**2** takes the form of a proportion of variance explained by the model between 0 and 1.  The R**2 formula is 1 - (RSS/TSS) where TSS is the sum of (yi − y¯)**2 or the **total sum of squares.** In simple regression, it's possible to show that the squared correlation between X and Y and the R**2 value are identical, however this doesn't aexptend to multivariate regression.
+Since RSE is in the units of Y, it is not always clear what constitutes a good value.  **R**2** takes the form of a proportion of variance explained by the model between 0 and 1.  The R**2 formula is 1 - (RSS/TSS) where TSS is the sum of (yi − y¯)**2 or the **total sum of squares.** In simple regression, it's possible to show that the squared correlation between X and Y and the R**2 value are identical, however this doesn't extend to multivariate regression.
+
+
 
 ### Multivariate Regression ###
 
@@ -765,7 +789,46 @@ Multivariate regression takes the following form:
 
         Y = β0 + β1X1 + β2X2 + ··· + βpXp + ε
 
-While univariate regression uses ordinary least squares to predict the coefficents, multivariate regression uses multiple least squares streamlined with matrix algebra.  
+While univariate regression uses ordinary least squares to predict the coefficents, multivariate regression uses multiple least squares streamlined with matrix algebra.  To do this in python, use the following:
+
+        est = sm.OLS(y, X) # This comes from statsmodels
+        est = est.fit()
+        est.summary()
+
+This printout tells you the dependent variable (y), the type of model, and the method.  The F statistic will tell us if any of our coefficients are equal to 0.  AIC and BIC should be minimized.  We want to make sure the t statistic is larger than 2.  We want to then exclude the largest p values.  **Backwards stepwise** moves backwards through the model by removing the variables with the largest p values.  Skew and kurtosis are also important in reading a linear model because if they're drastic, it violates our t test since a t test assumes normality.  
+
+The assumptions of a linear model are as follows:
+
+1. `Linearity`
+2. `Constant variance (homoscedasticity)`: this can often be rectified with a log
+3. `Independence of errors`
+4. `Normality of errors`
+5. `Lack of multicollinearity`
+
+**Residual plots** allow us to visualize whether there's a pattern not accounted for by our model, testing the assumptions of our model.
+
+A **leverage point** is an observation with an unusual X value.  We calculate leverage using the **hat matrix** and the diagonals of which respond to its leverage.  **Studentized residuals** are the most common way of quantifying outliers.
+
+**Variance Inflation Factors (VIF)** allows us to compute multicollinearity by the ratio of the variance of β^j when fitting the full model divided by the variance of β^j if fit on its own.  The smallest value for VIF is 1, which indicates a complete absence of multicollinearity.  The rule of thumb is that a VIF over 10 is problematic.  *Multicollinearity only affects the standard errors of your estimates, not your predictive power.*
+
+**QQ plots** allow you to test normality by dividing your normal curve into n + 1 sections, giving you a visual for normality.
+
+**Categorical variables** take a non-numeric value such as gender.  When using a categorical variable, you use a constant of all ones and then other variables (such as removing one ethnicity as the constant and adding two new variables for two other ethnicities).  To vary the slop, you can add an **interaction term** such as income multiplied by whether they're a student.  An **interaction effect** would be, for instance, when radio advertisements combined with tv has a more pronounced effect than separate.  This can be dealt with by multplying the two.  
+
+Here are some potential transformations:
+
+| Method | Transformation(s) | Regression equation  | Predicted value (y^) |
+| ------ |:-----------------:| --------------------:| --------------------:|
+| Standard linear  | none | y = β0 + β1x | y^ = β0 + β1x |
+| Exponential model | Dependent variable = log(y) | log(y) = β0 + β1x | y^ = 10**(β0 + β1x) |
+| Quadradic model  | Dependent variable = sqrt(y) |sqrt(y) = β0 + β1x | y^ = (β0 + β1x)**2 |
+| Reciprocal model  | Dependent variable = 1/y|1/y = β0 + β1x | y^ = 1 / (β0 + β1x) |
+| Logarithmic model  | Independent variable = log(x) |y = β0 + β1log(x) | y^ = β0 + β1log(x) |
+| Power model | Dep. and Ind. variables = log(y) and log(x) |log(y) = β0 + β1log(x) | y^ = 10**(β0 + β1log(x)) |
+
+
+Reference: http://emp.byui.edu/brownd/stats-intro/dscrptv/graphs/qq-plot_egs.htm
+
 
 ### Logistic Regression
 
@@ -806,5 +869,6 @@ Common Interview Questions:
 * Confounding factors in experimental design
 * Basic probability
 * Basic combinatorics
+* Linear regression basics, especially that LR is more complex than y = MX + B
 
 O'Reilly (Including salary averages): https://www.oreilly.com
