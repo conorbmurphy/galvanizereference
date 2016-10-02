@@ -817,14 +817,14 @@ A **leverage point** is an observation with an unusual X value.  We calculate le
 
 Here are some potential transformations:
 
-| Method | Transformation(s) | Regression equation  | Predicted value (y^) |
-| ------ |:-----------------:| --------------------:| --------------------:|
-| Standard linear  | none | y = β0 + β1x | y^ = β0 + β1x |
-| Exponential model | Dependent variable = log(y) | log(y) = β0 + β1x | y^ = 10**(β0 + β1x) |
-| Quadradic model  | Dependent variable = sqrt(y) |sqrt(y) = β0 + β1x | y^ = (β0 + β1x)**2 |
-| Reciprocal model  | Dependent variable = 1/y|1/y = β0 + β1x | y^ = 1 / (β0 + β1x) |
-| Logarithmic model  | Independent variable = log(x) |y = β0 + β1log(x) | y^ = β0 + β1log(x) |
-| Power model | Dep. and Ind. variables = log(y) and log(x) |log(y) = β0 + β1log(x) | y^ = 10**(β0 + β1log(x)) |
+| Model   | Transformation(s) | Regression equation  | Predicted value (y^) |
+| ---------- |:-----------------:| ----------------------:| --------------------:|
+| Standard linear | none | y = β0 + β1x | y^ = β0 + β1x |
+| Exponential | Dependent variable = log(y) | log(y) = β0 + β1x | y^ = 10**(β0 + β1x) |
+| Quadradic | Dependent variable = sqrt(y) |sqrt(y) = β0 + β1x | y^ = (β0 + β1x)**2 |
+| Reciprocal | Dependent variable = 1/y|1/y = β0 + β1x | y^ = 1 / (β0 + β1x) |
+| Logarithmic | Independent variable = log(x) |y = β0 + β1log(x) | y^ = β0 + β1log(x) |
+| Power | Dep and Ind variables = log(y) and log(x) |log(y) = β0 + β1log(x) | y^ = 10**(β0 + β1log(x)) |
 
 
 Reference: http://emp.byui.edu/brownd/stats-intro/dscrptv/graphs/qq-plot_egs.htm
