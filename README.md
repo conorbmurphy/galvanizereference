@@ -826,7 +826,7 @@ Here are some potential transformations:
 | Logarithmic | Independent variable = log(x) |y = β0 + β1log(x) | y^ = β0 + β1log(x) |
 | Power | Dep and Ind variables = log(y) and log(x) |log(y) = β0 + β1log(x) | y^ = 10**(β0 + β1log(x)) |
 
-![Transformations](https://github.com/conorbmurphy/galvanizereference/images/tranformations.png)
+![Transformations] (https://github.com/conorbmurphy/galvanizereference/images/tranformations.png)
 
 Reference: http://emp.byui.edu/brownd/stats-intro/dscrptv/graphs/qq-plot_egs.htm
 
