@@ -409,11 +409,23 @@ Joins are used to query across multiple tables using foreign keys.  **Every join
 2. `LEFT OUTER JOIN:` joins based on all rows on the left table even if there are no values on the right table.  A right join is possible too, but is only the inverse of a left join.  This would bee the left two sections of a venn diagram.
 3. `FULL OUTER JOIN:` joins all rows from both tables even if there are some in either the left or right tables that don't match.  This would be all three sections of a venn diagram.
 
+While data scientists are mostly accessing data, it's also useful to know how to create tables.
+
+          CREATE TABLE table_name
+          (
+            column_name data_type(size),
+            column_name data_type(size),
+            column_name data_type(size)
+            );
+
+Data types include varchar, integer, decimal, date, etc.  The size specifies the maximum length of the column of the table.
+
 Resources:
 * http://sqlzoo.net/wiki/SELECT_basics
 * An illustrated explanation of joins: https://blog.codinghorror.com/a-visual-explanation-of-sql-joins/
 * Databases by market share: http://db-engines.com/en/ranking
 * SQL practice: https://pgexercises.com/
+* SQL data types: http://www.w3schools.com/sql/sql_datatypes.asp
 
 ### SQL using Pandas and Psycopg2 ###
 
@@ -906,6 +918,50 @@ In terms of increasing time (not necessarily number of iterations), SGD is often
 The **Newton-Raphson Method** chooses our learning rate (alpha) in GD.  When the derivative is changing quickly, it takes a larger step.  When we're close to the minimum, it takes a smaller step by looking at the tangent's intersection with the x axis.
 
 https://www.wolframalpha.com/
+
+### Machine Learning (ML) ###
+
+### k-Nearest Neighbors (KNN) ###
+
+KNN is a highly accurate ML algorithm offering high accuracy that is insensitive to outliers and makes no assumptions about the data.  You can also do online updates easily (you just store another data point), use as many classes as you want, and learn a complex function with no demands on relationships between variables (like linearity).  The downside is that it is computationally very expensive because it's **IO bound** (you have to read every data point to use it), noise can affect results, and feature interpretation can be tricky.  Categorical variables makes feature interpretation tricky.  It works with numeric and nominal values.  
+
+KNN is a classifier algorithm that works by comparing a new piece of data to every piece of data in a training set.  We then look at the top k most similar pieces of data and take a majority vote, the winner of which will get its label assigned to the new data.  Your error rate is the number of misclassifications over the number of total classifications.
+
+The method:
+
+1. Collect: any method
+2. Prepare: numeric values are needed for a distance calculation; structured data is best.  We need to feature scale in order to balance our distances.
+3. Analyze: any method
+4. Train: notable about KNN is that there is no training step.  You can change k and your distance metric, but otherwise there's not much to adapt
+5. Test: calculate the error rate
+
+You prediction is the majority (in the case of classification) or the average (in the case of regression) of the k nearest points.  Defining k is a challenge.  When k is 1, you get localized neighborhoods around what could be outliers (high variance) as well as 100% accuracy if you evaluate yourself on your training data.  If k is n then you're only guessing the most common class (high bias).  A good place to start is `k = sqrt(n)`.
+
+Distance metrics can include any of the following:
+
+* `Euclidean`: a straight line (and a safe default)
+* `Manhattan`: straight lines from the base point to the destination using the number of stops at other points along the way.  Manhattan distance is based on how far a taxi would go following blocks in a city
+* `Cosine`: uses the angle from the origin to the new point.  For instance, you can plot different points and the magnitude (distance from the origin) won't matter, only the distance from the origin
+* `Custom`: you can always design your own distance metric as well
+
+The **curse of dimensionality** is that as dimensionality increases, the performance of KNN commonly decreases.  This starts to affect you when you have p (number of dimensions) as 5 or greater.  The nearest neighbors are no longer nearby neighbors.  Adding useful features (that are truly associated with the response) is generally helpful but noise features increase dimensionality without an upside.  The more dimensions you have (p), the amount of space you have in your non-outlier region becomes miniscule.  *This is the kryptonite of KNN*.  You'll often have to reduce dimensions to use it, especially with NLP.  **Locality-sensitive hashing** is a way to reduce the time to lookup each datapoint.
+
+KNN can be used for classification, regression (neighbors averaged to give continuous value), imputation (replace missing data), and anomaly detection (if the nearest neighbor is far away, it might be an outlier).
+
+
+### Decision Trees ###
+
+Decision trees use **information theory** (the science of splitting data) to classify data into different sets, subsetting those sets further as needed.  One benefit of decision trees over KNN is that it's more interpretable.  They are computationally inexpensive and missing values and irrelavant features are ok.  The downside is that they are prone to overfitting.  Like KNN they work with numeric and nominal values however numeric values have to be translated into a nominal one.
+
+The method:
+
+1. Collect: any method
+2. Prepare: any continuous values need to be quantized into nominal ones
+3. Analyze: any method, but trees should be examined after they're built
+4. Train: construct a tree
+5. Test: calculate the error rate
+
+The ID3 algorithm is one option for splitting the data.
 
 
 ---

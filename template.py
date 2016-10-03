@@ -3,13 +3,13 @@ import numpy as np
 import scipy.stats as scs
 
 import matplotlib.pyplot as plt
-import seaborn as sns 
+import seaborn as sns
 
-import statsmodels.api as sm # Most stats models are here
+import statsmodels.api as sm  # Most stats models are here
 import statsmodels.formula.api as smf
 import psycopg2
 import itertools
-from __future__ import division # defaults to float for division
+from __future__ import division  # defaults to float for division
 
 '''
 EDA
