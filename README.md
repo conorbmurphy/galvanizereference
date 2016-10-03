@@ -1,6 +1,8 @@
 # Galvanize Reference #
 
-This is designed to be a catch-all reference tool for my time in Galvanize's Data Science Immersive program.  Others might find it of use as well.
+## Introduction ##
+
+This is designed to be a catch-all reference tool for my notes while in Galvanize's Data Science Immersive program.  Others might find it of use as well.
 
 The main responsibilities of a data scientist are:
 
@@ -14,7 +16,7 @@ The main responsibilities of a data scientist are:
 6. `Modeling`
 7. `Presentation`
 
-In practice, data scientists spend a good majority of their time in SQL.
+Part study tool part reference document, this will condense many of my notes and resources as a living document intended to assist me while in the act of data science-ing.
 
 ---
 
@@ -31,10 +33,12 @@ There are many different programming paradigms such as declarative, functional, 
 
 OOP has classes and objects.  A class is a combination of state and behaviors.  Python has a logic where everybody can access anything, making it difficult to obfuscate code.  This makes Python particularly adept for the open source community.
 
-#### Data Types ####
+### Base Data Types ###
+
+Python has a few base datatypes whose different characteristics can be leveraged for faster, drier code.  Data types based on hashing, such as dictionaries, allow us to retrieve information much more quickly because we can go directly to a value, similar to a card in a card catalogue.  
 
 * `string`: immutable
-  * string = string['abc']; str[-1] # note indexing is cardinal, not oridinal like R
+  * string = string['abc']; str[-1] # note indexing is cardinal, not ordinal like R
 * `tuple`: immutable
   * tuple = (5, 3, 8); tuple[3]
   * tuple2 = (tuple, 2, 14) # nested tuple
@@ -50,17 +54,9 @@ OOP has classes and objects.  A class is a combination of state and behaviors.  
   * dict['newkey'] = 'value'
 * `set`: mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set).
 
+### Built-in Functions ###
 
-
-
-Hashing allows us to retrieve information much more quickly because we can go directly to a value, similar to a card in a card catalogue.  
-
-#### Importing Data ####
-
-* `open`:
-* `read`:
-
-#### Built-in Functions ####
+The following are the base functions Python offers, some more useful than others.  Knowing these with some fluency makes dealing with more complex programs easier.
 
 * `abs()`:
 * `all()`:
@@ -139,7 +135,10 @@ Hashing allows us to retrieve information much more quickly because we can go di
 * `zip()`:
 * `__import__()`:
 
-#### Classes ####
+Note the difference between functions like `range` and `xrange` above.  `range` will create a list at the point of instantiation and save it to memory.  `xrange`, by contrast, will generate a new value each time it's called upon.  **Generators** like this (`zip` versus `izip` from itertools is another common example) are especially powerful in long for loops.
+
+
+### Classes ###
 
 To make a class:
 
@@ -161,15 +160,18 @@ Magic methods allow you to define things like printing and comparing values:
                 return 0
            else:
                 raise ValueError(“Couldn’t compare {} to {}”.format(self, other))
+          __
 
 A decorator is a way to say that you're going to access some attribute of a class as though it's not a function.  This is not a function; it's encapsulated.
-@property
-def full(self):
-     return self._fullness == self._capacity
 
-@property
-def empty(self):
-     return self._fullness == 0
+      @property
+      def full(self):
+           return self._fullness == self._capacity
+
+      @property
+      def empty(self):
+           return self._fullness == 0
+      __
 
 Basic vocabulary regarding classes:
 
@@ -180,7 +182,7 @@ Basic vocabulary regarding classes:
 
 Reference: http://www.rafekettler.com/magicmethods.html
 
-#### List Comprehension ####
+#### Loops and List Comprehension ####
 
 #### Lambda Functions ####
 
@@ -476,7 +478,15 @@ EDA is the first cut analysis where you evaluate the following points:
 
 Some common functions to do this are `pd.head()`, `.describe()`, `.info()`, and `pd.crosstab()`.  If you see 'object' in the info result where you should have numbers, it is likely that you have a string hidden in the column somewhere.  When removing NA's, be sure that you don't drop any data that might be included in your final analysis.
 
-There are a few options for dealing with NA's, including deleting them from your dataset and imputing their values using prediction, mean, mode, etc.
+There are a few options for dealing with NA's:
+
+* Drop that data
+* Fill those values with:
+ * Column averages
+ * 0 or other neutral number
+ * Fill forwards or backwards (especially for time series)
+ * Impute the values with a prediction (e.g. mean, mode)
+* Ignore them and hope your model can handle them
 
 ---
 
@@ -811,7 +821,7 @@ A **leverage point** is an observation with an unusual X value.  We calculate le
 
 **Variance Inflation Factors (VIF)** allows us to compute multicollinearity by the ratio of the variance of β^j when fitting the full model divided by the variance of β^j if fit on its own.  The smallest value for VIF is 1, which indicates a complete absence of multicollinearity.  The rule of thumb is that a VIF over 10 is problematic.  *Multicollinearity only affects the standard errors of your estimates, not your predictive power.*
 
-**QQ plots** allow you to test normality by dividing your normal curve into n + 1 sections, giving you a visual for normality.
+**QQ plots** allow you to test normality by dividing your normal curve into n + 1 sections, giving you a visual for normality.  **Omitted variable bias** is when a variable you leave out of the model inflates the value of other variables which should be omitted had the original variable been included.
 
 **Categorical variables** take a non-numeric value such as gender.  When using a categorical variable, you use a constant of all ones and then other variables (such as removing one ethnicity as the constant and adding two new variables for two other ethnicities).  To vary the slop, you can add an **interaction term** such as income multiplied by whether they're a student.  An **interaction effect** would be, for instance, when radio advertisements combined with tv has a more pronounced effect than separate.  This can be dealt with by multplying the two.  
 
@@ -831,9 +841,72 @@ Here are some potential transformations:
 Reference: http://emp.byui.edu/brownd/stats-intro/dscrptv/graphs/qq-plot_egs.htm
 
 
-### Logistic Regression
+### Logistic Regression ###
 
-**Gradient ascent** is built on the idea that if we want to find the maximum point on a function, the best way to move is in the direction of the gradient. Gradient descent is the same function except our formula subtracts as to minimize a function.
+Linear regression is good choice when your dependent variable is continuous and your independent variable(s) are either continuous or categorical.  *Logistic regression, a subset of linear regression, is used when your dependent variable is categorical.*  Examples of when you use logistic regression include customer churn, species extinction, patient outcome, prospective buyer purchase, eye color, and spam email.  Since linear regression is not bounded to our discrete outcome, we need something that takes a continuous input and produces a 0 or 1, has intuitive transition, and interpretable coefficients.  The **logit function** asymptotically approaches 0 and 1, coming from the sigmoid family.  It is solved via maximum likelihood.
+
+If your results say "optimization not terminated successfully," do not use them as it's likely an issue with multicollinearity.  We look at the difference between LL-Null and Log-Likelihood, which tell us how far we could go to 0 (a perfect model) and how far we went (Log-Likelihood).  Doing `likelihood-ratio-test()` will return the p-value of one model being better than the other if one model is the same as the other with subtracted parameters.
+
+*The coefficients for logistic regression are in log odds.*  In other words, we would interpret them as:
+
+        exp(β0 + β1X1 + β2X2 + ··· + βpXp)
+        ----------------------------------
+        1 + exp(β0 + β1X1 + β2X2 + ··· + βpXp)
+
+Similar to hypothesis testing, a confusion matrix gives you your true and false positive and negatives:
+
+|                    | Predicted positive  | Predicted negative   |
+|--------------------|:-----------:|---------:|
+| Actually positive               | True positive           | False negative        |
+| Actually negative               | False positive          | True negative     |
+
+When you fill in this matrix, you can calculate accuracy (true poitives and negatives over n), misclassification (accuracy's compliment), true positive (actual yes over predicted yes), true negative, specificity, precision, etc.
+
+The **Receiver Operator Characteristic (ROC) curve** is the sigmoid function with our different quadrants for true and false negatives and positives.   After you run your regression model, you’re going to get a score, which is a probability.  You’ll run a bunch of models with their respective confusion matrix.  You then plot them to see which model is better.  You might have to decide if you’re more worried about false positives or negatives.  You make a ROC curve by putting your sensitivity on the y axis and your false positive rate on the x axis.
+
+
+
+### Cross-validation ###
+
+Cross-validation is a model validation technique for assessing how the results of a statistical analysis will generalize to an independent dataset.  The biggest mistake you can make in terms of validating a model is to keep all of your data together.  Do not evaluate yourself on your training set.  The **train/test split** divides your data into separate sets for you to train and evaluate your model.  When talking about splits, convention is to flip our dataset on its side to have variables as rows.  You can:
+
+* Split the data evenly into two equal-size groups
+* Split the data into n groups (each data point in its own group)
+* `Leave one out Cross-validation`: Split the data into n groups of k points and train a completely new model on all the data minus one datapoint, evaluating it on that accuracy.  Ideally the size of k is 1.  Then you take the mean on a bunch of reporting models.  At the end, you retrain the model on the whole dataset.
+* `10-fold cross-validation`: Same as above but using the convention of groups of 10
+
+When training hyperparameters, set aside another subset of the data for testing at the end.  
+
+Time series cross-validation example: http://robjhyndman.com/hyndsight/tscvexample/
+
+### Bias/Variance Tradeoff ###
+
+The error of any model is the function of three things: the **variance** (the amount that the function would change if trained on a different dataset) plus **bias** (the error due to simplified approximation) plus the irreducible error (epsilon).  Your bias goes up as your variance goes down and vice versa.  **Underfitting** is when the model does not fully capture the signal in X, being insufficiently flexible.  **Overfitting** is when the model erroneously interprets noise as signal, being too flexible.
+
+In linear regression, we minimize the RSS by using the right betas.  You want to avoid large course corrections because that would mean high variance.  **Ridge (or L2) regression** and **lasso (L1) regression** avoid high variance by penalizing high betas.  In ridge, you add a hyperparameter that sums up the squared betas.  As the betas increase, the sum of the beta squared's increase as well.  Since you multiply your summation of squared betas by lambda, the bigger the lambda the more this is penalized. This evens out teh regression line.  Since high betas are penalized, we have to standardize the predictors.
+
+Lasso regression is almost identical to ridge except you take the magnitude (or absolute value).  When you plot lasso, it looks like a V while ridge looks like a parabola.  Lasso still penalizes you when you're close to 0 so it's helpful for feature selection and more sparse models.  *Most consider lasso is better than ridge but it depends on the situation.*
+
+### Gradient Ascent ###
+
+Minimization algorithms are optimizations techniques.  In linear regression, we minimized the sum of squared errors; we minimized with respect to our betas.  In logistic regression, we maximized the likelihood function.  **Gradient ascent** is built on the idea that if we want to find the maximum point on a function, the best way to move is in the direction of the gradient. Gradient descent is the same function except our formula subtracts as to minimize a function.
+
+It works on a small subset of problems but is used everywhere because we don't have many functions for optimization.  Here are some characteristics:
+
+* It is like a derivative but with many dimensions
+* It works on "smooth functions" with a gradient
+* Must be some kind of convex function that has a minimum
+
+If the above criteria are met, it will get asymptotically close to the global optimum.  The biggest concern is getting stuck in a local minimum where the derivative is zero.  In a broad sense, it works by taking a point on a curve and varying it slightly to see if its value has increased or decreased.  You then use that information to find the direction of the minimum.  **Alpha** is the size of the step you take towards that minimum.
+
+**Stochastic gradient descent (SGD)** saves computation by taking one observation in the data and calculates the gradient based upon that.  The path is more chaotic however it will converge as long as there's no local minimum.  **Minibatch SDG** takes a subset of your data and computes the gradient based on that.  Relative to SGD, it takes a more direct path to the optimum while keeping us from having to calculate our minimum using the whole dataset.
+
+In terms of increasing time (not necessarily number of iterations), SGD is often fastest ahead of minibatch and then standard gradient descent.  SGD often gets an accurate enough response and is good for big data as it converges faster on average and can work online (with updating new data and sunsetting old observations by pushing itself away from the optimum to check for change).  
+
+The **Newton-Raphson Method** chooses our learning rate (alpha) in GD.  When the derivative is changing quickly, it takes a larger step.  When we're close to the minimum, it takes a smaller step by looking at the tangent's intersection with the x axis.
+
+https://www.wolframalpha.com/
+
 
 ---
 
@@ -871,5 +944,6 @@ Common Interview Questions:
 * Basic probability
 * Basic combinatorics
 * Linear regression basics, especially that LR is more complex than y = MX + B
+* Interpreting coefficients for linear and logistic regression
 
 O'Reilly (Including salary averages): https://www.oreilly.com
