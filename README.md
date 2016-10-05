@@ -344,7 +344,16 @@ A useful plot from seaborn is heatmap and violin plot (which is the kde mirrored
 
 Statsmodels is the de facto library for performing regression tasks in Python.  
 `import statsmodels.api as sm`
+Note that logistic regression in statsmodels will fail to converge if data perfectly separable.  Logistic regression in sklearn normalizes (punishes betas) so it will converge.
 
+`from sklearn.linear_model import LinearRegression`
+`from sklearn.linear_model import LogisticRegression`
+`from sklearn.neighbors import KNeighborsClassifier`
+`from sklearn.tree import DecisionTreeRegressor`
+`from sklearn.ensemble import RandomForestClassifier`
+* `max_features`: for classification start with sqrt(p) and for regression p/3
+* `min_sample_leaf`: start with None and try others
+* `n_jobs`: -1 will make it run on the max # of proocessors
 
 ---
 
@@ -545,7 +554,7 @@ An **orthogonal matrix** is important for statement of preference surveys. **Eig
 
 ## Probability ##
 
-Probability is the measure of the likelihood that an event will occur.
+**Probability** is the measure of the likelihood that an event will occur.  **Odds** are
 
 ### Set Operations and Notation ###
 
@@ -719,7 +728,7 @@ Assuming normality, you would use the following for your 95% confidence interval
 
 Z tests can be conducted for a smaller sample size (n < 30) while T tests are generally reserved for lager sample sizes.
 
-Boostraping estimates the sampling distribution of an estimator by sampling with replacement from the original sample.  Bootstrapping is often used to estimate the standard errors and confidence intervals of an unknown parameter.  We bootstrap when the theoretical distribution of the statistical parameter is complicated or unknown (like wanting a confidence interval on a median or correlation), when n is too small, and we we favor accuracy over computational costs.  It comes with almost no assumptions.
+**Bootstraping** estimates the sampling distribution of an estimator by sampling with replacement from the original sample.  Bootstrapping is often used to estimate the standard errors and confidence intervals of an unknown parameter, but can also be used for your beta coefficients.  We bootstrap when the theoretical distribution of the statistical parameter is complicated or unknown (like wanting a confidence interval on a median or correlation), when n is too small, and we we favor accuracy over computational costs.  It comes with almost no assumptions.
 
 1. Start with your dataset of size n
 2. Sample from your dataset with replacement to create a bootstrap sample of size n
@@ -921,6 +930,28 @@ https://www.wolframalpha.com/
 
 ### Machine Learning (ML) ###
 
+**Machine learning (ML)** is a "Field of study that gives computers the ability to learn without being explicitly programmed."  There are three broad categories of ML depending on the feedback available to the system:
+
+1. `Supervised learning`: The algorithm is given example inputs and outputs with the goal of mapping the two together.  k-Nearest Neighbors and decision trees are non-parametric, supervised learning algorithms.  
+2. `Unsupervised learning`: No labels are given to the algorithm, leaving it to find structure within the input itself.  Discovering hidden patterns or feature engineering is often the goal of this approach
+3. `Reinforcement learning`: A computer interacts with a dynamic environment in which it must perform a goal (like driving a car) without being explicitly told if it has come close to its goal
+
+There are a number of possible outputs of ML:
+
+* `Classification`: results are classified into one or more classes, such as spam filters
+* `Regression`: provides continuous outputs
+* `Clustering`: returns a set of groups where, unlike classification, the groups are not known beforehand
+* `Density estimations`: finds the distribution of inputs in some space
+* `Dimensionality reduction`: simplifies inputs by mapping them into a lower-dimensional space
+
+An **ensemble** leverages the idea that more predictors can make a better model than any one predictor independently, combining many predictors with average or weighted averages.  There are a few types of ensembles:
+
+1. `Committees`: this is the domain of random forest where regressions have an unweighted average and classification uses a majority
+2. `Weighted averages`: these give more weight to better predictors (the domain of boosting)
+3. `Predictor of predictors`: Treats predictors as features in a different model.  We can do a linear regression as a feature and random forest as another (part of the MLXtend package)
+
+
+
 ### k-Nearest Neighbors (KNN) ###
 
 KNN is a highly accurate ML algorithm offering high accuracy that is insensitive to outliers and makes no assumptions about the data.  You can also do online updates easily (you just store another data point), use as many classes as you want, and learn a complex function with no demands on relationships between variables (like linearity).  The downside is that it is computationally very expensive because it's **IO bound** (you have to read every data point to use it), noise can affect results, and feature interpretation can be tricky.  Categorical variables makes feature interpretation tricky.  It works with numeric and nominal values.  
@@ -951,28 +982,72 @@ KNN can be used for classification, regression (neighbors averaged to give conti
 
 ### Decision Trees ###
 
-Decision trees use **information theory** (the science of splitting data) to classify data into different sets, subsetting those sets further as needed.  One benefit of decision trees over KNN is that it's more interpretable.  They are computationally inexpensive and missing values and irrelavant features are ok.  The downside is that they are prone to overfitting.  Like KNN they work with numeric and nominal values however numeric values have to be translated into a nominal one.
+Decision trees use **information theory** (the science of splitting data) to classify data into different sets, subsetting those sets further as needed.  One benefit of decision trees over KNN is that it's *incredibly interpretable*.  They are computationally inexpensive, feature interaction is already built in, and they can handle mixed data (discrete, continuous, and categorical).  The downside is that they are prone to overfitting.  They are also terrible at extrapolation (e.g. if I make $10 for 1 hour work and $20 for 2 hours work, they'll predict $20 for 10 hours of work).  Like KNN they work with numeric and nominal values however numeric values have to be translated into a nominal one.  They are computational challenging at the training phase and inexpensive at the prediction phase as well as able to deal with irrelevant features and NA's (the opposite of KNN).
+
+Trees consist of **nodes**.  One type of node is the common element throughout the tree known as the **root** (at the top, so it's botanically inaccurate).  The **stump** is the first node.  The **leaves** are a type of node at the end of the tree.  
+
+**Information gain** is the difference between the pre-split and and post-split entropy.  The **entropy** of a set is a measure of the amount of disorder.  We want to create splits that minimize the entropy in each side of split.  **Cross-entropy** is a measure of node purity using the log and **Gini index** does the same with a slightly different formula (both are effectively the same).  You can do regression decision trees by using RSS against the mean value of each leaf instead of cross-entropy or Gini.  You can also use variance before and after.
 
 The method:
 
 1. Collect: any method
 2. Prepare: any continuous values need to be quantized into nominal ones
 3. Analyze: any method, but trees should be examined after they're built
-4. Train: construct a tree
+4. Train: construct a tree by calculating the information gain for every possible split and select the split that has the highest information gain.  Splits for categorical features are `variable = value` or `!= variable`  and for continuous variable `variable <= threshold`
 5. Test: calculate the error rate
 
-The ID3 algorithm is one option for splitting the data.
+With *continuous variables*, decision trees divide the space and use the mean from that given space.  For continuous variables, there are three general split methods for decision tree regression:
 
+1. Minimize RSS after the split
+2. Reduce the weighted variance after each split (weighted by the number of each side of split over the total number of values going to that split)
+3. Reduce weighted std after the split
+
+
+Decision trees are high variance since they are highly dependent on the training data.  We can ease up on the variance by **pruning**, which is necessary whenever you make trees. **Prepruning** is when you prune as you build the tree.  You can do this with leaf size (stopping when there's few data points at a none), depth (stip when a tree gets too deep), class mix (stop when some percent of data points are the same class), and error reduction (stop when the information gains are small).  For **postpruning**, you can build a full tree, then cut off some leaves (meaning merge them) using a formula similar to ridge regression.  You will likely extend your trees with bagging, random forests, or boosting.  
+
+Algorithms for splitting data include ID3, C4.5, and CART.
+
+### Bagging, Random Forests, and Boosting ###
+
+**Bagging** is Bootstrap AGGregatING where you take a series of bootstrapped samples from your data following this method:
+
+1. Draw a random bootstrap sample of size n
+2. Grow a decision tree using the same split criteria at each node by maximizing the information gain (no pruning)
+3. Repeat steps 1 & 2 k times
+4. Aggregate the prediction by each tree to assign the class label by majority vote (for classification) or average (for regression)
+
+Bagging starts with high variance and averages it away.  Boosting does the opposite, starting with high bias and moving towards higher variance.
+
+**Random forest** is the same as bagging but with one new step: in step 2 it randomly selects d features without resampling (further decorrelating the trees).  We can do this process in parallel to save computation.  Start with 100-500 trees and plot the number of trees versus your error.  You can then do many more trees at the end of your analysis.  Generally you don't need interaction variables though there may be times when you need them.
+
+Random forest offers **feature importance**, or the relative importance of the variables in your data.  This makes your forest more interpretable and gives you free feature selection.  Note that you are only interested in rank, not magnitude, and that multicollinearity will inflate the value of certain variables.  There are two ways of calculating this, called the first and second way:
+
+1. Start with an array that is the same number of features in your model and then calculate the information gain and points split with each variable.
+2. Calculate OOB error for a given tree.  After, take your features and give them a random value between the min and max and calculate how much worse it makes your model.
+
+One downside of random forest is that it sacrifices the interpretability of individual trees.  *Explain or predict, don't do both*.  Some models have to be explained to stakeholders.  Others just need high predictive accuracy.  Try to separate these two things whenever possible.
+
+**Out of Bag (OOB) Error** pertains to bootstrap samples.  Since each bootstrap is different and you're already calling it, you can use your OOB samples for crossvalidation using `oob_score = True`.  *You will rarely crossvalidate a random forest because OOB error efectively acts as the crossvalidation* meaning that you only need a test/train split, not a validation set.
+
+For categorical data, strings need to be converted to numeric.  If possible, convert to a continuous verable (e.g. S, M, L into a weight and height).
+
+Galit Shmueli's paper "To Explain or to Predict?""
+
+
+### Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines ###
+
+Differences between SVM's and logistic regression.
 
 ---
 
 ## Note on Style and Other Tools ##
 
-
-jupyter notebook or Apache Zeppelin
+iPython offers features like tab completion and auto-reload over the main python install.  You can also type `%debug` to debut code.
+Jupyter/iPython notebook or Apache Zeppelin
 Markdown: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 Atom: command / hashes out text
-For not having to specify integer division: from __future__ import division
+Anacoda
+Homebrew
 
 Sniffer which wraps nose tests so every time you save a file it will automatically run the tests - pip install sniffer nose-timer
 
@@ -1001,5 +1076,6 @@ Common Interview Questions:
 * Basic combinatorics
 * Linear regression basics, especially that LR is more complex than y = MX + B
 * Interpreting coefficients for linear and logistic regression
+* How do you know if you overfit a model and how do you adjust for it?
 
 O'Reilly (Including salary averages): https://www.oreilly.com
