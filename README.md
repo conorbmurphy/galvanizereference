@@ -13,7 +13,7 @@ The main responsibilities of a data scientist are:
 4. `Exploratory data analysis (EDA)` (python/pandas)
 4. `Data munging` (pandas)
 5. `Feature engineering`
-6. `Modeling`
+6. `Modeling` (sklearn)
 7. `Presentation`
 
 Part study tool part reference document, this will condense many of my notes and resources as a living document intended to assist me while in the act of data science-ing.
@@ -290,6 +290,11 @@ Working with datetime objects, you can do df.dt. and then hit tab to see the dif
 Linear algebra package
 In calculating `np.std()`, be sure to specify `ddof = 1` when refering to the sample.
 
+`np.concatenate((foo, bar), axis = 1)` # adds a column
+`np.hstack((foo, bar))` # adds a column
+`np.vstack((foo, bar))` # adds a row
+`foo.min(axis = 0)` # takes column mins
+
 ---
 
 ### Python Packages - scipy ###
@@ -340,20 +345,45 @@ A useful plot from seaborn is heatmap and violin plot (which is the kde mirrored
 
 ---
 
-### Python Packages - sklearn/statsmodels ###
+### Python Packages - statsmodels ###
 
 Statsmodels is the de facto library for performing regression tasks in Python.  
 `import statsmodels.api as sm`
 Note that logistic regression in statsmodels will fail to converge if data perfectly separable.  Logistic regression in sklearn normalizes (punishes betas) so it will converge.
 
+
+### Python Packages - sklearn ###
+
+Sklearn does not allow for categorical variables.  Everything must be encoded as a float.
+
+Splitting test/training data:
+
+      from sklearn.model_selection import train_test_split
+      from sklearn.cross_validation import train_test_split # Older version
+      X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+
 `from sklearn.linear_model import LinearRegression`
 `from sklearn.linear_model import LogisticRegression`
 `from sklearn.neighbors import KNeighborsClassifier`
 `from sklearn.tree import DecisionTreeRegressor`
+
 `from sklearn.ensemble import RandomForestClassifier`
 * `max_features`: for classification start with sqrt(p) and for regression p/3
 * `min_sample_leaf`: start with None and try others
 * `n_jobs`: -1 will make it run on the max # of proocessors
+
+`from sklearn.svm import SVC` # sklearn uses SVC's even though it's a SVM.
+* By default, SVC will use radial basis, which will enlarge your feature space with higher-order functions
+
+A few other fun tools:
+
+`from sklearn.pipeline import Pipeline`
+Note that pipeline is helpful for keeping track of changes
+
+`from sklearn.preprocessing import LabelEncoder`
+This tool will transform classes into numerical values
+
 
 ---
 
@@ -459,6 +489,21 @@ Git is the version control software.  Github builds a UI around git.  A repo is 
 
 Adding is building to a commit.  Ideally a commit would be a whole new feature/version.  `It’s only with commands that have the word ‘force’ that you risk losing data.`  When you make a pull request, it means you have a new version of a repo and you want these to be a part of the original repo.
 
+Here's a workflow:
+
+1. One person creates a repository (and adds others as collaborators)
+2. Everyone clones the repository
+3. User A makes and commits a small change.  Like, really small.
+4. User A pushes change.
+5. User B makes and commits a small change.
+6. User B tries to push, but gets an error.
+7. User B pull User A's changes.
+8. User B resolves any possible merge conflicts (this is why you keep commits small)
+9. User B pushes.
+10. Repeat
+
+Centralized Git Workflow: https://www.atlassian.com/git/tutorials/comparing-workflows/
+
 ---
 
 ## Command Line ##
@@ -509,6 +554,8 @@ There are a few options for dealing with NA's:
  * Impute the values with a prediction (e.g. mean, mode)
 * Ignore them and hope your model can handle them
 
+Exploratory plots such as scattermatrix.
+
 ---
 
 ## Linear Algebra ##
@@ -554,7 +601,7 @@ An **orthogonal matrix** is important for statement of preference surveys. **Eig
 
 ## Probability ##
 
-**Probability** is the measure of the likelihood that an event will occur.  **Odds** are
+**Probability** is the measure of the likelihood that an event will occur written as the number of successes over the number of trials.  **Odds** are the number of successes over the number of failures.  Probability takes a value between 0 and 1 and odds usually take the form successes:failures.  
 
 ### Set Operations and Notation ###
 
@@ -1007,7 +1054,7 @@ Decision trees are high variance since they are highly dependent on the training
 
 Algorithms for splitting data include ID3, C4.5, and CART.
 
-### Bagging, Random Forests, and Boosting ###
+### Bagging and Random Forests ###
 
 **Bagging** is Bootstrap AGGregatING where you take a series of bootstrapped samples from your data following this method:
 
@@ -1033,10 +1080,26 @@ For categorical data, strings need to be converted to numeric.  If possible, con
 
 Galit Shmueli's paper "To Explain or to Predict?""
 
+### Boosting ###
+
+
+
 
 ### Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines ###
 
+Support Vector Machines (SVM) are typically thought of as a classification algorithm however they can be used for regressions as well.  SVM's used to be as well researched as neural networks are today and are considered to be one of the best "out of the box" classifiers.
+
+In p-dimensional space, a **hyperplane** is a flat affine subspace of dimension p-1.  With a dat set of an n x p matrix, we have n points in p-dimensional space.  Points of different classes, if completely separable, are able to be separated by an infinite number of hyperplanes.  The **maximal margin hyperplane** is the separating hyperplane that is farthest from the training observations.  The **maximal margin classifier** then is when we classify a test observation based on which side of the maximal margin hyperplane it lies.
+
+This margin relies on just three points, those closest to the hyperplane.  These points are called the **support vectors**.
+
+While a maximal margin classifier relies on a perfect division of classes, a **support vector classifier** (also known as a **soft margin classifier**) is a generalization to the non-separable case.  Using the term **C** we control the number and severity of violations to the margin.  In practice, we evaluate this tuning parameter at a variety of values using cross-validation.  C is how we control the bias/variance trade-off for this model, as it increases we become more tolerant of violations, giving us more bias and less variance.
+
+Finally, **support vector machines (SVM)** allow us to address the problem of possibly non-linear boundaries by enlarging the feature space using quadratic, cubic, and higher-order polynomial functions as our predictors.  By default,
+
 Differences between SVM's and logistic regression.
+
+MIT lecture on SVM's: https://www.youtube.com/watch?v=_PwhiWxHK8o
 
 ---
 
@@ -1048,6 +1111,7 @@ Markdown: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 Atom: command / hashes out text
 Anacoda
 Homebrew
+AWS: https://gist.github.com/iamatypeofwalrus/5183133
 
 Sniffer which wraps nose tests so every time you save a file it will automatically run the tests - pip install sniffer nose-timer
 
