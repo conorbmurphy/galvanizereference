@@ -16,9 +16,11 @@ The main responsibilities of a data scientist are:
 6. `Modeling` (sklearn)
 7. `Presentation`
 
-While these represent the core competencies of a data scientist, the method for implementing them is best served by the Cross-Industry Standard Process for Data Mining (CRISP-DM).
+While these represent the core competencies of a data scientist, the method for implementing them is best served by the Cross-Industry Standard Process for Data Mining (CRISP-DM), pictured below.
 
 ![Image of CRISP-DM](https://github.com/conorbmurphy/galvanizereference/blob/master/images/CRISP.png)
+
+This system helps refocus our process on business understanding and business needs.  Always ask what your ideal data set is before moving into the data understanding stage, then approach the data you do have in that light.  Always, always, always focus on business solutions.  
 
 ---
 
@@ -564,6 +566,8 @@ There are a few options for dealing with NA's:
  * Impute the values with a prediction (e.g. mean, mode)
 * Ignore them and hope your model can handle them
 
+One trick for imputation is to add another column to your model that's your variable imputed with a third column that's binary for whether you did impute it.  Using this method, your model can unlearn the imputation if you shouldn't have done it.
+
 Exploratory plots such as scattermatrix.
 
 ---
@@ -914,7 +918,7 @@ Here are some potential transformations:
 | Logarithmic | Independent variable = log(x) |y = β0 + β1log(x) | y^ = β0 + β1log(x) |
 | Power | Dep and Ind variables = log(y) and log(x) |log(y) = β0 + β1log(x) | y^ = 10**(β0 + β1log(x)) |
 
-![Transformations] (https://github.com/conorbmurphy/galvanizereference/images/tranformations.png)
+![Transformations] (https://github.com/conorbmurphy/galvanizereference/blob/master/images/transformations.png)
 
 Reference: http://emp.byui.edu/brownd/stats-intro/dscrptv/graphs/qq-plot_egs.htm
 
