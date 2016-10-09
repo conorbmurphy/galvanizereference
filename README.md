@@ -2,7 +2,7 @@
 
 ## Introduction ##
 
-This is designed to be a catch-all reference tool for my notes while in Galvanize's Data Science Immersive program.  Others might find it of use as well.
+This is designed to be a catch-all reference tool for my notes while in Galvanize's Data Science Immersive program.  My goal is to have a living  document that I can update with tips, tricks, and additional resources as I progress in my data science-ing.  Others might find it of use as well.
 
 The main responsibilities of a data scientist are:
 
@@ -16,7 +16,9 @@ The main responsibilities of a data scientist are:
 6. `Modeling` (sklearn)
 7. `Presentation`
 
-Part study tool part reference document, this will condense many of my notes and resources as a living document intended to assist me while in the act of data science-ing.
+While these represent the core competencies of a data scientist, the method for implementing them is best served by the Cross-Industry Standard Process for Data Mining (CRISP-DM).
+
+![Image of CRISP-DM](https://github.com/conorbmurphy/galvanizereference/blob/master/images/CRISP.png)
 
 ---
 
@@ -373,10 +375,18 @@ Splitting test/training data:
 * `min_sample_leaf`: start with None and try others
 * `n_jobs`: -1 will make it run on the max # of proocessors
 
+`from sklearn.ensemble import GradientBoostingRegressor`
+* You can used `staged_predict` to access the boosted steps, which is especially useful in plotting error rate over time
+
 `from sklearn.svm import SVC` # sklearn uses SVC's even though it's a SVM.
 * By default, SVC will use radial basis, which will enlarge your feature space with higher-order functions
 
+
 A few other fun tools:
+
+`from sklearn.model_selection import GridSearchCV`
+Searches over designated parameters to tune a model
+* GridSearch can parallelize jobs so set `n_jobs = -1`
 
 `from sklearn.pipeline import Pipeline`
 Note that pipeline is helpful for keeping track of changes
@@ -983,10 +993,10 @@ https://www.wolframalpha.com/
 2. `Unsupervised learning`: No labels are given to the algorithm, leaving it to find structure within the input itself.  Discovering hidden patterns or feature engineering is often the goal of this approach
 3. `Reinforcement learning`: A computer interacts with a dynamic environment in which it must perform a goal (like driving a car) without being explicitly told if it has come close to its goal
 
-There are a number of possible outputs of ML:
+The best model to choose often depends on computational costs at training time versus at prediction time in addition to sample size.  There are a number of possible outputs of ML:
 
-* `Classification`: results are classified into one or more classes, such as spam filters
-* `Regression`: provides continuous outputs
+* `Classification`: results are classified into one or more classes, such as spam filters.  For this, we have logistic regression, decision trees, random forest, KNN, SVM's, and boosting
+* `Regression`: provides continuous outputs.
 * `Clustering`: returns a set of groups where, unlike classification, the groups are not known beforehand
 * `Density estimations`: finds the distribution of inputs in some space
 * `Dimensionality reduction`: simplifies inputs by mapping them into a lower-dimensional space
@@ -1082,24 +1092,62 @@ Galit Shmueli's paper "To Explain or to Predict?""
 
 ### Boosting ###
 
+**Boosting** is generally considered to be the best out of box supervised learning algorithm for classification and regression.  In practice, you often get similar results from bagging and random forests while boosting generally gives you better performance.  Boosting does well if you have more features than sample size, and is especially helpful for website data where we're collecting more and more information.
+
+While it's most natural to think of boosting in the context of trees, it applies to other 'weak learners' including linear regression.  It does not apply to strong lerners like SVM's.  While random forest and bagging creates a number of trees and looks for consensus amongst them, boosting trains a single tree.  That is, random forest takes place in parallel while boosting must be done in series since each tree relies on the last (making it slower to train).  Boosting does not involve bootstrap sampling: each tree is fit on the error of the previous model.
+
+The first predicting function does practically nothing where the error is basically everything.  Here's the key terminology:
+
+* `B`: your number of trees, likely in the hundreds or thousands.  Since boosting can overfit (though it's rare), pick this with cross-validation
+* `D`: your depth control on your trees (also known as the interaction depth since it controls feature interaction order/degree).  Often D is 1-3 where 1 is known as stupmps.
+* `λ`: your learning rate.  It is normally a small number like .1, .01, or .001.  Use CV to pick it.  λ is in tension with B because learning more slowly means needing more trees
+* `r`: your error rate.  Note that you're fitting to r and y.
 
 
+For every B, you fit a tree with d splits to r.  You update that with a version of the tree shrunken with λ and update the residuals.  The boosted model is the sum of all your functions multiplied by λ.  At each step, you upweight the residuals you got wrong.  We control depth and learning rate to avoid a 'hard fit' where we overfit the data.  This is the opposite of random forest where we make complex models and then trim them back.
+
+There are many different types of boosting with the best option depending on computation/speed, generality, flexibility and nomenclature:
+
+* `AdaBoost`: 'adaptive boosting' that upweights the points you're getting wrong to focus more on them.  It will weigh each individual weak learner based on its performance.  This is a special case of gradient boosting, which was discovered after AdaBoost.  AdaBoost allows us to be more nuanced in how we shrink a function as it's not just a constant lambda.  You have two sets of weights: d, our weight for an underrepresented class (updated as it goes), and alpha, which is the weight of our weak learners (constant).  *Anything better than random is valuable.*  Alpha flips at .5, meaning that if a given learner is wrong more than it's right we predict the opposite outcome.
+* `Gradient Boosting`: improves the handling of loss functions for robustness and speed.  It needs differentiable loss functions
+** `XGBoost`: a derivation on gradient boosting invented, interestingly enough, by a student in China to win a Kaggle competition
+
+To *compare our models*, lets imagine you want a copy of a painting.  Bagging would be the equivalent of asking a bunch of painters to observe the painting from the same location and then go paint it from memory.  Random forests would be the same except these painters could stand anywhere around it.  In both of these cases, you would average the results of all the painters.  Boosting, by contrast, would be the equivalent of asking one single painter to sit by the painting, waiting for each stroke to dry, and then painting the 'error' between what they've already painted and the true painting.
+
+A particularly helpful visualization: https://github.com/zipfian/DSI_Lectures/blob/master/boosting/matt_drury/Boosting-Presentation-Galvanize.ipynb
 
 ### Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines ###
 
-Support Vector Machines (SVM) are typically thought of as a classification algorithm however they can be used for regressions as well.  SVM's used to be as well researched as neural networks are today and are considered to be one of the best "out of the box" classifiers.
+Support Vector Machines (SVM) are typically thought of as a classification algorithm however they can be used for regressions as well.  SVM's used to be as well researched as neural networks are today and are considered to be one of the best "out of the box" classifiers.  They are useful when you have a sparcity of solutions achievable by the l1 penalty and when you know that kernels and margins can be an effective way to approach your data.
 
-In p-dimensional space, a **hyperplane** is a flat affine subspace of dimension p-1.  With a dat set of an n x p matrix, we have n points in p-dimensional space.  Points of different classes, if completely separable, are able to be separated by an infinite number of hyperplanes.  The **maximal margin hyperplane** is the separating hyperplane that is farthest from the training observations.  The **maximal margin classifier** then is when we classify a test observation based on which side of the maximal margin hyperplane it lies.
+In p-dimensional space, a **hyperplane** is a flat affine subspace of dimension p-1.  With a dat set of an n x p matrix, we have n points in p-dimensional space.  Points of different classes, if completely separable, are able to be separated by an infinite number of hyperplanes.  The **maximal margin hyperplane** is the separating hyperplane that is farthest from the training observations.  The **margin** is the orthogonal distance between points between two classes (when the inner product of two vectors is 0, it's orthoginal).  The **maximal margin classifier** then is when we classify a test observation based on which side of the maximal margin hyperplane it lies.
 
 This margin relies on just three points, those closest to the hyperplane.  These points are called the **support vectors**.
 
 While a maximal margin classifier relies on a perfect division of classes, a **support vector classifier** (also known as a **soft margin classifier**) is a generalization to the non-separable case.  Using the term **C** we control the number and severity of violations to the margin.  In practice, we evaluate this tuning parameter at a variety of values using cross-validation.  C is how we control the bias/variance trade-off for this model, as it increases we become more tolerant of violations, giving us more bias and less variance.
 
-Finally, **support vector machines (SVM)** allow us to address the problem of possibly non-linear boundaries by enlarging the feature space using quadratic, cubic, and higher-order polynomial functions as our predictors.  By default,
+Finally, **support vector machines (SVM)** allow us to address the problem of possibly non-linear boundaries by enlarging the feature space using quadratic, cubic, and higher-order polynomial functions as our predictors.  **Kernels** are a computationally efficient way to enlarge your feature space as they rely only on the inner products of the observations, not the observations themselves.  There are a number of different kernels that can be used.
 
-Differences between SVM's and logistic regression.
+The slack variable allows us to relax our constraint in a given case.  Class imbalance is an issue for SVM (when you have a lot of classes of different positive and negative values).  When you penalize the betas with respect to the size of the beta, then you should scale them.  SVM's encode yi as (-1, 1) to denote which side of our hyperplane it's on, a change from logistic regression where it's encoded as (0, 1).
+
+If there are more than two classes of data, there are two options to approach the problem:
+
+1. `One versus the rest`: train k models for your k classes and choose the model that predicts the highest probability for your specific class
+2. `One versus one`: choose the best model based on ties
+
+Theree are many *differences between logisic regression and SVM's*.  A logistic regression only asymptotically approaches 0 or 1.  Perfectly separable data is a problem for logistic regression where it won't converge.  SVM's give you a class without a probability; logistic regression assigns a probability for a given class.
 
 MIT lecture on SVM's: https://www.youtube.com/watch?v=_PwhiWxHK8o
+
+---
+
+## Helpful Visualizations ##
+
+Feature importance: Plot your features in order of importance (tells you importance but not if they correlate positively or negatively)
+Partial dependency: This makes predictions having froze a given feature and incrementing it up.  FOr instance, you can plot two features against the 'partial dependence', which is your outcome.  
+ROC
+Residual plots
+QQ Norm
 
 ---
 
