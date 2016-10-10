@@ -197,21 +197,22 @@ Lambda functions are for defining functions without a name:
 
 #### Testing and Debugging ####
 * add this in line you're examining: import pdb; pdb.set_trace()
+** Resource: http://frid.github.io/blog/2014/06/05/python-ipdb-cheatsheet/
 * Use test_[file to test].py when labeling test files
 * Use `from unittest import TestCase`
 
 
 nosetests
 
-from unittest import TestCase
+`from unittest import TestCase`
 
-class OOPTests(TestCase):
+      class OOPTests(TestCase):
 
-      def test_backpack(self):
-          pack = Backpack()
-          x = 1
-          pack.throw_in(x)
-          self.assertIn(1, pack._items)
+            def test_backpack(self):
+                pack = Backpack()
+                x = 1
+                pack.throw_in(x)
+                self.assertIn(1, pack._items)
 
 You need assertions in unittest in order to test things.
 
@@ -1015,7 +1016,7 @@ An **ensemble** leverages the idea that more predictors can make a better model 
 
 ### k-Nearest Neighbors (KNN) ###
 
-KNN is a highly accurate ML algorithm offering high accuracy that is insensitive to outliers and makes no assumptions about the data.  You can also do online updates easily (you just store another data point), use as many classes as you want, and learn a complex function with no demands on relationships between variables (like linearity).  The downside is that it is computationally very expensive because it's **IO bound** (you have to read every data point to use it), noise can affect results, and feature interpretation can be tricky.  Categorical variables makes feature interpretation tricky.  It works with numeric and nominal values.  
+KNN is a highly accurate ML algorithm that is insensitive to outliers and makes no assumptions about the data.  You can also do online updates easily (you just store another data point), use as many classes as you want, and learn a complex function with no demands on relationships between variables (like linearity).  The downside is that it is computationally very expensive because it's **IO bound** (you have to read every data point to use it) and noise can affect results.  Categorical variables makes feature interpretation tricky.  It works with numeric and nominal values.  
 
 KNN is a classifier algorithm that works by comparing a new piece of data to every piece of data in a training set.  We then look at the top k most similar pieces of data and take a majority vote, the winner of which will get its label assigned to the new data.  Your error rate is the number of misclassifications over the number of total classifications.
 
@@ -1033,21 +1034,21 @@ Distance metrics can include any of the following:
 
 * `Euclidean`: a straight line (and a safe default)
 * `Manhattan`: straight lines from the base point to the destination using the number of stops at other points along the way.  Manhattan distance is based on how far a taxi would go following blocks in a city
-* `Cosine`: uses the angle from the origin to the new point.  For instance, you can plot different points and the magnitude (distance from the origin) won't matter, only the distance from the origin
+* `Cosine`: uses the angle from the origin to the new point.  For instance, you can plot different points and the magnitude (distance from the origin) won't matter, only the distance from the origin. *Cosine distance is key in NLP.*
 * `Custom`: you can always design your own distance metric as well
 
-The **curse of dimensionality** is that as dimensionality increases, the performance of KNN commonly decreases.  This starts to affect you when you have p (number of dimensions) as 5 or greater.  The nearest neighbors are no longer nearby neighbors.  Adding useful features (that are truly associated with the response) is generally helpful but noise features increase dimensionality without an upside.  The more dimensions you have (p), the amount of space you have in your non-outlier region becomes miniscule.  *This is the kryptonite of KNN*.  You'll often have to reduce dimensions to use it, especially with NLP.  **Locality-sensitive hashing** is a way to reduce the time to lookup each datapoint.
+The **curse of dimensionality** is that as dimensionality increases, the performance of KNN commonly decreases.  This starts to affect you when you have p (number of dimensions) as 5 or greater.  The nearest neighbors are no longer nearby neighbors.  Adding useful features (that are truly associated with the response) is generally helpful but noise features increase dimensionality without an upside.  The more dimensions you have (p), the smaller the amount of space you have in your non-outlier region.  *This is the kryptonite of KNN*.  You'll often have to reduce dimensions to use it, especially with NLP.  **Locality-sensitive hashing** is a way to reduce the time to lookup each datapoint.
 
 KNN can be used for classification, regression (neighbors averaged to give continuous value), imputation (replace missing data), and anomaly detection (if the nearest neighbor is far away, it might be an outlier).
 
 
 ### Decision Trees ###
 
-Decision trees use **information theory** (the science of splitting data) to classify data into different sets, subsetting those sets further as needed.  One benefit of decision trees over KNN is that it's *incredibly interpretable*.  They are computationally inexpensive, feature interaction is already built in, and they can handle mixed data (discrete, continuous, and categorical).  The downside is that they are prone to overfitting.  They are also terrible at extrapolation (e.g. if I make $10 for 1 hour work and $20 for 2 hours work, they'll predict $20 for 10 hours of work).  Like KNN they work with numeric and nominal values however numeric values have to be translated into a nominal one.  They are computational challenging at the training phase and inexpensive at the prediction phase as well as able to deal with irrelevant features and NA's (the opposite of KNN).
+Decision trees use **information theory** (the science of splitting data) to classify data into different sets, subsetting those sets further as needed.  One benefit of decision trees over KNN is that it's *incredibly interpretable*.  They are computationally inexpensive, feature interaction is already built in, and they can handle mixed data (discrete, continuous, and categorical).  The downside is that they are prone to overfitting.  They are also terrible at extrapolation (e.g. if I make $10 for 1 hour work and $20 for 2 hours work, they'll predict $20 for 10 hours of work).  Like KNN they work with numeric and nominal values however numeric values have to be translated into a nominal one.  They are computationally challenging at the training phase and inexpensive at the prediction phase as well as able to deal with irrelevant features and NA's (the opposite of KNN).
 
 Trees consist of **nodes**.  One type of node is the common element throughout the tree known as the **root** (at the top, so it's botanically inaccurate).  The **stump** is the first node.  The **leaves** are a type of node at the end of the tree.  
 
-**Information gain** is the difference between the pre-split and and post-split entropy.  The **entropy** of a set is a measure of the amount of disorder.  We want to create splits that minimize the entropy in each side of split.  **Cross-entropy** is a measure of node purity using the log and **Gini index** does the same with a slightly different formula (both are effectively the same).  You can do regression decision trees by using RSS against the mean value of each leaf instead of cross-entropy or Gini.  You can also use variance before and after.
+**Information gain** is the difference between the pre-split and and post-split entropy.  The **entropy** of a set is a measure of the amount of disorder.  We want to create splits that minimize the entropy in each side of split.  **Cross-entropy** is a measure of node purity using the log and **Gini index** does the same with a slightly different formula (both are effectively the same).  You  can do regression decision trees by using RSS against the mean value of each leaf instead of cross-entropy or Gini.  You can also use variance before and after.
 
 The method:
 
@@ -1064,7 +1065,7 @@ With *continuous variables*, decision trees divide the space and use the mean fr
 3. Reduce weighted std after the split
 
 
-Decision trees are high variance since they are highly dependent on the training data.  We can ease up on the variance by **pruning**, which is necessary whenever you make trees. **Prepruning** is when you prune as you build the tree.  You can do this with leaf size (stopping when there's few data points at a none), depth (stip when a tree gets too deep), class mix (stop when some percent of data points are the same class), and error reduction (stop when the information gains are small).  For **postpruning**, you can build a full tree, then cut off some leaves (meaning merge them) using a formula similar to ridge regression.  You will likely extend your trees with bagging, random forests, or boosting.  
+Decision trees are high variance since they are highly dependent on the training data.  We can ease up on the variance by **pruning**, which is necessary whenever you make trees. **Prepruning** is when you prune as you build the tree.  You can do this with leaf size (stopping when there's few data points at a node), depth (stop when a tree gets too deep), class mix (stop when some percent of data points are the same class), and error reduction (stop when the information gains are small).  For **postpruning**, you can build a full tree, then cut off some leaves (meaning merge them) using a formula similar to ridge regression.  You will likely extend your trees with bagging, random forests, or boosting.  
 
 Algorithms for splitting data include ID3, C4.5, and CART.
 
@@ -1084,13 +1085,13 @@ Bagging starts with high variance and averages it away.  Boosting does the oppos
 Random forest offers **feature importance**, or the relative importance of the variables in your data.  This makes your forest more interpretable and gives you free feature selection.  Note that you are only interested in rank, not magnitude, and that multicollinearity will inflate the value of certain variables.  There are two ways of calculating this, called the first and second way:
 
 1. Start with an array that is the same number of features in your model and then calculate the information gain and points split with each variable.
-2. Calculate OOB error for a given tree.  After, take your features and give them a random value between the min and max and calculate how much worse it makes your model.
+2. Calculate OOB error for a given tree by evaluating predictions on the observations that were not used in building the base learner.  After, take your features and give them a random value between the min and max and calculate how much worse it makes your model.
 
 One downside of random forest is that it sacrifices the interpretability of individual trees.  *Explain or predict, don't do both*.  Some models have to be explained to stakeholders.  Others just need high predictive accuracy.  Try to separate these two things whenever possible.
 
-**Out of Bag (OOB) Error** pertains to bootstrap samples.  Since each bootstrap is different and you're already calling it, you can use your OOB samples for crossvalidation using `oob_score = True`.  *You will rarely crossvalidate a random forest because OOB error efectively acts as the crossvalidation* meaning that you only need a test/train split, not a validation set.
+**Out of Bag (OOB) Error** pertains to bootstrap samples.  Since each bootstrap is different and you're already calling it, you can use your OOB samples for cross-validation using `oob_score = True`.  *You will rarely cross-validate a random forest because OOB error effectively acts as the cross-validation* meaning that you only need a test/train split, not a validation set.
 
-For categorical data, strings need to be converted to numeric.  If possible, convert to a continuous verable (e.g. S, M, L into a weight and height).
+For categorical data, strings need to be converted to numeric.  If possible, convert to a continuous variable (e.g. S, M, L into a weight and height).
 
 Galit Shmueli's paper "To Explain or to Predict?""
 
@@ -1098,14 +1099,14 @@ Galit Shmueli's paper "To Explain or to Predict?""
 
 **Boosting** is generally considered to be the best out of box supervised learning algorithm for classification and regression.  In practice, you often get similar results from bagging and random forests while boosting generally gives you better performance.  Boosting does well if you have more features than sample size, and is especially helpful for website data where we're collecting more and more information.
 
-While it's most natural to think of boosting in the context of trees, it applies to other 'weak learners' including linear regression.  It does not apply to strong lerners like SVM's.  While random forest and bagging creates a number of trees and looks for consensus amongst them, boosting trains a single tree.  That is, random forest takes place in parallel while boosting must be done in series since each tree relies on the last (making it slower to train).  Boosting does not involve bootstrap sampling: each tree is fit on the error of the previous model.
+While it's most natural to think of boosting in the context of trees, it applies to other 'weak learners' including linear regression.  It does not apply to strong learners like SVM's.  While random forest and bagging creates a number of trees and looks for consensus amongst them, boosting trains a single tree.  That is, random forest takes place in parallel while boosting must be done in series since each tree relies on the last (making it slower to train).  Boosting does not involve bootstrap sampling: each tree is fit on the error of the previous model.
 
 The first predicting function does practically nothing where the error is basically everything.  Here's the key terminology:
 
 * `B`: your number of trees, likely in the hundreds or thousands.  Since boosting can overfit (though it's rare), pick this with cross-validation
-* `D`: your depth control on your trees (also known as the interaction depth since it controls feature interaction order/degree).  Often D is 1-3 where 1 is known as stupmps.
+* `D`: your depth control on your trees (also known as the interaction depth since it controls feature interaction order/degree).  Often D is 1-3 where 1 is known as stumps.
 * `λ`: your learning rate.  It is normally a small number like .1, .01, or .001.  Use CV to pick it.  λ is in tension with B because learning more slowly means needing more trees
-* `r`: your error rate.  Note that you're fitting to r and y.
+* `r`: your error rate.  Note that you're fitting to r instead of y.
 
 
 For every B, you fit a tree with d splits to r.  You update that with a version of the tree shrunken with λ and update the residuals.  The boosted model is the sum of all your functions multiplied by λ.  At each step, you upweight the residuals you got wrong.  We control depth and learning rate to avoid a 'hard fit' where we overfit the data.  This is the opposite of random forest where we make complex models and then trim them back.
