@@ -22,6 +22,8 @@ While these represent the core competencies of a data scientist, the method for 
 
 This system helps refocus our process on business understanding and business needs.  Always ask what your ideal data set is before moving into the data understanding stage, then approach the data you do have in that light.  Always, always, always focus on business solutions.  
 
+[MongoDB][1]
+
 ---
 
 ## Python ##
@@ -378,6 +380,7 @@ Splitting test/training data:
 * `min_sample_leaf`: start with None and try others
 * `n_jobs`: -1 will make it run on the max # of proocessors
 
+`from sklearn.ensemble import AdaBoostClassifier`
 `from sklearn.ensemble import GradientBoostingRegressor`
 * You can used `staged_predict` to access the boosted steps, which is especially useful in plotting error rate over time
 
@@ -485,7 +488,25 @@ You can make connections to Postgres databases using psycopg2 including creating
 
 **Beware of SQL injection where you add code.**  Use `%s` where possible, which will be examined by psychopg2 to make sure you're not injecting anything.  You can use ORM's like ruby on rails or the python equivalent jengo to take care of SQL injection too.
 
+---
 
+[1]## MongoDB ##
+
+MongoDB is an open-source cross-platform document-oriented database program, classified as a NoSQL database program.  Instead of traditional, table-oriented databases, it uses the dynamic schema system similar to JSON-like documents.
+
+1. MongoDB has the same concept as a database/schema, being able to contain zero or more
+2. Databases can have zero or more collections (i.e. tables)
+3. Collections can be made up of zero or more documents (i.e. rows)
+4. A document is made up of one or more fields (i.e. variables)
+When you ask MongoDB for data, it returns a pointer to the result called a **cursor**.  Cursors can do things such as counting or skipping ahead before pulling the data.  The cursor's execution is delayed until necessary.
+
+The difference between a document and a table is that relational databases define columns at the table level whereas a document-oriented database defines its fields at the document level.  Each document within a collection has its own fields.
+
+`sudo mongod`
+
+
+Reference: http://openmymind.net/mongodb.pdf
+Cheatsheet: https://blog.codecentric.de/files/2012/12/MongoDB-CheatSheet-v1_0.pdf
 ---
 
 ## Git ##
@@ -936,7 +957,7 @@ If your results say "optimization not terminated successfully," do not use them 
         ----------------------------------
         1 + exp(β0 + β1X1 + β2X2 + ··· + βpXp)
 
-Similar to hypothesis testing, a confusion matrix gives you your true and false positive and negatives:
+Similar to hypothesis testing, a **confusion matrix** gives you your true and false positive and negatives:
 
 |                    | Predicted positive  | Predicted negative   |
 |--------------------|:-----------:|---------:|
@@ -966,7 +987,7 @@ Time series cross-validation example: http://robjhyndman.com/hyndsight/tscvexamp
 
 The error of any model is the function of three things: the **variance** (the amount that the function would change if trained on a different dataset) plus **bias** (the error due to simplified approximation) plus the irreducible error (epsilon).  Your bias goes up as your variance goes down and vice versa.  **Underfitting** is when the model does not fully capture the signal in X, being insufficiently flexible.  **Overfitting** is when the model erroneously interprets noise as signal, being too flexible.
 
-In linear regression, we minimize the RSS by using the right betas.  You want to avoid large course corrections because that would mean high variance.  **Ridge (or L2) regression** and **lasso (L1) regression** avoid high variance by penalizing high betas.  In ridge, you add a hyperparameter that sums up the squared betas.  As the betas increase, the sum of the beta squared's increase as well.  Since you multiply your summation of squared betas by lambda, the bigger the lambda the more this is penalized. This evens out teh regression line.  Since high betas are penalized, we have to standardize the predictors.
+In linear regression, we minimize the RSS by using the right betas.  You want to avoid large course corrections because that would mean high variance.  **Ridge (or L2) regression** and **lasso (L1) regression** avoid high variance by penalizing high betas.  In ridge, you add a hyperparameter that sums up the squared betas.  As the betas increase, the sum of the beta squared's increase as well.  Since you multiply your summation of squared betas by lambda, the bigger the lambda the more this is penalized. This evens out the regression line.  Since high betas are penalized, we have to standardize the predictors.
 
 Lasso regression is almost identical to ridge except you take the magnitude (or absolute value).  When you plot lasso, it looks like a V while ridge looks like a parabola.  Lasso still penalizes you when you're close to 0 so it's helpful for feature selection and more sparse models.  *Most consider lasso is better than ridge but it depends on the situation.*
 
@@ -1117,7 +1138,7 @@ There are many different types of boosting with the best option depending on com
 * `Gradient Boosting`: improves the handling of loss functions for robustness and speed.  It needs differentiable loss functions
 ** `XGBoost`: a derivation on gradient boosting invented, interestingly enough, by a student in China to win a Kaggle competition
 
-To *compare our models*, lets imagine you want a copy of a painting.  Bagging would be the equivalent of asking a bunch of painters to observe the painting from the same location and then go paint it from memory.  Random forests would be the same except these painters could stand anywhere around it.  In both of these cases, you would average the results of all the painters.  Boosting, by contrast, would be the equivalent of asking one single painter to sit by the painting, waiting for each stroke to dry, and then painting the 'error' between what they've already painted and the true painting.
+To *compare our models*, lets imagine you want a copy of a painting.  Bagging would be the equivalent of asking a bunch of painters to observe the painting from the same location and then go paint it from memory.  Random forests would be the same except these painters could stand anywhere around it (further de-correlating their results).  In both of these cases, you would average the results of all the painters.  Boosting, by contrast, would be the equivalent of asking one single painter to sit by the painting, waiting for each stroke to dry, and then painting the 'error' between what they've already painted and the true painting.
 
 A particularly helpful visualization: https://github.com/zipfian/DSI_Lectures/blob/master/boosting/matt_drury/Boosting-Presentation-Galvanize.ipynb
 
@@ -1140,7 +1161,7 @@ If there are more than two classes of data, there are two options to approach th
 1. `One versus the rest`: train k models for your k classes and choose the model that predicts the highest probability for your specific class
 2. `One versus one`: choose the best model based on ties
 
-Theree are many *differences between logisic regression and SVM's*.  A logistic regression only asymptotically approaches 0 or 1.  Perfectly separable data is a problem for logistic regression where it won't converge.  SVM's give you a class without a probability; logistic regression assigns a probability for a given class.
+There are many *differences between logisic regression and SVM's*.  A logistic regression only asymptotically approaches 0 or 1.  Perfectly separable data is a problem for logistic regression where it won't converge.  SVM's give you a class without a probability; logistic regression assigns a probability for a given class.
 
 MIT lecture on SVM's: https://www.youtube.com/watch?v=_PwhiWxHK8o
 
