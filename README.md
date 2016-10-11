@@ -491,7 +491,7 @@ You can make connections to Postgres databases using psycopg2 including creating
 
 ---
 
-## MongoDB ##
+## MongoDB
 
 MongoDB is an open-source cross-platform document-oriented database program, classified as a NoSQL database program.  Instead of traditional, table-oriented databases, it uses the dynamic schema system similar to JSON-like documents.
 
