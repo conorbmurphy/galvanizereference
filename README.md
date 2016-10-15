@@ -1,8 +1,8 @@
 # Galvanize Reference #
 
-[Introduction](#Introduction)
-[Python](#Python)
-[MongoDB](#MongoDB)
+[Introduction](#introduction)
+[Python](#python)
+[MongoDB](#mongodb)
 
 ## Introduction ##
 
