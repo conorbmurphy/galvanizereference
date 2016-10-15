@@ -1,6 +1,5 @@
 # Galvanize Reference #
 
-[create an anchor](#anchors-in-markdown)
 
 ## Introduction ##
 
@@ -24,7 +23,7 @@ While these represent the core competencies of a data scientist, the method for 
 
 This system helps refocus our process on business understanding and business needs.  Always ask what your ideal data set is before moving into the data understanding stage, then approach the data you do have in that light.  Always, always, always focus on business solutions.  
 
-[MongoDB](##MongoDB)
+[MongoDB](#MongoDB)
 
 
 ---
@@ -250,7 +249,6 @@ Here are some common errors to avoid:
 ### iPython ###
 
 
-#anchors-in-markdown
 ---
 
 ### Python Packages - pandas ###
