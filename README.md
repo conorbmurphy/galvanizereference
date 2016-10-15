@@ -24,7 +24,7 @@ While these represent the core competencies of a data scientist, the method for 
 
 This system helps refocus our process on business understanding and business needs.  Always ask what your ideal data set is before moving into the data understanding stage, then approach the data you do have in that light.  Always, always, always focus on business solutions.  
 
-[MongoDB](##MongoDB)
+[MongoDB](#MongoDB)
 
 
 ---
@@ -249,7 +249,7 @@ Here are some common errors to avoid:
 
 ### iPython ###
 
-(#anchors-in-markdown)
+#anchors-in-markdown
 ---
 
 ### Python Packages - pandas ###
@@ -494,7 +494,7 @@ You can make connections to Postgres databases using psycopg2 including creating
 
 ---
 
-(## MongoDB)
+## MongoDB
 
 MongoDB is an open-source cross-platform document-oriented database program, classified as a NoSQL database program.  Instead of traditional, table-oriented databases, it uses the dynamic schema system similar to JSON-like documents.
 
