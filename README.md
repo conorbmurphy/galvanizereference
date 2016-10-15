@@ -1,5 +1,7 @@
 # Galvanize Reference #
 
+[create an anchor](#anchors-in-markdown)
+
 ## Introduction ##
 
 This is designed to be a catch-all reference tool for my notes while in Galvanize's Data Science Immersive program.  My goal is to have a living  document that I can update with tips, tricks, and additional resources as I progress in my data science-ing.  Others might find it of use as well.
@@ -191,6 +193,8 @@ Reference: http://www.rafekettler.com/magicmethods.html
 
 #### Loops and List Comprehension ####
 
+
+
 #### Lambda Functions ####
 
 Lambda functions are for defining functions without a name:
@@ -246,7 +250,7 @@ Here are some common errors to avoid:
 ### iPython ###
 
 
-
+#anchors-in-markdown
 ---
 
 ### Python Packages - pandas ###
@@ -559,6 +563,8 @@ Centralized Git Workflow: https://www.atlassian.com/git/tutorials/comparing-work
 * `which python`: Tells you the path the's executed with the command python
 * `Ctr-Z`: puts current process to the background.  
 * `fg`: brings the suspended process to the foreground
+* `ps waux`: shows you all current processes (helpful for finding open databases)
+* `xcode-select --install`: updates command line tools (often needed after an OS update)
 
 You can also access your bash profile with `atom ~/.bash_profile`
 
@@ -1034,7 +1040,7 @@ An **ensemble** leverages the idea that more predictors can make a better model 
 2. `Weighted averages`: these give more weight to better predictors (the domain of boosting)
 3. `Predictor of predictors`: Treats predictors as features in a different model.  We can do a linear regression as a feature and random forest as another (part of the MLXtend package)
 
-
+References: https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf
 
 ### k-Nearest Neighbors (KNN) ###
 
@@ -1194,6 +1200,175 @@ Visualization:
 * Tableau
 * D3.js - based in javascript
 * Shiny
+
+### Natural Language Processing ###
+
+http://blog.christianperone.com/2011/09/machine-learning-text-feature-extraction-tf-idf-part-i/
+http://blog.christianperone.com/2011/10/machine-learning-text-feature-extraction-tf-idf-part-ii/
+http://blog.christianperone.com/2013/09/machine-learning-cosine-similarity-for-vector-space-models-part-iii/
+
+### Time Series ###
+
+Time series data is a sequence of observations of some quantity that's collected over time.
+
+Two separate, but not mutually exclucive, approaches to time series exist: the time domain approach and the frequency domain approach.
+
+A couple helpful references, in order of difficulty
+* Hyndman & Athanasopoulos: Forecasting: principles and practice (free online, last published '12)
+* Shumway & Stoffer: Time Series & Applications: w. R Examples (4th ed out later in '16)
+Enough material for whole year masters course. First chapters included in our readings
+* Box, Jenkins: Time Series Analysis: forecasting and Control ('08)
+Recent update edition by originators named in famous methodology. Also includes older focus on process control - still very important even as recent texts are more likely to emphasize finance
+* Hamilton: Time Series Analysis ('94) - Older and huge, but a classic
+
+Specialization on economics/finance
+Tsay Analysis of Financial Time Series ('10)
+Advanced, but below is a more introductory text by the same author (with greater focus on R):
+Tsay Introduction to Analysis of Financial Data ('12)
+Enders: Applied Econometric Time Series
+Elliott & Timmermann: Economic forecasting
+
+https://www.analyticsvidhya.com/blog/2015/12/complete-tutorial-time-series-modeling/
+
+### Web-Scraping ###
+
+The general rule of thumb for web-scraping is that if you can see it, you can scrape it.  HTTP is the hypertext transfer protocol, or the protocol for transfering documents across the internet.  There are other protocols like git, smtp (for emails), ftp, etc.  The internet is these connections.  HTTP can't do much: it's a stateless and dumb framework and it's hard for a site to know the specifics of your traffic to the site.  There are four actions in HTTP with little preconceived notion of how these work:
+
+* `GET`: think of it as to read.  This is most of what you do
+* `PUT`: think of it like an edit, such as editing a picture
+* `POST`: think of this like creating new content, like adding a new photo to instagram
+* `DELETE`: be careful with this domain
+
+The workflow of web-scraping is normally as follows:
+
+1. `Scraping`
+2. `Storage`: normally with MongoDB (it's reasonable to write all the HTML code to your hard drive for small projects).  Always store everything: don't do pre-parsing
+3. `Parsing`
+4. `Storage`: moving parsed content into pickle/CSV/SQL/etc
+5. `Prediction`
+
+**CSS** is a separate document that styles a webpage.  There are often many of them at the top of the HTML page.  It's a cascading style sheet, which enables the separation of the document content from presentation, cascading because it uses the most specific rule chosen.  CSS allows us to pull from web pages since the CSS rules apply to different areas we're looking for.
+
+*requests* is the best option for scraping a site.  *urllib* can be used as a backup if needed (it also could be necessary for local sites).  *BeautifulSoup* is good for HTML parsing.
+
+      import requests
+      from IPython.core.display import HTML
+
+      z = requests.get(‘http://galvanize.com')
+      z.content # gives you a summary of the content
+      HTML(z.content) # loads the page
+
+An HTML Basic authentication is when you have a popup window asking you to sign in build into HTTP.  You can add an auth tuple with the username and password.  Most sites use their own authentication informtion.
+
+Use developer tools when logging into a site, focusing on Form Data for extra paraemters like step, rt, and rp.  This will help you tweak your request.
+
+When making a request, there's no way to track from request to request (the equivalent of opening a new page in an incognito window).  You want to use a cookie so that you don't have to sign in each time.  Do this with the following:
+
+      s = requests.Session() # makes new session
+
+      form_data = {'step':'confirmation',
+               'p': 0,
+               'rt': '',
+               'rp': '',
+               'inputEmailHandle':'isaac.laughlin@gmail.com',
+               'inputPassword':clist_pwd}
+
+      headers = {"Host": "accounts.craigslist.org",
+                 "Origin": "https://accounts.craigslist.org",
+                 "Referer": "https://accounts.craigslist.org/login",
+                 'User-Agent':"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36"}
+
+      s.headers.update(headers)
+      z = s.post('https://accounts.craigslist.org/login', data=form_data)
+      z
+
+For parsing, you can use the following example using BeautifulSoup:
+
+      soup = BeautifulSoup(z.content, from_encoding='UTF-8')
+      t = soup.findAll('table')
+      listings = t[1]
+      rows = listings.findAll('tr')
+      data = [[x.text for x in row.findAll('td')] for row in rows]
+      data
+      [row.findAll('td') for row in rows]
+
+You can also use `pd.read_html()` to turn a table into a pandas dataframe.
+
+When javascript goes out to load data (shown by the spinning download wheel), you can see this in the XHR tab.
+
+You can use **Selenium** to automate the browser process for more advanced guards.  **Tor** can be used to hide your identity as needed.
+
+Selenium: http://www.seleniumhq.org/
+CSS selection game: flukeout.github.io
+
+### MongoDB and Pymongo ###
+
+**MongoDB** is a free and open source NoSQL, document-oriented database program.  It doesn't require us to define a schema, though that means that if we don't have a schema we can't do joins (its main limitation).  It's great for semi-structured data though sub-optimmal for complicated queries.  You search it with key-value pairs, like a dictionary.
+
+**Pymongo**, similar to psychopg, is the python interface with MongoDB.  You can also use the javascript client (the mongo shell).  Every document you insert has an ObjectId to ensure that you can distinguish between identical objects.
+
+      use my_new_database
+
+Inserting data
+
+      db.users.insert({name: 'Jon', age: '45', friends: ['Henry', 'Ashley'] })
+      show dbs db.getCollectionNames()
+      db.users.insert({name: 'Ashley', age: '37', friends: ['Jon', 'Henry'] })
+      db.users.insert({name: 'Frank', age: '17', friends: ['Billy'], car: 'Civic'}) db.users.find()
+
+Querying data
+
+      // find by single field db.users.find({ name: 'Jon'})
+      // find by presence of field db.users.find({ car: { $exists : true } })
+      // find by value in array db.users.find({ friends: 'Henry' })
+      // field selection (only return name from all documents)
+      db.users.find({}, { name: true })
+
+You use this nested structure, similar to JSON.
+Updating data
+
+      // replaces friends array db.users.update({name: "Jon"}, { $set: {friends: ["Phil"]}})
+      // adds to friends array db.users.update({name: "Jon"}, { $push: {friends: "Susie"}})
+      // upsert - create user if it doesn’t exist
+      db.users.update({name: "Stevie"}, { $push: {friends: "Nicks"}}, true) // multiple updates db.users.update({}, { $set: { activated : false } }, false, true)
+
+Deleting data
+
+      db.users.remove({})
+
+### Profit Curves ###
+
+A **profit curve** allows us to monetize the best model to choose.  It assigns costs and benefits to our confusion matrix.  A profit matrix looks like this:
+
+|                    | Predicted positive  | Predicted negative   |
+|--------------------|:-------------------:|---------------------:|
+| Actually positive  | Benefit of true positive| Cost of false negative   |
+| Actually negative  | Cost of false positive  | Benefit true negative     |
+
+In the case of fraud, for example, the benefit of accurately predicting fraud when there is fraud saves alot of money.  The cost of a false positive is relatively low.
+
+An ROC curve gives our estimated true positives versus false positives.  Similarly, you walk through all the possible thresholds in your dataset, make a confusion matrix, and use that confusion matrix to estimate profit.  On the X axis you plot the percentage of test instances, or the percent of data points that you predict positive.  The Y axis is profit.
+
+![Image of Profit Curve](https://github.com/conorbmurphy/galvanizereference/blob/master/images/Profit curve.png)
+
+You choose the model and threshold based upon the point that maximizes the profit.  This can be applied to abstract cases as well, like a somewhat abstract quantification for how bad it is to have spam misclassified versus accurately classified.
+
+### Imbalanced Classes ###
+
+There are a number of ways to deal with imbalanced classes.  We could say that everything from the positive class is worth 100 times more than the negative class.  This is something we do in SVM's, though we could do this with random forest.  A second way is to balance by adding or subtracting data.  A third way is the **elbow method** where you look at a ROC curve and choose an elbow from the model.  This is your best option if you have only one model.
+
+There are three common techniques for adding or subtracting data:
+
+1. `Undersampling`: randomly discard majority class observations.  This makes calculations faster but entails losing data
+2. `Oversampling`: reblicate minority class observations by multiplying points (you duplicate points, not bootstrap them).  The upside is that you don't discard info while the downside is that you'll likely overfit.
+3. `Synthetic Minority Oversampling Technique (SMOTE)`: this uses KNN to create data that you would be likely to see.  This generally performs better than the other approaches.  Be sure to use a random distance between the two points you use.  It takes three inputs:
+** `T`: number of minority class samples T
+** `N%`: amount of SMOTE
+** `k`: number of nearest neighbors (normally 5)
+
+Always test the three methods and throw it on a ROC curve.  SMOTE generally works well.  When it doesn't work, it really doesn't work.
+
+You can change your cost function in a way where predicting wrong is taxed more.  **Stratified k-fold sampling** ensures that each fold has the same proportion of the classes than the training set.  If you have a significant minority, this will help keep you from fitting your model to only one class.  F-1 as your metric gives you a **harmonic mean** between precision and recall.  A harmonic mean is not just the arithmetic mean but also how far points are from one another.  The above are generally better than F-1 however if your automatically selecting than F-1 can be a good metric, especially as a replacement for accuracy.  If you're comparing a few models, use curves.  If you're comparing a large number of them, use F-1.  
 
 ---
 
