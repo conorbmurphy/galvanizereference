@@ -8,7 +8,7 @@
 
   ** [Python](#python)
 
-  ** [Python Packages - pandas](#python-packages-pandas)
+  ** [Python Packages - pandas](#python-packages---pandas)
 
   ** [SQL](#sql)
 
