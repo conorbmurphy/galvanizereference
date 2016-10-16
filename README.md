@@ -8,7 +8,7 @@
 
   ** [Python](#python)
 
-  ** [Python Packages - pandas](#python-packages---pandas)
+  *** [Python Packages - pandas](#python-packages---pandas)
 
   ** [SQL](#sql)
 
@@ -19,6 +19,14 @@
   ** [Command Line](#command-line)
 
 * Probability and Statistics
+
+* Modeling
+
+* Special Topics
+
+  ** [Natural Language Processing](#natural-language-processing)
+
+
 
 ## Introduction ##
 
@@ -41,8 +49,6 @@ While these represent the core competencies of a data scientist, the method for 
 ![Image of CRISP-DM](https://github.com/conorbmurphy/galvanizereference/blob/master/images/CRISP.png)
 
 This system helps refocus our process on business understanding and business needs.  Always ask what your ideal data set is before moving into the data understanding stage, then approach the data you do have in that light.  Always, always, always focus on business solutions.  
-
-
 
 
 ---
@@ -511,7 +517,7 @@ You can make connections to Postgres databases using psycopg2 including creating
 
 ---
 
-## MongoDB
+## MongoDB ##
 
 MongoDB is an open-source cross-platform document-oriented database program, classified as a NoSQL database program.  Instead of traditional, table-oriented databases, it uses the dynamic schema system similar to JSON-like documents.
 
@@ -1249,9 +1255,85 @@ http://blog.christianperone.com/2013/09/machine-learning-cosine-similarity-for-v
 
 ### Time Series ###
 
-Time series data is a sequence of observations of some quantity that's collected over time.
+Time series data is a sequence of observations of some quantity that's collected over time, not a number of discrete events.  A time series is a balance of two forces.  **Momentum** is the idea that things will follow the trend it is on.  **Mean reversion** is the idea that things will regress to the mean.  *The essence of forecasting is these two forces.*  The general general rule of thumb is to have 3-4 times the history that you're predicting on.  There's no explicity penalty for too much history although AIC could penalize you on an ARIMA model.
 
-Two separate, but not mutually exclucive, approaches to time series exist: the time domain approach and the frequency domain approach.
+You could model time series with polynomials however the higher the degree the more they shoot off to infinity at the end of your dataset.  This considers momentum but not mean reversion.  You can use some ML techniques, especially to win Kaggle competitions, however this is still somewhat unexplored.  Clustering time periods in new ways as well as other ML techniques is a path forward for time series.
+
+We're interested in y<sub>t</sub>+1 (the next time period) + y<sub>t</sub>+2 + ... y<sub>t</sub>+h where *h* is our time horizon.  We assume discrete time sampling at regular intervals.  This is hard to model because we only observe one realization of the path of the process.
+
+The components of a time series are:
+
+1. `Trend`: the longterm structure (could be linear or exponential)
+2. `Seasonality`: something that repeats at regular intervals.  This could be seasons, months, wekks, days, etc.  This is anything that demonstrates relatively fixed periodicity between events
+3. `Cyclic`: fluctuations over multiple steps that are not periodic (i.e. not at a specified seasonality)
+4. `Shock`: a sudden change of state
+5. `Noise`: everything not in the above is viewed to be white noise without a discernible structure
+
+![Image of Time Series](https://github.com/conorbmurphy/galvanizereference/blob/master/images/timeseries.png)
+
+When we remove the trends, seasonality, and cyclic effects, we should be left with white noise.  It is possible to see a growing amplitude as time advances.  This could be modeled as a multiplicative effect to reduce that.
+
+**An autoregressive integrated moving average (ARIMA)** model is a generalization of an **autoregressive moving average (ARMA)** model. Both of these models are fitted to time series data either to better understand the data or to predict future points in the series (forecasting).  There are three parts to ARIMA:
+
+1. `AR` = p.  This is your expectation times time plus an error term (the error term has an expectation of 0)
+2. `I` = d.  This is your integral, your order of differencing.  ARMA is forecasting without this element, which is differencing.  To difference, you subtract on the y value from its last value.  You normally difference twice (compute with np.diff(n=d))
+3. `MA` = q.  This is you moving average.  A moving average of 2 is what is the average of the last two values.  This removes seasonality and decreases variance.
+
+This reverse-engineers time series.  Variance captures up and down.  **Autocovariance** is how much a lag predicts the future value of a time series.  It is a dimensionless measure of the influence of one lag upon another.  
+
+For EDA, you want to plot time series, ACF and PACF.  You want hypotheses which includes seasonality.  You then want to aggregate so that you have an appropriate gain (balance granularity with generality so you can see your signal).
+
+![Image of Modeling Process](https://github.com/conorbmurphy/galvanizereference/blob/master/images/hyndman_modeling_process.png)
+
+Estimating ARIMA models using Box-Jenkins: here's the main Box-Jenkins methodology:
+
+1. Exploratory data analysis (EDA):
+** plot time series, ACF, PACF
+** identify hypotheses, models, and data issues
+** aggregate to an appropriate grain
+2. Fit model(s)
+** Difference until stationary (possibly at different seasonalities!)
+** Test for a unit root (Augmented Dicky-Fuller (ADF)): if found, is evidence data still has trend
+** However: too much differencing causes other problems
+** Transform until variance is stable
+3. Examine residuals: are they white noise?
+4. Test and evaluate on out of sample data
+5. Worry about:
+** structural breaks
+** forecasting for large h with limited data needs a "panel of experts"
+** seasonality, periodicity
+
+An Autocorrelation Function (ACF) is a function of lag, or a difference in time.  The autocorrelation will start at 1 because everything is self-correlated and then we'll see put a confidence interval over it.  You want to address this seasonality in your model.  A Partial Autocorrelation Function (PACF) looks at what wasn't picked up by the ACF.  ACF goes with MA; PACF goes with AR.  *In a certain sense, all we're doing is taking care of ACF and PACF until we just see noise, then we run it through ARIMA.*  You deal with trends first through linear models, clustering on segments, or whatever other method.  Then you deal with perodicity using ACF and PACF.  You then deal with cycles until you see only noise.
+
+You can predict against other forecasts.  For instance, a fed prediction is a benchmark to which the market reacts so you can use that as a predictor.  
+
+**Exponential Smoothing** is the Bayesian analogue to ARIMA.  The basic idea is that you weigh more recent data more than older data.  With ETS, you’re essentially modeling the state and then build a model that moves it forward.  The ‘state space model’ is a black box that takes in data but spits out responses.
+
+**Alpha** determines how much you weigh recent information.  In the below, you can see how a smaller alpha relates to a delayed incorporation of the real data.  
+
+![Image of SES](https://github.com/conorbmurphy/galvanizereference/blob/master/images/ses.png)
+
+*This is the bias/variance tradeoff for ETS.*  An alpha of .2 takes longer to adjust because it multiplies past values by .2.
+
+ARIMA features & benefits:
+
+* Benchmark model for almost a century
+* Much easier to estimate with modern computational resources
+* Easy to diagnose models graphically
+* Easy to fit using Box-Jenkins methodology
+
+ETS features & benefits:
+
+* Can handle non-linear and non-stationary processes
+* Can be computed with limited computational resources
+* Not always a subset of ARIMA
+* Easier to explain to non-technical stakeholders
+
+We have not covered fourrier series.  There are other ways to combine models like the Kalman filter.
+
+
+
+Two separate, but not mutually exclusive, approaches to time series exist: the time domain approach and the frequency domain approach.
 
 A couple helpful references, in order of difficulty
 * Hyndman & Athanasopoulos: Forecasting: principles and practice (free online, last published '12)
