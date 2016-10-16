@@ -1,8 +1,15 @@
 # Galvanize Reference #
 
-[Introduction](#introduction)
-[Python](#python)
-[MongoDB](#mongodb)
+## Table of Contents ##
+
+* [Introduction](#introduction)
+* Programming
+** [Python](#python)
+** [Python Packages - pandas](#python-packages-pandas)
+** [SQL](#sql)
+** [MongoDB](#mongodb)
+** [Git](#git)
+** [Command Line](#command-line)
 
 ## Introduction ##
 
@@ -1203,6 +1210,30 @@ Visualization:
 
 ### Natural Language Processing ###
 
+**Natural language processing (NLP)** is a field of computer science, artificial intelligence, and computational linguistics concerned with the interactions between computers and human (natural) languages.  Computational linguistics (now NLP) grew up side by side with linguistics.
+
+A collection of documents is a **corpus**.  Certain **parallel corpuses** like the Canadian parlimentary proceedings help us advance in other languages in addition to English.  A **document** is a collection of **tokens**.  A token is difficult to define: it could be a word, words minus articles, particular versions of a word, **n-grams** (such as a **monogram**, **bigram**, or **trigram**), etc.  A **stop word** is a word that provides little insight such as 'the' or 'and'.  How can we effectively tag different parts of speech?  How can we segment a sentence?
+
+Computation allowed the field to go from a rule-based view to a probabilitic one.  We often **normalize** by removing stop words and making all words lower case.  We can also **stem** words by reducing them to their stem and **lemmatize** them by taking their root (like ration as the root of rationalize).
+
+**Term Frequency Inverse Document Frequency (TFIDF)** is the beginning of term frequency where we see which words matter.  We can look at number of occurances of a term t in a document.  We also want to look at how common the term is in general (in documents in general or the number of documents containing t over the number of documents).  *The intuition is that we normalize term frequency by document frequency.*
+
+For Bayes theorum, the posterior is the prior times the likelihood over the evidence.  How do we turn this theorum into a classifier?  For each additional feature we're looking at teh probability of each feature given all previous features.  We are going to make a naive assumption, which is that each of these are indipendent variables.  This is effectively wrong, but it works out quite well.  This turns into our prior P(c) multiplied by each feature given that class P(F1 | c).  We now have the pseudo-probability that the result is span, for instance (pseudo because we don't have the denominator).  The denominator stays the same for all classes so rather than going through the work of calculating it (especially since it's not clear how to calculate it), you ignore the denominator and compare numerators to see the highest class likelihood.  Using **Naive Bayes** like this is an effective multi-class classifier.
+
+In this approach, we take the log transformation of our probabilities since we could have a **floating point underflow problem** where the numbers are so small the computer would assume they're zero.  Since probability is lower than 1, we can switch everything into log space and add it (adding is the same as multiplying in non-log space).
+
+Also note that **Laplacian smoothing** is necessary where you assume you've seen every feature in every class one more time than you have.  This is the smoothing constant that keeps your model from tanking on unseen words.
+
+Naive Bayes is great for wide data (p > n), is fast to train, good at online learning/streaming data, simple to implement, and is multi-class.  The cons are that correlated features aren’t treated right and it is sometimes outperformed by other models (especially with medium-sized data).
+
+Here are a few helpful tools:
+
+      from unidecode import unidecode # for dealing with unicode issues
+      from collections import Counter # use Counter() to make a feature dictionary with words as keys and values as counts
+      import string # useful in punctuation removal 
+      tok = ‘’.join([c for c in tok if not c in string.punctuation])
+
+*Speech and Language Processing* by Jurafsky and Martin
 http://blog.christianperone.com/2011/09/machine-learning-text-feature-extraction-tf-idf-part-i/
 http://blog.christianperone.com/2011/10/machine-learning-text-feature-extraction-tf-idf-part-ii/
 http://blog.christianperone.com/2013/09/machine-learning-cosine-similarity-for-vector-space-models-part-iii/
