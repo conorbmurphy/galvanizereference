@@ -3,19 +3,20 @@
 ## Table of Contents ##
 
 * [Introduction](#introduction)
+
 * Programming
 
-** [Python](#python)
+  ** [Python](#python)
 
-** [Python Packages - pandas](#python-packages-pandas)
+  ** [Python Packages - pandas](#python-packages-pandas)
 
-** [SQL](#sql)
+  ** [SQL](#sql)
 
-** [MongoDB](#mongodb)
+  ** [MongoDB](#mongodb)
 
-** [Git](#git)
+  ** [Git](#git)
 
-** [Command Line](#command-line)
+  ** [Command Line](#command-line)
 
 * Probability and Statistics
 
