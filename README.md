@@ -84,9 +84,19 @@
 
   ** [Natural Language Processing](#natural-language-processing)
 
-  ** [Time Series](time-series)
+  ** [Time Series](#time-series)
 
-  ** [Web-Scraping](web-scraping)
+  ** [Web-Scraping](#web---scraping)
+
+  ** [Profit Curves](#profit-curves)
+
+  ** [Imbalanced Classes](#imbalanced-classes)
+
+  ** [Helpful Visualization](#helpful-visualizations)
+
+  ** [Note on Style and Other Tools](#note-on-style-and-other-tools)
+
+  ** [Career Points](#career-pointers)
 
 ---
 
