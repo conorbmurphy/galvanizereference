@@ -4,12 +4,20 @@
 
 * [Introduction](#introduction)
 * Programming
+
 ** [Python](#python)
+
 ** [Python Packages - pandas](#python-packages-pandas)
+
 ** [SQL](#sql)
+
 ** [MongoDB](#mongodb)
+
 ** [Git](#git)
+
 ** [Command Line](#command-line)
+
+* Probability and Statistics
 
 ## Introduction ##
 
@@ -1230,7 +1238,7 @@ Here are a few helpful tools:
 
       from unidecode import unidecode # for dealing with unicode issues
       from collections import Counter # use Counter() to make a feature dictionary with words as keys and values as counts
-      import string # useful in punctuation removal 
+      import string # useful in punctuation removal
       tok = ‘’.join([c for c in tok if not c in string.punctuation])
 
 *Speech and Language Processing* by Jurafsky and Martin
