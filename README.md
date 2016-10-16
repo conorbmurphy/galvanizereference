@@ -8,25 +8,87 @@
 
   ** [Python](#python)
 
+  *** [Base Data Types](base-data-types)
+
+  *** [Built-in Functions](built---in-functions)
+
+  *** [Classes](classes)
+
+  *** [Testing and Debugging](testing-and-debugging)
+
+  *** [A Note on Style](a-note-on-style)
+
   *** [Python Packages - pandas](#python-packages---pandas)
+
+  *** [Python Packages - numpy](#python-packages---numpy)
+
+  *** [Python Packages - scipy](#python-packages---scipy)
+
+  *** [Python Packages - statsmodels](#python-packages---statsmodels)
+
+  *** [Python Packages - sklearn](#python-packages---sklearn)
 
   ** [SQL](#sql)
 
-  ** [MongoDB](#mongodb)
+  ** [MongoDB and Pymongo](#mongodb-and-pymongo)
 
   ** [Git](#git)
 
   ** [Command Line](#command-line)
 
-* Probability and Statistics
+* Linear Algebra, Probability, and Statistics
+
+  ** [Linear Algebra](#linear-algebra)
+
+  ** [Probability](#probability)
+
+  ** [Statistics](#statistics)
+
+  *** [Frequentist Statistics](#frequentist-statistics)
+
+  *** [Hypothesis Testing](#hypothesis-testing)
+
+  *** [Bayesian Statistics](#bayesian-statistics)
 
 * Modeling
+
+  ** [Exploratory Data Analysis][#exploratory-data-analysis-(EDA)]
+
+  ** [Linear Regression Introduction and Univariate](#linear-regression-introduction-and-univariate)
+
+  ** [Multivariate Regression](#multivariate-regression)
+
+  ** [Logistic Regression](#logistic-regression)
+
+  ** [Cross-validation](#cross-validation)
+
+  ** [Bias/Variance Tradeoff](#bias/variance-tradeoff)
+
+  ** [Gradient Ascent](#gradient-ascent)
+
+* [Machine Learning](#machine-learning-(ml))
+
+  ** [Supervised Learning](#supervised-learning)
+
+  *** [k-Nearest Neighbors (KNN)](#k-nearest-neighbors-(knn))
+
+  *** [Decision Trees](#decision-trees)
+
+  *** [Bagging and Random Forests](#bagging-and-random-forests)
+
+  *** [Boosting](#boosting)
+
+  *** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)
 
 * Special Topics
 
   ** [Natural Language Processing](#natural-language-processing)
 
+  ** [Time Series](time-series)
 
+  ** [Web-Scraping](web-scraping)
+
+---
 
 ## Introduction ##
 
@@ -268,10 +330,6 @@ Here are some common errors to avoid:
 
 * `AttributeError`: Thrown when you call an attribute an object doesn't have
 * `ZeroError`: Thrown when dividing by a zero
-
----
-
-### iPython ###
 
 ---
 
@@ -517,9 +575,9 @@ You can make connections to Postgres databases using psycopg2 including creating
 
 ---
 
-## MongoDB ##
+## MongoDB and Pymongo ##
 
-MongoDB is an open-source cross-platform document-oriented database program, classified as a NoSQL database program.  Instead of traditional, table-oriented databases, it uses the dynamic schema system similar to JSON-like documents.
+MongoDB is an open-source cross-platform document-oriented database program, classified as a NoSQL database program.  Instead of traditional, table-oriented databases, it uses the dynamic schema system similar to JSON-like documents.  It doesn't require us to define a schema, though that means that if we don't have a schema we can't do joins (its main limitation).  It's great for semi-structured data though sub-optimmal for complicated queries.  You search it with key-value pairs, like a dictionary.
 
 1. MongoDB has the same concept as a database/schema, being able to contain zero or more
 2. Databases can have zero or more collections (i.e. tables)
@@ -531,6 +589,36 @@ The difference between a document and a table is that relational databases defin
 
 `sudo mongod`
 
+**Pymongo**, similar to psychopg, is the python interface with MongoDB.  You can also use the javascript client (the mongo shell).  Every document you insert has an ObjectId to ensure that you can distinguish between identical objects.
+
+      use my_new_database
+
+Inserting data
+
+      db.users.insert({name: 'Jon', age: '45', friends: ['Henry', 'Ashley'] })
+      show dbs db.getCollectionNames()
+      db.users.insert({name: 'Ashley', age: '37', friends: ['Jon', 'Henry'] })
+      db.users.insert({name: 'Frank', age: '17', friends: ['Billy'], car: 'Civic'}) db.users.find()
+
+Querying data
+
+      // find by single field db.users.find({ name: 'Jon'})
+      // find by presence of field db.users.find({ car: { $exists : true } })
+      // find by value in array db.users.find({ friends: 'Henry' })
+      // field selection (only return name from all documents)
+      db.users.find({}, { name: true })
+
+You use this nested structure, similar to JSON.
+Updating data
+
+      // replaces friends array db.users.update({name: "Jon"}, { $set: {friends: ["Phil"]}})
+      // adds to friends array db.users.update({name: "Jon"}, { $push: {friends: "Susie"}})
+      // upsert - create user if it doesn’t exist
+      db.users.update({name: "Stevie"}, { $push: {friends: "Nicks"}}, true) // multiple updates db.users.update({}, { $set: { activated : false } }, false, true)
+
+Deleting data
+
+      db.users.remove({})
 
 Reference: http://openmymind.net/mongodb.pdf
 Cheatsheet: https://blog.codecentric.de/files/2012/12/MongoDB-CheatSheet-v1_0.pdf
@@ -592,36 +680,6 @@ You can also access your bash profile with `atom ~/.bash_profile`
 
 ---
 
-## Exploratory Data Analysis (EDA) ##
-
-EDA is the first cut analysis where you evaluate the following points:
-
-* What are the feature names and types?
-* Are there missing values?
-* Are the data types correct?
-* Are there outliers?
-* Which features are continuous and which are categorical?
-* What is the distribution of the features?
-* What is the distrubiton of the target?
-* How do the variables relate to one another?
-
-Some common functions to do this are `pd.head()`, `.describe()`, `.info()`, and `pd.crosstab()`.  If you see 'object' in the info result where you should have numbers, it is likely that you have a string hidden in the column somewhere.  When removing NA's, be sure that you don't drop any data that might be included in your final analysis.
-
-There are a few options for dealing with NA's:
-
-* Drop that data
-* Fill those values with:
- * Column averages
- * 0 or other neutral number
- * Fill forwards or backwards (especially for time series)
- * Impute the values with a prediction (e.g. mean, mode)
-* Ignore them and hope your model can handle them
-
-One trick for imputation is to add another column to your model that's your variable imputed with a third column that's binary for whether you did impute it.  Using this method, your model can unlearn the imputation if you shouldn't have done it.
-
-Exploratory plots such as scattermatrix.
-
----
 
 ## Linear Algebra ##
 
@@ -900,6 +958,38 @@ There are four main multi-armed bandit algorithms:
 
 ## Modeling ##
 
+## Exploratory Data Analysis (EDA) ##
+
+EDA is the first cut analysis where you evaluate the following points:
+
+* What are the feature names and types?
+* Are there missing values?
+* Are the data types correct?
+* Are there outliers?
+* Which features are continuous and which are categorical?
+* What is the distribution of the features?
+* What is the distrubiton of the target?
+* How do the variables relate to one another?
+
+Some common functions to do this are `pd.head()`, `.describe()`, `.info()`, and `pd.crosstab()`.  If you see 'object' in the info result where you should have numbers, it is likely that you have a string hidden in the column somewhere.  When removing NA's, be sure that you don't drop any data that might be included in your final analysis.
+
+There are a few options for dealing with NA's:
+
+* Drop that data
+* Fill those values with:
+ * Column averages
+ * 0 or other neutral number
+ * Fill forwards or backwards (especially for time series)
+ * Impute the values with a prediction (e.g. mean, mode)
+* Ignore them and hope your model can handle them
+
+One trick for imputation is to add another column to your model that's your variable imputed with a third column that's binary for whether you did impute it.  Using this method, your model can unlearn the imputation if you shouldn't have done it.
+
+Exploratory plots such as scattermatrix.
+
+---
+
+
 ### Linear Regression Introduction and Univariate ###
 
 Linear regression is essentially fitting lines to data, originally coming from trying to predict child height to parent height.  In univariate linear regression, we are investigating the following equation:
@@ -1064,6 +1154,10 @@ An **ensemble** leverages the idea that more predictors can make a better model 
 
 References: https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf
 
+### Supervised Learning
+
+WHEN TO USE WHICH ALGORITH
+
 ### k-Nearest Neighbors (KNN) ###
 
 KNN is a highly accurate ML algorithm that is insensitive to outliers and makes no assumptions about the data.  You can also do online updates easily (you just store another data point), use as many classes as you want, and learn a complex function with no demands on relationships between variables (like linearity).  The downside is that it is computationally very expensive because it's **IO bound** (you have to read every data point to use it) and noise can affect results.  Categorical variables makes feature interpretation tricky.  It works with numeric and nominal values.  
@@ -1195,33 +1289,6 @@ There are many *differences between logisic regression and SVM's*.  A logistic r
 MIT lecture on SVM's: https://www.youtube.com/watch?v=_PwhiWxHK8o
 
 ---
-
-## Helpful Visualizations ##
-
-Feature importance: Plot your features in order of importance (tells you importance but not if they correlate positively or negatively)
-Partial dependency: This makes predictions having froze a given feature and incrementing it up.  FOr instance, you can plot two features against the 'partial dependence', which is your outcome.  
-ROC
-Residual plots
-QQ Norm
-
----
-
-## Note on Style and Other Tools ##
-
-iPython offers features like tab completion and auto-reload over the main python install.  You can also type `%debug` to debut code.
-Jupyter/iPython notebook or Apache Zeppelin
-Markdown: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-Atom: command / hashes out text
-Anacoda
-Homebrew
-AWS: https://gist.github.com/iamatypeofwalrus/5183133
-
-Sniffer which wraps nose tests so every time you save a file it will automatically run the tests - pip install sniffer nose-timer
-
-Visualization:
-* Tableau
-* D3.js - based in javascript
-* Shiny
 
 ### Natural Language Processing ###
 
@@ -1423,40 +1490,7 @@ You can use **Selenium** to automate the browser process for more advanced guard
 Selenium: http://www.seleniumhq.org/
 CSS selection game: flukeout.github.io
 
-### MongoDB and Pymongo ###
 
-**MongoDB** is a free and open source NoSQL, document-oriented database program.  It doesn't require us to define a schema, though that means that if we don't have a schema we can't do joins (its main limitation).  It's great for semi-structured data though sub-optimmal for complicated queries.  You search it with key-value pairs, like a dictionary.
-
-**Pymongo**, similar to psychopg, is the python interface with MongoDB.  You can also use the javascript client (the mongo shell).  Every document you insert has an ObjectId to ensure that you can distinguish between identical objects.
-
-      use my_new_database
-
-Inserting data
-
-      db.users.insert({name: 'Jon', age: '45', friends: ['Henry', 'Ashley'] })
-      show dbs db.getCollectionNames()
-      db.users.insert({name: 'Ashley', age: '37', friends: ['Jon', 'Henry'] })
-      db.users.insert({name: 'Frank', age: '17', friends: ['Billy'], car: 'Civic'}) db.users.find()
-
-Querying data
-
-      // find by single field db.users.find({ name: 'Jon'})
-      // find by presence of field db.users.find({ car: { $exists : true } })
-      // find by value in array db.users.find({ friends: 'Henry' })
-      // field selection (only return name from all documents)
-      db.users.find({}, { name: true })
-
-You use this nested structure, similar to JSON.
-Updating data
-
-      // replaces friends array db.users.update({name: "Jon"}, { $set: {friends: ["Phil"]}})
-      // adds to friends array db.users.update({name: "Jon"}, { $push: {friends: "Susie"}})
-      // upsert - create user if it doesn’t exist
-      db.users.update({name: "Stevie"}, { $push: {friends: "Nicks"}}, true) // multiple updates db.users.update({}, { $set: { activated : false } }, false, true)
-
-Deleting data
-
-      db.users.remove({})
 
 ### Profit Curves ###
 
@@ -1491,6 +1525,36 @@ There are three common techniques for adding or subtracting data:
 Always test the three methods and throw it on a ROC curve.  SMOTE generally works well.  When it doesn't work, it really doesn't work.
 
 You can change your cost function in a way where predicting wrong is taxed more.  **Stratified k-fold sampling** ensures that each fold has the same proportion of the classes than the training set.  If you have a significant minority, this will help keep you from fitting your model to only one class.  F-1 as your metric gives you a **harmonic mean** between precision and recall.  A harmonic mean is not just the arithmetic mean but also how far points are from one another.  The above are generally better than F-1 however if your automatically selecting than F-1 can be a good metric, especially as a replacement for accuracy.  If you're comparing a few models, use curves.  If you're comparing a large number of them, use F-1.  
+
+---
+
+## Helpful Visualizations ##
+
+Feature importance: Plot your features in order of importance (tells you importance but not if they correlate positively or negatively)
+Partial dependency: This makes predictions having froze a given feature and incrementing it up.  FOr instance, you can plot two features against the 'partial dependence', which is your outcome.  
+ROC
+Residual plots
+QQ Norm
+
+
+---
+
+## Note on Style and Other Tools ##
+
+iPython offers features like tab completion and auto-reload over the main python install.  You can also type `%debug` to debut code.
+Jupyter/iPython notebook or Apache Zeppelin
+Markdown: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+Atom: command / hashes out text
+Anacoda
+Homebrew
+AWS: https://gist.github.com/iamatypeofwalrus/5183133
+
+Sniffer which wraps nose tests so every time you save a file it will automatically run the tests - pip install sniffer nose-timer
+
+Visualization:
+* Tableau
+* D3.js - based in javascript
+* Shiny
 
 ---
 
