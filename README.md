@@ -80,6 +80,10 @@
 
   *** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)
 
+  ** [Unsupervised Learning](#unsupervised-learning)
+
+  *** [KMeans Clustering](#kmeans-clustering)
+
 * Special Topics
 
   ** [Natural Language Processing](#natural-language-processing)
@@ -157,6 +161,7 @@ Python has a few base datatypes whose different characteristics can be leveraged
   * dict['first'];
   * dict.keys(); dict.values();
   * dict['newkey'] = 'value'
+  * defaultdict (from collections) can be used to avoid key errors
 * `set`: mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set).
 
 ### Built-in Functions ###
@@ -661,6 +666,8 @@ Here's a workflow:
 9. User B pushes.
 10. Repeat
 
+With merge issues, you'll have to write a merge message followed by, `esc`, `:wq`, and then `enter`.
+
 Centralized Git Workflow: https://www.atlassian.com/git/tutorials/comparing-workflows/
 
 ---
@@ -1156,7 +1163,7 @@ The best model to choose often depends on computational costs at training time v
 * `Density estimations`: finds the distribution of inputs in some space
 * `Dimensionality reduction`: simplifies inputs by mapping them into a lower-dimensional space
 
-An **ensemble** leverages the idea that more predictors can make a better model than any one predictor independently, combining many predictors with average or weighted averages.  There are a few types of ensembles:
+An **ensemble** leverages the idea that more predictors can make a better model than any one predictor independently, combining many predictors with average or weighted averages.  *Often the best supervised algorithms have unsupervised learning as a pre-processing step such as using dimensionality reduction, then kmeans, and finally running knn against centroids from kmeans.  There are a few types of ensembles:
 
 1. `Committees`: this is the domain of random forest where regressions have an unweighted average and classification uses a majority
 2. `Weighted averages`: these give more weight to better predictors (the domain of boosting)
@@ -1277,7 +1284,7 @@ A particularly helpful visualization: https://github.com/zipfian/DSI_Lectures/bl
 
 ### Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines ###
 
-Support Vector Machines (SVM) are typically thought of as a classification algorithm however they can be used for regressions as well.  SVM's used to be as well researched as neural networks are today and are considered to be one of the best "out of the box" classifiers.  They are useful when you have a sparcity of solutions achievable by the l1 penalty and when you know that kernels and margins can be an effective way to approach your data.
+Support Vector Machines (SVM) are typically thought of as a classification algorithm however they can be used for regressions as well.  SVM's used to be as well researched as neural networks are today and are considered to be one of the best "out of the box" classifiers.  Hand writing analysis in post offices were done by SVM's.  They are useful when you have a sparcity of solutions achievable by the l1 penalty and when you know that kernels and margins can be an effective way to approach your data.
 
 In p-dimensional space, a **hyperplane** is a flat affine subspace of dimension p-1.  With a dat set of an n x p matrix, we have n points in p-dimensional space.  Points of different classes, if completely separable, are able to be separated by an infinite number of hyperplanes.  The **maximal margin hyperplane** is the separating hyperplane that is farthest from the training observations.  The **margin** is the orthogonal distance between points between two classes (when the inner product of two vectors is 0, it's orthoginal).  The **maximal margin classifier** then is when we classify a test observation based on which side of the maximal margin hyperplane it lies.
 
@@ -1298,6 +1305,97 @@ There are many *differences between logisic regression and SVM's*.  A logistic r
 
 MIT lecture on SVM's: https://www.youtube.com/watch?v=_PwhiWxHK8o
 
+
+## Unsupervised Learning ##
+
+Unsupervised learning is of more interest to computer science than for stats.  It uses a lot of computing power to find the underlying structure of data set.  In supervised learning, you cross-validate *with y (our target) as our supervisor*.  In unsupervised, we don't have a y and we therefore can't cross-valilidate.  There are two common and contrasting unsupervised techniques: principle component analysis and clustering.
+
+### KMeans Clustering ###
+
+**Kmeans clustering** aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean, serving as a prototype of the cluster called the **centroid**.  Kmeans is helpful when dealing with space (such as in mapping) or in clustering customer profiles together.  Kmeans can work well with knn where you run knn on the centroids from kmeans.  Limitations include that new points could be classified in the 'beams' if far from a distant cluster and that it is often difficult to find a distance metric for categorical data.
+
+In essence, points in your data set are assigned one of k clusters.  The centroid is then calculated as the center of the points in its cluster.  The points are then reassigned to their closest centroid.  This continues until a maximum number of iterations or convergence.
+
+There are a number of ways to initialize kmeans.  One is to initialize randomly by assigning every point to a cluster at random.  Another is to pick k random points and call them centroids.  **Kmeans++** picks one centroid at random and then improves the probability of getting another centroid as you get farther from that point, allowing us to converge faster.  It's worth using Kmeans++ whenever possible as it improves run time (though it doesn't make much difference in the final solution).
+
+The group sum of squares tells you the spread of your clusters.  This both indicates convergence as well as the best number of clusters.  The **elbow method** involves plotting the sum of squares on the y axis and k on the x axis where the elbow normally shows the poitn of diminishing returns for k.  Beyond this method, the **silhouette coefficient** asks how tightly your group is clustered compared to the next group.  If your group is tightly clustered as is the next group away then this is a good clustering.
+
+You can use standard distance metrics like Euclidean, Manhattan, and cosine similarity.  Other options like **DBSCAN** or **OPTICS** does clustering while dealing with the noise.
+
+![Image of Time DBSCAN](https://github.com/conorbmurphy/galvanizereference/blob/master/images/dbscan.png)
+
+Resources:
+https://www.naftaliharris.com/blog/visualizing-k-means-clustering/
+
+### Hierarchical Clustering ###
+
+**Hierarchical clustering**  is a method of cluster analysis which seeks to build a hierarchy of clusters, resulting in a **dendogram**.  There are two main types of hierarchical clustering: agglomerative (a bottom-up approach) and divisive (a top-down approach).  The main drawback to this method is that it asserts that there is a hierarchy within the data set.  For instance, there could be men and women in a data set as well as different nationalities where none of these given traits are truly hierarchical.  This is also the slowest approach from what's listed above by a large margin.
+
+In this method, you decide two things: your **linkage**, or how you choose the points to calculate difference, and your distance metric.  The four linkage metrics:
+
+* `Complete`: This is the maximal intercluster dissimilarity.  You calculate all the dissimilarities between the observations in cluster A and cluster B and use the largest of these.
+* `Single`: This is minimal intercluster dissimilarity, or the opposite of the above.
+* `Average`: This is the mean intercluster dissimilarity.  Compute all pairwise dissimilarities between the two clusters and record the average of these.
+* `Centroid`:  This is the dissimilarity between the centroids of clusters A and B, which can result in undesirable inversions.
+
+Take for instance grouping customers by online purchases.  If one customer buys many pairs of socks and one computer, the computer will not show up as significant when in reality it could be the most important purchase.  This can be corrected by subtracting the mean and scaling by the standard deviation (see pg. 399 of ISLR).
+
+### Dimension Reduction ###
+
+So far, we've used the following techniques for reducing dimensionality:
+
+* `Lasso`: adds a regularization parameter that penalizes us for large betas such that many betas are reduced to zero
+* `Stepwise selection`: in backwards stepwise, we put all of our features into our dataset and then remove features one by one to see if it reduces our R2 value
+* `Relaxed Lasso`: This is a combination of lasso and stepwise where you run a regression and then lasso, removing the variables that were reduced with lasso and then re-running the regression without them
+
+Reducing dimension allows us to visualize data in 2D, remove redundant and/or correlated features, remove features that we don't know what to do with, and remove features for storage needs.  Take a small image for instance.  A 28x28 pixel image is 784 dimensions, making it challenging to process.
+
+### Principle Component Analysis ###
+
+**Principle component analysis (PCA)** uses an orthogonal transformation to convert a set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables called principal components.  The general intuition is that we rotate the data set in the direction of the most variation.  It is good for visualization since it can condense many features, before doing kNN on high-dimensional data, and working with images when you can't do neural nets.  Otherwise it is not widely used since their are better ways to deal wwith dimension reduction.
+
+More specifically, we do the following:
+
+* Create a centered design matrix of n rows and p features (centered on its mean)
+* Calculate the covariance matrix: a pxp square matrix with the variance on the diagonal and the correlation elsewhere.  *Note that if features aren't well correlated (.3 or above) then PCA won't do well*
+* The principle components are the eigenvectors of the covariance matrix, ordered on an orthogonal basis capturing the most-to-least variance of the data
+
+A **scree plot** shows the eigenvalues in non-increasing order with lambda on the y and the principle components on the x axis.  Looking for the elbow tell us how many components we need to capture various amounts of the feature space.
+
+PCA weakness: https://gist.github.com/lemonlaug/976543b650e53db24ab2
+
+### Singular Value Decomposition (SVD) ###
+
+**Singular value decomposition (SVD)** is a factorization of a real or complex matrix.  We can use SVD to determine what we call **latent features**.  Every matrix X has a unique decomposition and SVD returns three matrices:
+
+* U: mxk in shape - representing your observations
+* sigma: kxk in shape - eigenvalues of the concept space (your latent features).  This is where your feature importance comes from
+* V transpose: k x n in shape - representing your variables.  This give you a notion of the features from your original dataset.
+
+### Non-Negative Matrix Factorization ###
+
+**Non-Negative Matrix Factorization** gives a similar result to SVD where we factorize our matrix into two separate matrices but with a constraint that the values in our two matrices (we get two, not three in NMF) be non-negative.  In SVD, we could have a negative value for one of our themes (if we’re using SVD for themes).  We care about NMF because it has different properties than SVDs.  In NMF, we're going to identify latent features but a given observation can either express it or not--it can't negatively express it like SVD.  One downside is that NMF can't take new data without rerunning OLS on it.  Use NMF over PCA whenever possible.
+
+Let's start with the example of baking a cake.  Can we figure out the protein/fat/carbs in a cake based on its ingredients?  
+
+Our response comes in form of X = WH.  Using an example of NLP, here's how we would interpret these matrices:
+
+* X is mxn: documents by word counts
+* W is mxk: documents by latent features.  Each coefficient k links up with H.  Each row m shows how much it expresed each of the latent features k
+* H is kxn: Each column is a column n that is a latent feature that matches using k to W. This could be themes of texts.
+
+Here is the process:
+
+1. Initialize W and H using a given value (this can be done with random values).  Kmeans can be used for a strategic initialization
+2. Solve for H holding W constant (minimize OLS) and clip negative values by rounding them to zero
+3. Solve for W holding H constant and clip negative values
+4. Repeat 2 and 3 until they converge
+
+**Alternating least squares (ALS) allows us to find ingredients and proportions given the final product.  ALS is biconvex since it solves for two matrices.  You still have to define your **k value** which limits the columns of W and rows of H.  You can plot the reconstruction error to evaluate k at different levels.
+
+You can use this strategy for a number of things such as theme analysis by having movies as your columns and users as your rows with the intersect being their rating.  You can also have pixel values flattened on the columns and the image as the row.  Part of the original motivation behind NMF was wanting to know the parts that contribute to an image where PCA would give a result but you couldn't see recognizable features in the result.  This is good for textual analysis too because it can't have anti-values (e.g. this text is negative eggplant).
+
+
 ---
 
 ### Natural Language Processing ###
@@ -1308,7 +1406,29 @@ A collection of documents is a **corpus**.  Certain **parallel corpuses** like t
 
 Computation allowed the field to go from a rule-based view to a probabilitic one.  We often **normalize** by removing stop words and making all words lower case.  We can also **stem** words by reducing them to their stem and **lemmatize** them by taking their root (like ration as the root of rationalize).
 
-**Term Frequency Inverse Document Frequency (TFIDF)** is the beginning of term frequency where we see which words matter.  We can look at number of occurances of a term t in a document.  We also want to look at how common the term is in general (in documents in general or the number of documents containing t over the number of documents).  *The intuition is that we normalize term frequency by document frequency.*
+A document represented as a vector of word counts is called a **bag of words.**  The problem here is that bags of words are naive: word counts emphasize words from longer documents and that every word has equal footing.
+
+The text featurization pipeline is as follows:
+
+1. Tokenization
+2. Lower case conversion
+3. Stop words removal
+4. Stemming/Lamentization
+5. Bag of words/N-grams
+
+**Term Frequency Inverse Document Frequency (TFIDF)** is the beginning of term frequency where we see which words matter.  This offers imporvements over a bag of words.  We can look at number of occurences of a term t in a document.  We also want to look at how common the term is in general (in documents in general or the number of documents containing t over the number of documents).  *The intuition is that we normalize term frequency by document frequency.*
+
+Term Frequency:
+
+      tf(t,d) = total count of term t in document d / total count of all terms in document d
+
+Inverse document frequency:
+
+      idf(t,D) = log(total count of documents in corpus D / count of documents containing term t)
+
+Term frequency, inverse document frequency:
+
+      tf-idf(t, d, D) = tf(t, d) * idf(t, D)
 
 For Bayes theorum, the posterior is the prior times the likelihood over the evidence.  How do we turn this theorum into a classifier?  For each additional feature we're looking at teh probability of each feature given all previous features.  We are going to make a naive assumption, which is that each of these are indipendent variables.  This is effectively wrong, but it works out quite well.  This turns into our prior P(c) multiplied by each feature given that class P(F1 | c).  We now have the pseudo-probability that the result is span, for instance (pseudo because we don't have the denominator).  The denominator stays the same for all classes so rather than going through the work of calculating it (especially since it's not clear how to calculate it), you ignore the denominator and compare numerators to see the highest class likelihood.  Using **Naive Bayes** like this is an effective multi-class classifier.
 
@@ -1451,18 +1571,19 @@ The workflow of web-scraping is normally as follows:
 *requests* is the best option for scraping a site.  *urllib* can be used as a backup if needed (it also could be necessary for local sites).  *BeautifulSoup* is good for HTML parsing.
 
       import requests
-      from IPython.core.display import HTML
+      from IPython.core.display import HTML # in a notebook
 
       z = requests.get(‘http://galvanize.com')
       z.content # gives you a summary of the content
       HTML(z.content) # loads the page
 
-An HTML Basic authentication is when you have a popup window asking you to sign in build into HTTP.  You can add an auth tuple with the username and password.  Most sites use their own authentication informtion.
+An HTML Basic authentication is when you have a popup window asking you to sign in built into HTTP.  You can add an auth tuple with the username and password.  Most sites use their own authentication information.
 
-Use developer tools when logging into a site, focusing on Form Data for extra paraemters like step, rt, and rp.  This will help you tweak your request.
+Use developer tools when logging into a site, focusing on Form Data for extra parameters like step, rt, and rp.  This will help you tweak your request.
 
 When making a request, there's no way to track from request to request (the equivalent of opening a new page in an incognito window).  You want to use a cookie so that you don't have to sign in each time.  Do this with the following:
 
+      import requests as requests
       s = requests.Session() # makes new session
 
       form_data = {'step':'confirmation',
@@ -1483,10 +1604,11 @@ When making a request, there's no way to track from request to request (the equi
 
 For parsing, you can use the following example using BeautifulSoup:
 
+      from bs4 import BeautifulSoup
       soup = BeautifulSoup(z.content, from_encoding='UTF-8')
       t = soup.findAll('table')
       listings = t[1]
-      rows = listings.findAll('tr')
+      rows = listings.find(class_='tr')
       data = [[x.text for x in row.findAll('td')] for row in rows]
       data
       [row.findAll('td') for row in rows]
@@ -1535,6 +1657,99 @@ There are three common techniques for adding or subtracting data:
 Always test the three methods and throw it on a ROC curve.  SMOTE generally works well.  When it doesn't work, it really doesn't work.
 
 You can change your cost function in a way where predicting wrong is taxed more.  **Stratified k-fold sampling** ensures that each fold has the same proportion of the classes than the training set.  If you have a significant minority, this will help keep you from fitting your model to only one class.  F-1 as your metric gives you a **harmonic mean** between precision and recall.  A harmonic mean is not just the arithmetic mean but also how far points are from one another.  The above are generally better than F-1 however if your automatically selecting than F-1 can be a good metric, especially as a replacement for accuracy.  If you're comparing a few models, use curves.  If you're comparing a large number of them, use F-1.  
+
+### Recommender Systems ###
+
+Recommender systems can be used to recommend a person, thing, experience, company, employee, travel, purchase, etc.  This problem exists partially in computer science, AI, human-computer interaction and cognitive psychology.  You want to consider the level of personalization, diversity in the recommendations, persistance with which you recommend, different modalities for different modes, privacy, and trust issues (what are your motivations for recommending me).
+
+We have three general kinds of data: on the target person, the target item, and the user item-interactions such as ratings.  Different algorithms have different demands for the type of data we need.
+
+One question is how we interpret actions, like to view something, to like it, or share it.  There are two general domains of action: explicit actions where a user took a clear action like a rating or implicit actions such as viewing a product.
+
+The three common appraches vary in how they frame the challenge and the data requirements:
+
+* `Classification/Regression`: this approach uses past interactions as your training data using familiar tools and algorithms.  The downside is that you need training data so you have to have a user rate your items.  You have to do feature engineering too.  Tuning a classifier for every user is difficult and you can compress modalities (like a user's mood).  Finally, this isn't a social model since it's built on a single person.
+* `Collaborative filtering`: every single rating from any user allows you to improve a recommendation for every other user.  This is often considered the de facto recommender system.  It doesn't use any information from the users or items, rather it uses similarity to other users/products to predict interactions.  The past interactions are your training data.  Your prediction of a given person for a given item relates to their similarity to other people.  With r as your rating, you want to subtract the user's average rating from their rating of a given item to normalize it (in case they rate every item highly or poorly).  For larger data sets, you can look for neighborhoods and cache the results.  **Content-boosted collaborative filtering** takes into account other content like Facebook connections to boost the similarity metric.  The crippling weakness of this model is the **cold start problem** where we don't know what to predict for a new user.
+* `Similarity`:  this approach tries to do a great job at figuring out which things are similar to one another.  It then gives you more ways to compare items when you collapse features.  This means it's lower time until first utility.  You also fave good side-effects like topics and topic distributions.  The limitations are that your item information requirement can be high and that it is sollipsistic.
+* `Matrix Factorization`: see below.
+
+You also want to consider user state, like when a user owns something, do they need another one?  There's **basket analysis** which analyzes products that go well together.  You also want to consider long-term preference shift.  You can also do A/B testing to evalutate long-terms success.
+
+A challenge with PCA, SVD, and NMF is that they all must be computed on a dense data matrix.  You can impute missing values with something like the mean (what sklearn does when it says it factorizes sparse matrices).  **Matrix factorization** turns your matrix X into U*V.  We return a prediction where we once had missing values.  Callaborative filtering is a memory based model where we store data and query it.  Factorization is more model based as it creates predictions from which subtle outputs can be deduced.  Like in NMF, we'll define a cost function.  However, since it's sparse we can't update on the entire matrix.  *The keys is updating only on known data.*  Like in most of data science, we have a cost function and we try to minimize it.  Similar to NMF, we can use ALS.  A more popular option is **Funk SVD**, which is not technically SVD and was popularized in the Netflix challenge.
+
+Gradient descent rules apply to matrix factorization but only with regards to individual cells in the matrix where we have data.  You're doing updates on one cell in X by looking at the row of U and column of V and skipping unrated items.  Root mean squared error is the most common validation metric.  If a row or column is entirely sparse, it's a cold start problem.  Prediction is fast and you can find latent features for topic meaning.  The downside is that you need to re-factorize with new data, there are not good open source tools, and it's difficult to tune directly to the type of recommendation you want to make.  Side information can be added.
+
+Original netflix article on the Funk method: http://sifter.org/~simon/journal/20061211.html
+
+### Graph Theory ###
+
+**Graph theory** is the study of graphs, which are mathematical structures used to model pairwise relations between objects.  The seminal paper for graph theory was published in 2004, so it is still a very new field.
+
+A graph G is composed of V and E where V is a finite set of elements and E is a set of two subsets of E (your connections).  In other words, G = (V,E)  Main vocabulary:
+
+* `Vertices/nodes/points`: the entities involved in the relationship
+* `Edges/arcs/lines/dyad`: the basic unit of a social network analysis denoting a single relationship.  
+* `Mode`: a **1-mode** graph includes only one type of node, where a bimodal or multi-modal graph involves many types such as organizations, a posting, etc.
+* `Neighbors`: the nodes connected to a given node
+* `Degree`: the total number of neighbors
+* `Path`: a series of vertices and the path that connects them without repeating an edge, denoted ABD
+* `Walk`: a path that traces back over itself
+* `Complete`: there is an edge from every node to every other node on the graph
+* `Connected`: Every node is connected in some path to other nodes (no freestanding nodes)
+* `Subgraph`: A subgraph is any subset of nodes and the edges that connect them.  A single node is a subgraph
+* `Connected Components`
+
+Here are three types of graphs:
+
+1. `Directed`: nodes are connected to one another (e.g. Facebook or LinkedIn connections and phone calls)
+2. `Undirected`: nodes care connected in one or two directions (e.g. twitter followers or LinkedIn endorsement)
+3. `Weighted`: distances are weighted (e.g. traveling costs such as fuel or time or social pressure)
+
+There are three ways of representing a graph in a computer:
+
+1. `Edge list`: This is a list of edges [(A,B,3), (A,C,5), (B,C,7), etc.]  In general, you don’t use this.
+2. `Adjacency list`: This keeps track of which nodes are connected to a given node (much faster to search): {A: (B,3), (C,5), B: (A,3), (C,7)}
+** Space: omega(abs(v) + abs(e))
+** Lookup cost: omega(abs(V))
+** Neighbor lookup: omega(# neighbors)
+3. `Adjacency matrix`: - The same as the list but as a full matrix (computationally inefficient).  You can do a bit matrix of 0’s and 1’s or use the weighted values.  For unconnected nodes, you want high numbers that denote that they’re not directly connected.  It should be orders of magnitude larger than other values.
+** Space: omega(v**2)
+** Lookup cost: omega(1) (constant time)
+** Neighbor lookup: omega(abs(V))
+
+             A   B   C   D
+          A  0   3   5   10e6
+          B  3   0   7   9
+
+There are two main search options.  **Breadth first search (BFS)** is the main search option which searches breadth before depth.  This good for finding the shortest paths between nodes by searching the first tier, then the second, etc.  **Depth first search (DFS)** follows through each node to its greatest depth, then goes back one tier, exhausts that, etc.  BFS is exaustive so it can be very slow if your node happens to be the last one seen.  DFS is not garunteed to find the shortest path.
+
+      BFS(graph, start, end):  #BFS pseudo-code
+           Create an empty queue, Q
+           Init an empty set V (visited nodes)
+           Add A to Q
+           While Q is not empty:
+                Take node off Q, call it N w/ distance d
+                If N isnot in V:
+                     add N to V
+                     if N is desired end node:
+                          done
+                     else:
+                          add every neighbor of N to Q with distance d+1
+
+**Centrality** is how we measure the importance of a node.  **Degree centrality** says that the more connections my node has the more important it is.  We can also normalize by dividing by the number of nodes.  **Betweenness centrality** shows the importance of a node for being between other nodes.  A given point will have 0 betweenness if you don't need to pass through it.  **Eigenvector centrality** comes through Perron-Frobenius Theorum.  We can get our eigenvector centrality by lambda(V)=AV.  You do this by multiplying your adjacency matrix by your degree vector.  **Page rank** is very similar to eigenvector centrality.  See notes for the equations for this.
+
+You can find communities in your network using the following:
+
+* `Mutual ties`: nodes within the group know each other
+* `Compactness`: reach other members in a few steps
+* `Dense edges`: high frequency of edges within groups
+* `Separation from other groups`: frequency within groups higher than out of group
+
+**Modularity** is a measure that defines how likely the group structure seen was due to random chance.  To calculate this, you look at the edges of a given node over the sum of all edges in the network.  You need to relax the assumptions in order to get the math to work by allowing a node to connect with itself.  Instead of modularity, you could also use hierarchical clustering and just cut off at different points, though modularity with the heuristic is much faster.
+
+Resources:
+* NetworkX for a python package
+* Gephi for graphing 
 
 ---
 
@@ -1587,5 +1802,8 @@ Common Interview Questions:
 * Linear regression basics, especially that LR is more complex than y = MX + B
 * Interpreting coefficients for linear and logistic regression
 * How do you know if you overfit a model and how do you adjust for it?
+* Compare lasso regression and logistic regression using PCA
+* Why would you choose breadth first search over depth first search in graph theory?
+* What's NMF and how does the math work?
 
 O'Reilly (Including salary averages): https://www.oreilly.com
