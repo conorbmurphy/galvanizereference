@@ -8,35 +8,35 @@
 
   ** [Python](#python)
 
-  *** [Base Data Types](#base-data-types)
+    *** [Base Data Types](#base-data-types)
 
-  *** [Built-in Functions](#built---in-functions)
+    *** [Built-in Functions](#built---in-functions)
 
-  *** [Classes](#classes)
+    *** [Classes](#classes)
 
-  *** [Loops and List Comprehension](#loops-and-list-comprehension)
+    *** [Loops and List Comprehension](#loops-and-list-comprehension)
 
-  *** [File I/O](#file-i-o)
+    *** [File I/O](#file-i-o)
 
-  *** [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)
+    *** [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)
 
-  *** [Testing and Debugging](#testing-and-debugging)
+    *** [Testing and Debugging](#testing-and-debugging)
 
-  *** [A Note on Style](#a-note-on-style)
+    *** [A Note on Style](#a-note-on-style)
 
-  *** [Common Errors](#common-errors)
+    *** [Common Errors](#common-errors)
 
   ** [Python Packages](#python-packages)
 
-  *** [Python Packages - pandas](#python-packages---pandas)
+    *** [Python Packages - pandas](#python-packages---pandas)
 
-  *** [Python Packages - numpy](#python-packages---numpy)
+    *** [Python Packages - numpy](#python-packages---numpy)
 
-  *** [Python Packages - scipy](#python-packages---scipy)
+    *** [Python Packages - scipy](#python-packages---scipy)
 
-  *** [Python Packages - statsmodels](#python-packages---statsmodels)
+    *** [Python Packages - statsmodels](#python-packages---statsmodels)
 
-  *** [Python Packages - sklearn](#python-packages---sklearn)
+    *** [Python Packages - sklearn](#python-packages---sklearn)
 
   ** [SQL](#sql)
 
@@ -54,11 +54,11 @@
 
   ** [Statistics](#statistics)
 
-  *** [Frequentist Statistics](#frequentist-statistics)
+    *** [Frequentist Statistics](#frequentist-statistics)
 
-  *** [Hypothesis Testing](#hypothesis-testing)
+    *** [Hypothesis Testing](#hypothesis-testing)
 
-  *** [Bayesian Statistics](#bayesian-statistics)
+    *** [Bayesian Statistics](#bayesian-statistics)
 
 * Modeling
 
@@ -80,19 +80,19 @@
 
   ** [Supervised Learning](#supervised-learning)
 
-  *** [k-Nearest Neighbors (KNN)](#k-nearest-neighbors-(knn))
+    *** [k-Nearest Neighbors (KNN)](#k-nearest-neighbors-(knn))
 
-  *** [Decision Trees](#decision-trees)
+    *** [Decision Trees](#decision-trees)
 
-  *** [Bagging and Random Forests](#bagging-and-random-forests)
+    *** [Bagging and Random Forests](#bagging-and-random-forests)
 
-  *** [Boosting](#boosting)
+    *** [Boosting](#boosting)
 
-  *** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)
+    *** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)
 
   ** [Unsupervised Learning](#unsupervised-learning)
 
-  *** [KMeans Clustering](#kmeans-clustering)
+    *** [KMeans Clustering](#kmeans-clustering)
 
 * Special Topics
 
@@ -340,35 +340,35 @@ Here are some common errors to avoid:
 Python offers an array of packages instrumental in its rise as one of the leading languages for data science.  Here are some useful packages, some of which will be explored in detail below:
 
 * Fundamental Libraries for Scientific Computing
-** `IPython Notebook`: an alternative Python command line shell for interactive computing
-** `NumPy`: the most fundamental package for efficient scientific computing through linear algebra routines
-** `pandas`: a library for operating with table-like structures and data munging
-** `SciPy`: one of the core packages for scientific computing routines
+  ** `IPython Notebook`: an alternative Python command line shell for interactive computing
+  ** `NumPy`: the most fundamental package for efficient scientific computing through linear algebra routines
+  ** `pandas`: a library for operating with table-like structures and data munging
+  ** `SciPy`: one of the core packages for scientific computing routines
 * Math and Statistics
-** `Statsmodels`: statistical data analysis mainly through linear models and includes a variety of statistical tests
-** `SymPy`: symbolic mathematical computations
+  ** `Statsmodels`: statistical data analysis mainly through linear models and includes a variety of statistical tests
+  ** `SymPy`: symbolic mathematical computations
 * Machine Learning
-** `Scikit-learn`: includes a broad range of different classifiers, cross-validation and other model selection methods, dimensionality reduction techniques, modules for regression and clustering analysis, and a useful data-preprocessing module
-** `Shogun`: ML library focussed on large-scale kernel methods
-** `PyBrain`: Python-Based Reinforcement Learning, Artificial Intelligence and Neural Network Library
-** `PyLearn2`: research library
-** `PyMC`: Bayesian statistics library
+  ** `Scikit-learn`: includes a broad range of different classifiers, cross-validation and other model selection methods, dimensionality reduction techniques, modules for regression and clustering analysis, and a useful data-preprocessing module
+  ** `Shogun`: ML library focussed on large-scale kernel methods
+  ** `PyBrain`: Python-Based Reinforcement Learning, Artificial Intelligence and Neural Network Library
+  ** `PyLearn2`: research library
+  ** `PyMC`: Bayesian statistics library
 * Plotting and Visualization
-** `matplotlib`: the defacto plotting library
-** `seaborn`: adds features to matplotlib like violin plots and more appealing aesthetics
-** `ggplot`: a port of R's ggplot2
-** `plotly`: focus on interactivity
-** `Bokeh`: aesthetic layouts and interactivity to produce high-quality plots for web browsers
-** `d3py`: creates interactive data visualizations based on d3
-** `prettyplotlib`: enhancement library for matplotlib (good for presentations)
+  ** `matplotlib`: the defacto plotting library
+  ** `seaborn`: adds features to matplotlib like violin plots and more appealing aesthetics
+  ** `ggplot`: a port of R's ggplot2
+  ** `plotly`: focus on interactivity
+  ** `Bokeh`: aesthetic layouts and interactivity to produce high-quality plots for web browsers
+  ** `d3py`: creates interactive data visualizations based on d3
+  ** `prettyplotlib`: enhancement library for matplotlib (good for presentations)
 * Database Interaction
-** `Psycopg2`: access to postgres databases
-** `Pymongo`: access to MongoDB databases
-** `sqlite3`: access to SQLite databases
+  ** `Psycopg2`: access to postgres databases
+  ** `Pymongo`: access to MongoDB databases
+  ** `sqlite3`: access to SQLite databases
 * Data formatting and storage
-** `bs4`: defacto library for parsing content from webscraping
-** `csvkit`: has some functionality beyond pandas for csv's
-** `PyTables`: good for large datasets
+  ** `bs4`: defacto library for parsing content from webscraping
+  ** `csvkit`: has some functionality beyond pandas for csv's
+  ** `PyTables`: good for large datasets
 
 ### Python Packages - pandas ###
 
