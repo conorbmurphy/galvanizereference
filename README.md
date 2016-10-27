@@ -3,48 +3,27 @@
 ## Table of Contents ##
 
 * [Introduction](#introduction)
-
 * Programming
-
-  ** [Python](#python)
-
-    *** [Base Data Types](#base-data-types)
-
-    *** [Built-in Functions](#built---in-functions)
-
-    *** [Classes](#classes)
-
-    *** [Loops and List Comprehension](#loops-and-list-comprehension)
-
-    *** [File I/O](#file-i-o)
-
-    *** [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)
-
-    *** [Testing and Debugging](#testing-and-debugging)
-
-    *** [A Note on Style](#a-note-on-style)
-
-    *** [Common Errors](#common-errors)
-
-  ** [Python Packages](#python-packages)
-
-    *** [Python Packages - pandas](#python-packages---pandas)
-
-    *** [Python Packages - numpy](#python-packages---numpy)
-
-    *** [Python Packages - scipy](#python-packages---scipy)
-
-    *** [Python Packages - statsmodels](#python-packages---statsmodels)
-
-    *** [Python Packages - sklearn](#python-packages---sklearn)
-
-  ** [SQL](#sql)
-
-  ** [MongoDB and Pymongo](#mongodb-and-pymongo)
-
-  ** [Git](#git)
-
-  ** [Command Line](#command-line)
+ * [Python](#python)
+  * [Base Data Types](#base-data-types)
+  * [Built-in Functions](#built---in-functions)
+  * [Classes](#classes)
+  * [Loops and List Comprehension](#loops-and-list-comprehension)
+  * [File I/O](#file-i-o)
+  * [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)
+  * [Testing and Debugging](#testing-and-debugging)
+  * [A Note on Style](#a-note-on-style)
+  * [Common Errors](#common-errors)
+ * [Python Packages](#python-packages)
+  * [Python Packages - pandas](#python-packages---pandas)
+  * [Python Packages - numpy](#python-packages---numpy)
+  * [Python Packages - scipy](#python-packages---scipy)
+  * [Python Packages - statsmodels](#python-packages---statsmodels)
+  * [Python Packages - sklearn](#python-packages---sklearn)
+ * [SQL](#sql)
+ * [MongoDB and Pymongo](#mongodb-and-pymongo)
+ * [Git](#git)
+ * [Command Line](#command-line)
 
 * Linear Algebra, Probability, and Statistics
 
@@ -54,11 +33,11 @@
 
   ** [Statistics](#statistics)
 
-    *** [Frequentist Statistics](#frequentist-statistics)
+  *** [Frequentist Statistics](#frequentist-statistics)
 
-    *** [Hypothesis Testing](#hypothesis-testing)
+  *** [Hypothesis Testing](#hypothesis-testing)
 
-    *** [Bayesian Statistics](#bayesian-statistics)
+  *** [Bayesian Statistics](#bayesian-statistics)
 
 * Modeling
 
@@ -80,19 +59,19 @@
 
   ** [Supervised Learning](#supervised-learning)
 
-    *** [k-Nearest Neighbors (KNN)](#k-nearest-neighbors-(knn))
+  *** [k-Nearest Neighbors (KNN)](#k-nearest-neighbors-(knn))
 
-    *** [Decision Trees](#decision-trees)
+  *** [Decision Trees](#decision-trees)
 
-    *** [Bagging and Random Forests](#bagging-and-random-forests)
+  *** [Bagging and Random Forests](#bagging-and-random-forests)
 
-    *** [Boosting](#boosting)
+  *** [Boosting](#boosting)
 
-    *** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)
+  *** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)
 
   ** [Unsupervised Learning](#unsupervised-learning)
 
-    *** [KMeans Clustering](#kmeans-clustering)
+  *** [KMeans Clustering](#kmeans-clustering)
 
 * Special Topics
 
