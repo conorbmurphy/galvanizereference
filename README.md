@@ -111,13 +111,13 @@ This is designed to be a catch-all reference tool for my notes while in Galvaniz
 The main responsibilities of a data scientist are:
 
 1. `Ideation` (experimental design)
-2. `Importing` (SQL/postgres/psycopg2)
+2. `Importing` (especially SQL/postgres/psycopg2)
  * defining the ideal dataset
  * understanding your data compares to the ideal
-4. `Exploratory data analysis (EDA)` (python/pandas)
-4. `Data munging` (pandas)
+4. `Exploratory data analysis (EDA)` (especially pandas)
+4. `Data munging`
 5. `Feature engineering`
-6. `Modeling` (sklearn)
+6. `Modeling` (especially sklearn)
 7. `Presentation`
 
 While these represent the core competencies of a data scientist, the method for implementing them is best served by the Cross-Industry Standard Process for Data Mining (CRISP-DM), pictured below.
@@ -144,124 +144,61 @@ OOP has classes and objects.  A class is a combination of state and behaviors.  
 
 ### Base Data Types ###
 
-Python has a few base datatypes whose different characteristics can be leveraged for faster, drier code.  Data types based on hashing, such as dictionaries, allow us to retrieve information much more quickly because we can go directly to a value, similar to a card in a card catalogue.  
+Python has a few base datatypes whose different characteristics can be leveraged for faster, drier code.  Data types based on hashing, such as dictionaries, allow us to retrieve information much more quickly because we can go directly to a value, similar to a card in a card catalogue, rather than iterating over every item.  
 
 * `string`: immutable
-  * string = string['abc']; str[-1] # note indexing is cardinal, not ordinal like R
+  * string = 'abc'; string[-1] # note indexing is cardinal, not ordinal like R
 * `tuple`: immutable
   * tuple = (5, 3, 8); tuple[3]
   * tuple2 = (tuple, 2, 14) # nested tuple
-* `int`: immutable
-* `float`: immutable
+* `int`: immutable integer
+* `float`: immutable floating point number
 * `list`: mutable, uses append
   * list = [5, 5, 7, 1]; list[2]
   * list2 = [list, 23, list] # nested list
+  * list.append(list2) # in place operation
+  * list3 = list # aliases list
+  * list3 = list[:]; list3 = list(list) # both copies list
 * `dict`: mutable, uses append, a series of hashable key/value pairs.
-  * dict = {‘key’: 'value', 'first': 1};
-  * dict['first'];
-  * dict.keys(); dict.values();
+  * dict = {‘key’: 'value', 'first': 1}
+  * dict['first']
+  * dict.keys(); dict.values() # returns keys or values
   * dict['newkey'] = 'value'
   * defaultdict (from collections) can be used to avoid key errors
-* `set`: mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set).
+  * Counter(dict).most_common(1) # (also from collections) orders dict values
+* `set`: mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set) in that they allow only one of a given value.
+  * s = set([1, 2, 3])
+  * s.add(4) # in place operation
 
 ### Built-in Functions ###
 
 The following are the base functions Python offers, some more useful than others.  Knowing these with some fluency makes dealing with more complex programs easier.
 
-* `abs()`:
-* `all()`:
-* `any()`:
-* `basestring()`:
-* `bin()`:
-* `bool()`:
-* `bytearray()`:
-* `callable()`:
-* `chr()`:
-* `classmethod()`:
-* `cmp()`:
-* `compile()`:
-* `complex()`:
-* `delattr()`:
-* `dict()`:
-* `dir()`:
-* `divmod()`:
-* `enumerate()`:
-* `eval()`:
-* `execfile()`:
-* `file()`:
-* `filter()`:
-* `float()`:
-* `format()`:
-* `frozenset()`:
-* `getattr()`:
-* `globals()`:
-* `hasattr()`:
-* `hash()`:
-* `help()`:
-* `hex()`:
-* `id()`:
-* `input()`:
-* `int()`:
-* `isinstance()`:
-* `issubclass()`:
-* `iter()`:
-* `len()`:
-* `list()`:
-* `locals()`:
-* `long()`:  
-* `map()`:  
-* `max()`:  
-* `memoryview()`:
-* `min()`:
-* `next()`:
-* `object()`:
-* `oct()`:
-* `open()`:
-* `ord()`:
-* `pow()`:
-* `print()`:
-* `property()`:
-* `range()`:
-* `raw_input()`:
-* `reduce()`:
-* `reload()`:
-* `repr()`:
-* `reversed()`:
-* `round()`:
-* `set()`:
-* `setattr()`:
-* `slice()`:
-* `sorted()`:
-* `staticmethod()`:
-* `str()`:
-* `sum()`:
-* `super()`:
-* `tuple()`:
-* `type()`:
-* `unichr()`:
-* `unicode()`:
-* `vars()`:
-* `xrange()`:
-* `zip()`:
-* `__import__()`:
+`abs()`, `all()`, `any()`, `basestring()`, `bin()`, `bool()`, `bytearray()`, `callable()`, `chr()`, `classmethod()`, `cmp()`, `compile()`, `complex()`, `delattr()`, `dict()`, `dir()`, `divmod()`, `enumerate()`, `eval()`, `execfile()`, `file()`, `filter()`, `float()`, `format()`, `frozenset()`, `getattr()`, `globals()`, `hasattr()`, `hash()`, `help()`, `hex()`, `id()`, `input()`, `int()`, `isinstance()`, `issubclass()`, `iter()`, `len()`, `list()`, `locals()`, `long()`: , `map()`: , `max()`: , `memoryview()`, `min()`, `next()`, `object()`, `oct()`, `open()`, `ord()`, `pow()`, `print()`, `property()`, `range()`, `raw_input()`, `reduce()`, `reload()`, `repr()`, `reversed()`, `round()`, `set()`, `setattr()`, `slice()`, `sorted()`, `staticmethod()`, `str()`, `sum()`, `super()`, `tuple()`, `type()`, `unichr()`, `unicode()`, `vars()`, `xrange()`, `zip()`, `__import__()`:
 
 Note the difference between functions like `range` and `xrange` above.  `range` will create a list at the point of instantiation and save it to memory.  `xrange`, by contrast, will generate a new value each time it's called upon.  **Generators** like this (`zip` versus `izip` from itertools is another common example) are especially powerful in long for loops.
 
 
 ### Classes ###
 
+Python classes offers the benefits of classes with a minimum of new syntax and semantics.  A class inherits qualities from other classes.  In practice, we often start by extending the object class however in more complex architectures you can extend from other classes, especially your own.
+
 To make a class:
 
-      class MapPoint(object): # This is extending from the object class (inheratance)
-           def __init__(self):
-                self.x = None
-                self.y = None
-           def lon(self): # This is a method, or a function w/in a class
-                return self.x
+      class MapPoint(object): # Extends from the class object, uses camel case by convetion
+        def __init__(self):
+          self.x = None
+          self.y = None
+
+        def lon(self): # This is a method, or a function w/in a class
+          return self.x # use 'self' to access attributes
+
+        def _update_lon(self): # an underscore before the method is convention for one that's only meant to be accessed internally
+          self.x += 1
 
 Magic methods allow you to define things like printing and comparing values:
 
-      def __cmp__(self, other):
+      def __cmp__(self, other): # Used in comparing values
            if self._fullness < other._fullness:
                 return -1 # This is a convention
            elif self._fullness > other._fullness:
@@ -270,9 +207,8 @@ Magic methods allow you to define things like printing and comparing values:
                 return 0
            else:
                 raise ValueError(“Couldn’t compare {} to {}”.format(self, other))
-          __
 
-A decorator is a way to say that you're going to access some attribute of a class as though it's not a function.  This is not a function; it's encapsulated.
+A decorator is a way to say that you're going to access some attribute of a class as though it's not a function.  Decorators are a syntactic convenience that allows a Python source file to say what it is going to do with the result of a function or a class statement before rather than after the statement.  This is not a function; it's encapsulated.
 
       @property
       def full(self):
@@ -281,16 +217,16 @@ A decorator is a way to say that you're going to access some attribute of a clas
       @property
       def empty(self):
            return self._fullness == 0
-      __
 
 Basic vocabulary regarding classes:
 
-* `encapsulation` is the idea that you don’t need to worry about the specifics of how a given thing is working.  
-* `composition` is the idea that things can be related (fruit to backpacks, for instance).  
-* `Inheritance` is where children take the quality of their parents
-* `Polymorphism` is where you customize a given behavior for a child
+* `encapsulation`: is the idea that you don’t need to worry about the specifics of how a given thing is working  
+* `composition`: is the idea that things can be related (fruit to backpacks, for instance)  
+* `inheritance`: is where children take the quality of their parents
+* `polymorphism`: is where you customize a given behavior for a child
 
-Reference: http://www.rafekettler.com/magicmethods.html
+Reference:
+* [List of Magic Methods](http://www.rafekettler.com/magicmethods.html)
 
 #### Loops and List Comprehension ####
 
@@ -958,7 +894,7 @@ When we look at the posterior distribution, the denominator is just a normalizin
 
 #### Bayesian A/B Testing ####
 
-In frequentist A/B testing, you can only reject or fail to reject.  You can't amass evidence for another hypothesis.  In Bayesian A/B testing, you can use a uniform distribution for an uninformative prior.  Depending on the study you're doing, an uninformative prior (which gives equal probability to all possible values) can be effectively the same as a frquentist approach.  If you use a bad prior, it will take longer to converge on the true value.  You can get a distribtuion from your test and then perform an element-wise comparison and take the mean to see where they overlap.  To test a 5% improvement, do element-wise plus .05.
+In frequentist A/B testing, you can only reject or fail to reject.  You can't amass evidence for another hypothesis.  In Bayesian A/B testing, you can use a uniform distribution for an uninformative prior.  Depending on the study you're doing, an uninformative prior (which gives equal probability to all possible values) can be effectively the same as a frequentist approach.  If you use a bad prior, it will take longer to converge on the true value.  You can get a distribution from your test and then perform an element-wise comparison and take the mean to see where they overlap.  To test a 5% improvement, do element-wise plus .05.
 
 The **multi-armed bandit** is the question of which option you take given prior knowledge.  There are two operative terms.  **Exploitation** leverages your current knowledge in order to get the highest expected reward at that time.  **Exploration** is testing other options to determine how good each one is.  Multi-armed bandit is now a big part of reinforcement learning (a branch of AI) more than it is part of stats.  You can use this for dynamic A/B testing, budget allocation amongst competing projects, clinical trials, adaptive routing for networks minimizing delays, and reinforcement learning.
 
@@ -1749,7 +1685,7 @@ You can find communities in your network using the following:
 
 Resources:
 * NetworkX for a python package
-* Gephi for graphing 
+* Gephi for graphing
 
 ---
 
