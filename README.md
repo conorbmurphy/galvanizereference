@@ -4,10 +4,14 @@
 
 
 * [Introduction](#introduction)
+
 * Programming
-  * [Python](#python)
-   ** [Base Data Types](#base-data-types)  
-   ** [Built-in Functions](#built---in-functions)  
+
+ * [Python](#python)
+
+    ** [Base Data Types](#base-data-types)
+
+    ** [Built-in Functions](#built---in-functions)
 
     ** [Classes](#classes)
 
@@ -34,6 +38,8 @@
     ** [statsmodels](#statsmodels)
 
     ** [sklearn](#sklearn)
+
+    ** [Plotting with matplotlib and seaborn](#plotting-with-matplotlib-and-seaborn)
 
  * [SQL](#sql)
 
@@ -344,6 +350,7 @@ Python offers an array of packages instrumental in its rise as one of the leadin
 * Math and Statistics
   ** `Statsmodels`: statistical data analysis mainly through linear models and includes a variety of statistical tests
   ** `SymPy`: symbolic mathematical computations
+  ** `Itertools`: combinatorics generators
 * Machine Learning
   ** `Scikit-learn`: includes a broad range of different classifiers, cross-validation and other model selection methods, dimensionality reduction techniques, modules for regression and clustering analysis, and a useful data-preprocessing module
   ** `Shogun`: ML library focussed on large-scale kernel methods
@@ -437,56 +444,22 @@ Note: in calculating `np.std()`, be sure to specify `ddof = 1` when refering to 
 
 ### scipy ###
 
-loc = mean
-scale = standard deviation
----
+SciPy is one of the core packages for scientific computing routines.  `linalg` is particularly helpful for linear algebra.  It's worth noting the following:
 
-### itertools ###
-
-Combinatoric generators
-
-### Python Packages for Plotting - matbplotlib and seaborn ###
-
-Matplotlib is the defacto choice for plotting in python.  There's also Plotly, Bokeh, Seaborne, Pandas, and ggplot (port of R package).  Seaborne and Pandas were both built on matplotlib.
-
-There are three levels it can be accesed on:
-
-1. plt - minimal, fast interface
-2. OO interface w/ pyplot - fine-grained control over figure, axes, etc
-3. pure OO interface - embed plots in GUI applications (will probably never use)
-
-      plt.figure
-      x_data = np.arange(0, 4, .011)
-      y_data = np.sin(x_data)
-      plt.plot(x_data, y_data)
-      plt.show()
-
-The objects involved are the figure and axes.  We can call individual axes, but normally we deal with them together.  The figure defines the area on which we can draw.  The axes is how we plot specific data.
-
-add lines
-multiple plots
-
-      fig, ax_list = plt.subplots(4, 2)
-      for ax, flips in zip(ax_list.flatten(), value):
-        x_value = [data changed by value]
-        y_value = [data changed by value]
-        ax.plot(x_value, y_value)
-
-A useful plot from seaborn is heatmap and violin plot (which is the kde mirrored):
-
-      agg = cars.groupby(['origin'], cars['year'])
-      ax = sns.heatmap(agg.unstack(level = 'year'), annot = True) # Be sure to annotate so you know what your values are
-
-      fit, axes = plt.subplots(3, 2)
-      for ax, var in zip(axes.ravel(), num_vars):
-        sns.violinplot(y = var, data = cars, ax = ax)
+* `loc`: what SciPy calls the mean
+* `scale`: what SciPy calls standard deviation
 
 ---
 
 ### statsmodels ###
 
 Statsmodels is the de facto library for performing regression tasks in Python.  
-`import statsmodels.api as sm`
+
+      import statsmodels.api as sm
+
+      from statsmodels.regression.linear_model import OLS
+      # unlike sklearn, this will provide a summary view of your model
+
 Note that logistic regression in statsmodels will fail to converge if data perfectly separable.  Logistic regression in sklearn normalizes (punishes betas) so it will converge.
 
 
@@ -501,36 +474,76 @@ Splitting test/training data:
       X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
 
-`from sklearn.linear_model import LinearRegression`
-`from sklearn.linear_model import LogisticRegression`
-`from sklearn.neighbors import KNeighborsClassifier`
-`from sklearn.tree import DecisionTreeRegressor`
+      from sklearn.linear_model import LinearRegression
+      from sklearn.linear_model import LogisticRegression  
 
-`from sklearn.ensemble import RandomForestClassifier`
-* `max_features`: for classification start with sqrt(p) and for regression p/3
-* `min_sample_leaf`: start with None and try others
-* `n_jobs`: -1 will make it run on the max # of proocessors
+      from sklearn.neighbors import KNeighborsClassifier   
 
-`from sklearn.ensemble import AdaBoostClassifier`
-`from sklearn.ensemble import GradientBoostingRegressor`
-* You can used `staged_predict` to access the boosted steps, which is especially useful in plotting error rate over time
+      from sklearn.tree import DecisionTreeRegressor   
 
-`from sklearn.svm import SVC` # sklearn uses SVC's even though it's a SVM.
-* By default, SVC will use radial basis, which will enlarge your feature space with higher-order functions
+      from sklearn.ensemble import RandomForestClassifier  
+      # `max_features`: for classification start with sqrt(p) and for regression p/3
+      # `min_sample_leaf`: start with None and try others
+      # `n_jobs`: -1 will make it run on the max # of proocessors
+
+      from sklearn.ensemble import AdaBoostClassifier
+      from sklearn.ensemble import GradientBoostingRegressor  
+      # You can used `staged_predict` to access the boosted steps, which is especially useful in plotting error rate over time
+
+      from sklearn.svm import SVC # sklearn uses SVC's even though it's a SVM.
+      # By default, SVC will use radial basis, which will enlarge your feature space with higher-order functions
 
 
 A few other fun tools:
 
-`from sklearn.model_selection import GridSearchCV`
-Searches over designated parameters to tune a model
-* GridSearch can parallelize jobs so set `n_jobs = -1`
+      from sklearn.model_selection import GridSearchCV
+      # Searches over designated parameters to tune a model
+      # GridSearch can parallelize jobs so set `n_jobs = -1`     
 
-`from sklearn.pipeline import Pipeline`
-Note that pipeline is helpful for keeping track of changes
+      from sklearn.pipeline import Pipeline     
+      # Note that pipeline is helpful for keeping track of changes
 
-`from sklearn.preprocessing import LabelEncoder`
-This tool will transform classes into numerical values
+      from sklearn.preprocessing import LabelEncoder      
+      # This tool will transform classes into numerical values
 
+---
+
+### Plotting with matplotlib and seaborn ###
+
+Matplotlib is the defacto choice for plotting in python.  There's also Plotly, Bokeh, Seaborne, Pandas, and ggplot.  Seaborne and Pandas were both built on matplotlib.
+
+There are three levels plotting can can be accesed on:
+
+1. `plt`: minimal, fast interface
+2. `OO interface w/ pyplot`: fine-grained control over figure, axes, etc
+3. `pure OO interface`: embed plots in GUI applications (will probably never use)
+
+      plt.figure
+      x_data = np.arange(0, 4, .011)
+      y_data = np.sin(x_data)
+      plt.plot(x_data, y_data)
+      plt.show()
+
+      pd.scatter_matrix(df, alpha=0.2, figsize=(6, 6), diagonal='kde') # scattermatrix
+
+The objects involved are the figure and axes.  We can call individual axes, but normally we deal with them together.  The figure defines the area on which we can draw.  The axes is how we plot specific data.
+
+      fig, ax_list = plt.subplots(4, 2)
+      for ax, flips in zip(ax_list.flatten(), value):
+        x_value = [data changed by flips]
+        y_value = [data changed by flips]
+        ax.plot(x_value, y_value)
+
+Plotting predictions can be done using `np.linspace()` to generate X or Y values for your plot.
+
+A useful plot from seaborn is heatmap and violin plot (which is the kde mirrored):
+
+      agg = cars.groupby(['origin'], cars['year'])
+      ax = sns.heatmap(agg.unstack(level = 'year'), annot = True) # Be sure to annotate so you know what your values are
+
+      fit, axes = plt.subplots(3, 2)
+      for ax, var in zip(axes.ravel(), num_vars):
+        sns.violinplot(y = var, data = cars, ax = ax)
 
 ---
 
