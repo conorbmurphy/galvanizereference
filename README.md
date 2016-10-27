@@ -9,35 +9,35 @@
 
  * [Python](#python)
 
-  ** [Base Data Types](#base-data-types)
+    ** [Base Data Types](#base-data-types)
 
-  ** [Built-in Functions](#built---in-functions)
+    ** [Built-in Functions](#built---in-functions)
 
-  ** [Classes](#classes)
+    ** [Classes](#classes)
 
-  ** [Loops and List Comprehension](#loops-and-list-comprehension)
+    ** [Loops and List Comprehension](#loops-and-list-comprehension)
 
-  ** [File I/O](#file-i-o)
+    ** [File I/O](#file-i-o)
 
-  ** [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)
+    ** [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)
 
-  ** [Testing and Debugging](#testing-and-debugging)
+    ** [Testing and Debugging](#testing-and-debugging)
 
-  ** [A Note on Style](#a-note-on-style)
+    ** [A Note on Style](#a-note-on-style)
 
-  ** [Common Errors](#common-errors)
+    ** [Common Errors](#common-errors)
 
  * [Python Packages](#python-packages)
 
-  ** [Python Packages - pandas](#python-packages---pandas)
+    ** [Python Packages - pandas](#python-packages---pandas)
 
-  ** [Python Packages - numpy](#python-packages---numpy)
+    ** [Python Packages - numpy](#python-packages---numpy)
 
-  ** [Python Packages - scipy](#python-packages---scipy)
+    ** [Python Packages - scipy](#python-packages---scipy)
 
-  ** [Python Packages - statsmodels](#python-packages---statsmodels)
+    ** [Python Packages - statsmodels](#python-packages---statsmodels)
 
-  ** [Python Packages - sklearn](#python-packages---sklearn)
+    ** [Python Packages - sklearn](#python-packages---sklearn)
 
  * [SQL](#sql)
 
