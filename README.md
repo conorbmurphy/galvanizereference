@@ -1514,6 +1514,8 @@ The components of a time series are:
 
 When we remove the trends, seasonality, and cyclic effects, we should be left with white noise.  It is possible to see a growing amplitude as time advances.  This could be modeled as a multiplicative effect to reduce that.
 
+#### ARIMA Models ####
+
 **An autoregressive integrated moving average (ARIMA)** model is a generalization of an **autoregressive moving average (ARMA)** model. Both of these models are fitted to time series data either to better understand the data or to predict future points in the series (forecasting).  There are three parts to ARIMA:
 
 1. `AR` = p.  This is your expectation times time plus an error term (the error term has an expectation of 0)
@@ -1548,13 +1550,21 @@ An Autocorrelation Function (ACF) is a function of lag, or a difference in time.
 
 You can predict against other forecasts.  For instance, a fed prediction is a benchmark to which the market reacts so you can use that as a predictor.  
 
-**Exponential Smoothing** is the Bayesian analogue to ARIMA.  The basic idea is that you weigh more recent data more than older data.  With ETS, you’re essentially modeling the state and then build a model that moves it forward.  The ‘state space model’ is a black box that takes in data but spits out responses.
 
-**Alpha** determines how much you weigh recent information.  In the below, you can see how a smaller alpha relates to a delayed incorporation of the real data.  
+#### Exponential Smoothing ####
+
+**Exponential Smoothing** is the Bayesian analogue to ARIMA, developed in the late 50's.  The basic idea is that you weigh more recent data more than older data.  Forecasts using this metod are wighted averages of past observations with the weights decaying exponentially as the observations get older.  With ETS, you’re essentially modeling the state and then build a model that moves it forward.  The ‘state space model’ is a black box that takes in data but spits out responses.
+
+**Alpha** is your smoothing parameter that determines how much you weigh recent information where 0 <= α <= 1.  In the below, you can see how a smaller alpha relates to a delayed incorporation of the real data.  The sum of the weights for any given α will be approximately 1.  The smaller the α, the more weight is placed on more distantly past events.
 
 ![Image of SES](https://github.com/conorbmurphy/galvanizereference/blob/master/images/ses.png)
 
 *This is the bias/variance tradeoff for ETS.*  An alpha of .2 takes longer to adjust because it multiplies past values by .2.
+
+The simplest ETS method is called **simple exponential smoothing (SES)**.  This is suitable for forecasting data with no trend or seasonal pattern.  By contrast we can talk about two methods: a naive one and an average one.  The former would predict the last value for the next, essentially weighing the last value above all others.  The average method would predict the average of all values.  SES is a combination of these two approaches where weights decrease exponentially as observations are more distant.
+
+ŷ<sub>T+1|T</sub> = α<sub>yT</sub> + α(1−α)<sub>yT-1</sub>+α(1−α)**2<sub>yT-2</sub>+⋯
+
 
 ARIMA features & benefits:
 
