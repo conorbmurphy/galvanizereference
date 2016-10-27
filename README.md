@@ -49,69 +49,69 @@
 
 * Linear Algebra, Probability, and Statistics
 
-  ** [Linear Algebra](#linear-algebra)
+ * [Linear Algebra](#linear-algebra)
 
-  ** [Probability](#probability)
+ * [Probability](#probability)
 
-  ** [Statistics](#statistics)
+ * [Statistics](#statistics)
 
-  *** [Frequentist Statistics](#frequentist-statistics)
+    ** [Frequentist Statistics](#frequentist-statistics)
 
-  *** [Hypothesis Testing](#hypothesis-testing)
+    ** [Hypothesis Testing](#hypothesis-testing)
 
-  *** [Bayesian Statistics](#bayesian-statistics)
+    ** [Bayesian Statistics](#bayesian-statistics)
 
 * Modeling
 
-  ** [Exploratory Data Analysis][#exploratory-data-analysis-(EDA)]
+ * [Exploratory Data Analysis][#exploratory-data-analysis-(EDA)]
 
-  ** [Linear Regression Introduction and Univariate](#linear-regression-introduction-and-univariate)
+ * [Linear Regression Introduction and Univariate](#linear-regression-introduction-and-univariate)
 
-  ** [Multivariate Regression](#multivariate-regression)
+ * [Multivariate Regression](#multivariate-regression)
 
-  ** [Logistic Regression](#logistic-regression)
+ * [Logistic Regression](#logistic-regression)
 
-  ** [Cross-validation](#cross-validation)
+ * [Cross-validation](#cross-validation)
 
-  ** [Bias/Variance Tradeoff](#bias/variance-tradeoff)
+ * [Bias/Variance Tradeoff](#bias/variance-tradeoff)
 
-  ** [Gradient Ascent](#gradient-ascent)
+ * [Gradient Ascent](#gradient-ascent)
 
 * [Machine Learning](#machine-learning-(ml))
 
-  ** [Supervised Learning](#supervised-learning)
+ * [Supervised Learning](#supervised-learning)
 
-  *** [k-Nearest Neighbors (KNN)](#k-nearest-neighbors-(knn))
+    ** [k-Nearest Neighbors (KNN)](#k-nearest-neighbors-(knn))
 
-  *** [Decision Trees](#decision-trees)
+    ** [Decision Trees](#decision-trees)
 
-  *** [Bagging and Random Forests](#bagging-and-random-forests)
+    ** [Bagging and Random Forests](#bagging-and-random-forests)
 
-  *** [Boosting](#boosting)
+    ** [Boosting](#boosting)
 
-  *** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)
+    ** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)
 
-  ** [Unsupervised Learning](#unsupervised-learning)
+ * [Unsupervised Learning](#unsupervised-learning)
 
-  *** [KMeans Clustering](#kmeans-clustering)
+    ** [KMeans Clustering](#kmeans-clustering)
 
 * Special Topics
 
-  ** [Natural Language Processing](#natural-language-processing)
+ * [Natural Language Processing](#natural-language-processing)
 
-  ** [Time Series](#time-series)
+ * [Time Series](#time-series)
 
-  ** [Web-Scraping](#web---scraping)
+ * [Web-Scraping](#web---scraping)
 
-  ** [Profit Curves](#profit-curves)
+ * [Profit Curves](#profit-curves)
 
-  ** [Imbalanced Classes](#imbalanced-classes)
+ * [Imbalanced Classes](#imbalanced-classes)
 
-  ** [Helpful Visualization](#helpful-visualizations)
+ * [Helpful Visualization](#helpful-visualizations)
 
-  ** [Note on Style and Other Tools](#note-on-style-and-other-tools)
+ * [Note on Style and Other Tools](#note-on-style-and-other-tools)
 
-  ** [Career Points](#career-pointers)
+ * [Career Points](#career-pointers)
 
 ---
 
