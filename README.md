@@ -8,11 +8,15 @@
 
   ** [Python](#python)
 
-  *** [Base Data Types](base-data-types)
+  *** [Base Data Types](#base-data-types)
 
-  *** [Built-in Functions](built---in-functions)
+  *** [Built-in Functions](#built---in-functions)
 
-  *** [Classes](classes)
+  *** [Classes](#classes)
+
+  *** [Loops and List Comprehension](#loops-and-list-comprehension)
+
+  *** [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)
 
   *** [Testing and Debugging](testing-and-debugging)
 
@@ -142,6 +146,8 @@ There are many different programming paradigms such as declarative, functional, 
 
 OOP has classes and objects.  A class is a combination of state and behaviors.  Python has a logic where everybody can access anything, making it difficult to obfuscate code.  This makes Python particularly adept for the open source community.
 
+There are a number of topics that I won't address here such as control structures, functions, and modules.
+
 ### Base Data Types ###
 
 Python has a few base datatypes whose different characteristics can be leveraged for faster, drier code.  Data types based on hashing, such as dictionaries, allow us to retrieve information much more quickly because we can go directly to a value, similar to a card in a card catalogue, rather than iterating over every item.  
@@ -228,18 +234,58 @@ Basic vocabulary regarding classes:
 Reference:
 * [List of Magic Methods](http://www.rafekettler.com/magicmethods.html)
 
-#### Loops and List Comprehension ####
+### Loops and List Comprehension ###
 
+There are two types of loops in python: for loops and while loops.  List comprehension provides a more compact way to approach for loops.
 
+For loops iterate over an item, completing after it has either iterated over all of its iterable components or reaches a `break`.  While this is similar to other components, I won't belabor this.  However it is important to draw attention to functions like `enumerate`, which returns an index and the iterable item, and `zip`, which combines pairs of items.
 
-#### Lambda Functions ####
+Here are a few examples of list comprehension:
+
+      square_root = [np.sqrt(i) for i in x]
+
+      L = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+      flattened_L = [item for row in L for item in row]
+
+      even =["even" if item % 2 == 0 else "odd" for item in L]
+
+### File I/O ###
+
+Normally we use pandas to open most files.  When working with .txt files, the base python funcationlity can be helpful.
+
+      f = open("myfile.txt")
+      for line in f:
+        # do something
+      f.close() # remember to close!
+
+      with open("myfile.txt") as f: # does not need f.close()
+        # do stuff with the file
+
+`readline()` is another option for reading a single line.  For outputing a file, you can use the following:
+
+      f = open("out.txt", 'w') # specify 'w' for writing or 'a' for appending to the end of the file
+      f.write("Hello!\n")
+      f.close()
+
+### Lambda Functions in Map, Filter, and Reduce ###
 
 Lambda functions are for defining functions without a name:
-     lambda x, y : x + y
-     map(lambda x: x**2)
+
+      L = [(2, 4), (5, 3), (6, 8), (4, 1)]
+      L.sort(key=lambda x: x[0])
+
+      map(lambda x: x**2)
+      map(lambda x: x * 2 if x > 0 else x, L)
+
+      ages = range(30)
+      adults = filter(lambda x: x > 18, ages)
+
+      reduce(lambda total, x: total + x, [1, 2, 3])
+
 
 
 #### Testing and Debugging ####
+
 * add this in line you're examining: import pdb; pdb.set_trace()
 ** Resource: http://frid.github.io/blog/2014/06/05/python-ipdb-cheatsheet/
 * Use test_[file to test].py when labeling test files
