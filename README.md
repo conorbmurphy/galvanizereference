@@ -4,14 +4,10 @@
 
 
 * [Introduction](#introduction)
-
 * Programming
-
- * [Python](#python)
-
-    ** [Base Data Types](#base-data-types)
-
-    ** [Built-in Functions](#built---in-functions)
+  * [Python](#python)
+   ** [Base Data Types](#base-data-types)  
+   ** [Built-in Functions](#built---in-functions)  
 
     ** [Classes](#classes)
 
@@ -29,15 +25,15 @@
 
  * [Python Packages](#python-packages)
 
-    ** [Python Packages - pandas](#python-packages---pandas)
+    ** [pandas](#pandas)
 
-    ** [Python Packages - numpy](#python-packages---numpy)
+    ** [numpy](#numpy)
 
-    ** [Python Packages - scipy](#python-packages---scipy)
+    ** [scipy](#scipy)
 
-    ** [Python Packages - statsmodels](#python-packages---statsmodels)
+    ** [statsmodels](#statsmodels)
 
-    ** [Python Packages - sklearn](#python-packages---sklearn)
+    ** [sklearn](#sklearn)
 
  * [SQL](#sql)
 
@@ -371,13 +367,13 @@ Python offers an array of packages instrumental in its rise as one of the leadin
   ** `csvkit`: has some functionality beyond pandas for csv's
   ** `PyTables`: good for large datasets
 
-### Python Packages - pandas ###
+### pandas ###
 
 Pandas is a library for data manipulation and analysis, the python equivalent of R's dplyr.  Pandas objects are based on numpy arrays so **vectorized options (e.g. apply) over iterative ones offer large performance increases.**
 
 Objects:
 
-* `series`: `prices = pd.Series([1, 2, 3, 4, 5], index = ['apple', 'pear', 'banana', 'mango', 'jackfruit'])``
+* `series`: `prices = pd.Series([1, 2, 3, 4, 5], index = ['apple', 'pear', 'banana', 'mango', 'jackfruit'])`
  * `prices.iloc[1:3]`: works on position, returns rows 1 stopping 1 before 3
  * `prices.loc['pear']`: works on index, returns row 'pear'
  * `prices.loc['pear':]`: Returns pear on
@@ -391,17 +387,25 @@ Objects:
 
 Common functions:
 
-* `prices.mean()`
-* `prices.std()`
-* `prices.median()`
-* `prices.describe()`
-* `pd.concat(frames)`: Concats a list of objects
-* `pd.merge(self, right, on = 'key')`: joins df's.  Can specify left_on, right_on if column names are different.  You can also specify how for inner or outer.
+* EDA
+ * `prices.describe()`
+ * `prices.info()`
+ * `prices.head()`
+ * `prices.hist()`
+ * `crosstab`: similar to table in R `pd.crosstab(inventory['inventory'], inventory['price'])`
+ * `pd.value_counts(inventory['price'])`
+* Mathematical operations
+ * `prices.mean()`
+ * `prices.std()`
+ * `prices.median()`
+* Other operations
+ * `pd.concat(frames)`: Concats a list of objects
+ * `pd.merge(self, right, on = 'key')`: joins df's.  Can specify left_on, right_on if column names are different.  You can also specify how for inner or outer.
 
 **Split-apply-combine** is a strategy for working on groups of data where you split the data based upon a given characteristic, apply a function, and combine it into a new object.
 
-      `inventory = pd.DataFrame({'price': [1, 2, 3, 4, 5], 'inventory': prices.index})`
-      `inventory['abovemean'] = inventory.price > 2.5`
+      inventory = pd.DataFrame({'price': [1, 2, 3, 4, 5], 'inventory': prices.index})`
+      inventory['abovemean'] = inventory.price > 2.5
 
 * `grouped = inventory.groupby('abovemean')`: creates groupby object
 * `grouped.aggregate(np.sum)`: aggregates the sum of those above the mean versus below the mean
@@ -409,31 +413,35 @@ Common functions:
 * `grouped.filter(lambda x: len(x)>2)`: filters by lambda function
 * `grouped.apply(sum)`: applies sum to each column by `abovemean`
 
-Working with datetime objects, you can do df.dt. and then hit tab to see the different options.  Similarly, df.str can give us all of our string functions.  
-
-`crosstab` is similar to table in R
+Working with datetime objects, you can do `df.dt`. and then hit tab to see the different options.  Similarly, `df.str` can give us all of our string functions.  
 
 ---
 
-### Python Packages - numpy ###
+### numpy ###
 
-Linear algebra package
-In calculating `np.std()`, be sure to specify `ddof = 1` when refering to the sample.
+NumPy is arguably the most fundamental package for efficient scientific computing through linear algebra routines.
 
-`np.concatenate((foo, bar), axis = 1)` # adds a column
-`np.hstack((foo, bar))` # adds a column
-`np.vstack((foo, bar))` # adds a row
-`foo.min(axis = 0)` # takes column mins
+Here are some general functions
+
+* `array = np.array([1, 2, 3, 4, 5])`
+* `array.shape`
+* `array..reshape(5, 1)`
+* `np.concatenate((foo, bar), axis = 1)` # adds a column
+* `np.hstack((foo, bar))` # adds a column
+* `np.vstack((foo, bar))` # adds a row
+* `foo.min(axis = 0)` # takes column mins
+
+Note: in calculating `np.std()`, be sure to specify `ddof = 1` when refering to the sample.
 
 ---
 
-### Python Packages - scipy ###
+### scipy ###
 
 loc = mean
 scale = standard deviation
 ---
 
-### Python Packages - itertools ###
+### itertools ###
 
 Combinatoric generators
 
@@ -475,14 +483,14 @@ A useful plot from seaborn is heatmap and violin plot (which is the kde mirrored
 
 ---
 
-### Python Packages - statsmodels ###
+### statsmodels ###
 
 Statsmodels is the de facto library for performing regression tasks in Python.  
 `import statsmodels.api as sm`
 Note that logistic regression in statsmodels will fail to converge if data perfectly separable.  Logistic regression in sklearn normalizes (punishes betas) so it will converge.
 
 
-### Python Packages - sklearn ###
+### sklearn ###
 
 Sklearn does not allow for categorical variables.  Everything must be encoded as a float.
 
