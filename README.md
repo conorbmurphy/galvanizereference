@@ -16,11 +16,17 @@
 
   *** [Loops and List Comprehension](#loops-and-list-comprehension)
 
+  *** [File I/O](#file-i-o)
+
   *** [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)
 
-  *** [Testing and Debugging](testing-and-debugging)
+  *** [Testing and Debugging](#testing-and-debugging)
 
-  *** [A Note on Style](a-note-on-style)
+  *** [A Note on Style](#a-note-on-style)
+
+  *** [Common Errors](#common-errors)
+
+  ** [Python Packages](#python-packages)
 
   *** [Python Packages - pandas](#python-packages---pandas)
 
@@ -184,7 +190,6 @@ The following are the base functions Python offers, some more useful than others
 
 Note the difference between functions like `range` and `xrange` above.  `range` will create a list at the point of instantiation and save it to memory.  `xrange`, by contrast, will generate a new value each time it's called upon.  **Generators** like this (`zip` versus `izip` from itertools is another common example) are especially powerful in long for loops.
 
-
 ### Classes ###
 
 Python classes offers the benefits of classes with a minimum of new syntax and semantics.  A class inherits qualities from other classes.  In practice, we often start by extending the object class however in more complex architectures you can extend from other classes, especially your own.
@@ -284,7 +289,7 @@ Lambda functions are for defining functions without a name:
 
 
 
-#### Testing and Debugging ####
+### Testing and Debugging ###
 
 * add this in line you're examining: import pdb; pdb.set_trace()
 ** Resource: http://frid.github.io/blog/2014/06/05/python-ipdb-cheatsheet/
@@ -306,7 +311,7 @@ nosetests
 
 You need assertions in unittest in order to test things.
 
-#### A Note on Style ####
+### A Note on Style ###
 
 Classes are capitalized LikeThis (camel case) and functions like_this (snake case).
 https://www.python.org/dev/peps/pep-0008/
@@ -321,7 +326,7 @@ Use this block to run code if the .py doc is called directly but not if imported
 
 There’s a package called flake8 which combines pep8 (the style guide) with flake (with code introspection, eg flagging calling a variable you didn’t define).  You should be able to install this for Atom
 
-#### Common Errors ####
+### Common Errors ###
 
 Here are some common errors to avoid:
 
@@ -329,6 +334,41 @@ Here are some common errors to avoid:
 * `ZeroError`: Thrown when dividing by a zero
 
 ---
+
+## Python Packages ##
+
+Python offers an array of packages instrumental in its rise as one of the leading languages for data science.  Here are some useful packages, some of which will be explored in detail below:
+
+* Fundamental Libraries for Scientific Computing
+** `IPython Notebook`: an alternative Python command line shell for interactive computing
+** `NumPy`: the most fundamental package for efficient scientific computing through linear algebra routines
+** `pandas`: a library for operating with table-like structures and data munging
+** `SciPy`: one of the core packages for scientific computing routines
+* Math and Statistics
+** `Statsmodels`: statistical data analysis mainly through linear models and includes a variety of statistical tests
+** `SymPy`: symbolic mathematical computations
+* Machine Learning
+** `Scikit-learn`: includes a broad range of different classifiers, cross-validation and other model selection methods, dimensionality reduction techniques, modules for regression and clustering analysis, and a useful data-preprocessing module
+** `Shogun`: ML library focussed on large-scale kernel methods
+** `PyBrain`: Python-Based Reinforcement Learning, Artificial Intelligence and Neural Network Library
+** `PyLearn2`: research library
+** `PyMC`: Bayesian statistics library
+* Plotting and Visualization
+** `matplotlib`: the defacto plotting library
+** `seaborn`: adds features to matplotlib like violin plots and more appealing aesthetics
+** `ggplot`: a port of R's ggplot2
+** `plotly`: focus on interactivity
+** `Bokeh`: aesthetic layouts and interactivity to produce high-quality plots for web browsers
+** `d3py`: creates interactive data visualizations based on d3
+** `prettyplotlib`: enhancement library for matplotlib (good for presentations)
+* Database Interaction
+** `Psycopg2`: access to postgres databases
+** `Pymongo`: access to MongoDB databases
+** `sqlite3`: access to SQLite databases
+* Data formatting and storage
+** `bs4`: defacto library for parsing content from webscraping
+** `csvkit`: has some functionality beyond pandas for csv's
+** `PyTables`: good for large datasets
 
 ### Python Packages - pandas ###
 
