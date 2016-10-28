@@ -1553,7 +1553,7 @@ You can predict against other forecasts.  For instance, a fed prediction is a be
 
 #### Exponential Smoothing ####
 
-**Exponential Smoothing** is the Bayesian analogue to ARIMA, developed in the late 50's.  The basic idea is that you weigh more recent data more than older data.  Forecasts using this metod are wighted averages of past observations with the weights decaying exponentially as the observations get older.  With ETS, you’re essentially modeling the state and then build a model that moves it forward.  The ‘state space model’ is a black box that takes in data but spits out responses.
+**Exponential Smoothing** is the Bayesian analogue to ARIMA, developed in the late 50's.  The basic idea is that you weigh more recent data more than older data.  Forecasts using this method are wighted averages of past observations with the weights decaying exponentially as the observations get older.  This is different from a moving average, for instance, that weighs past values equally.  With ETS, you’re essentially modeling the state and then build a model that moves it forward.  The ‘state space model’ is a black box that takes in data but spits out responses.
 
 **Alpha** is your smoothing parameter that determines how much you weigh recent information where 0 <= α <= 1.  In the below, you can see how a smaller alpha relates to a delayed incorporation of the real data.  The sum of the weights for any given α will be approximately 1.  The smaller the α, the more weight is placed on more distantly past events.
 
@@ -1561,9 +1561,23 @@ You can predict against other forecasts.  For instance, a fed prediction is a be
 
 *This is the bias/variance tradeoff for ETS.*  An alpha of .2 takes longer to adjust because it multiplies past values by .2.
 
-The simplest ETS method is called **simple exponential smoothing (SES)**.  This is suitable for forecasting data with no trend or seasonal pattern.  By contrast we can talk about two methods: a naive one and an average one.  The former would predict the last value for the next, essentially weighing the last value above all others.  The average method would predict the average of all values.  SES is a combination of these two approaches where weights decrease exponentially as observations are more distant.
+The simplest ETS method is called **simple exponential smoothing (SES)**.  This is suitable for forecasting data with no trend or seasonal pattern.  By contrast we can talk about two methods: a naive one and an average one.  The former would predict the last value for the next, essentially weighing the last value above all others.  The average method would predict the average of all values.  SES is a combination of these two approaches where weights decrease exponentially as observations are more distant.  Here is the basic formula:
 
-ŷ<sub>T+1|T</sub> = α<sub>yT</sub> + α(1−α)<sub>yT-1</sub>+α(1−α)**2<sub>yT-2</sub>+⋯
+    ŷ<sub>T+1|T</sub> = α<sub>yT</sub> + α(1−α)<sub>yT-1</sub> + α(1−α)**2<sub>yT-2</sub> + ...
+
+* `α`: smoothing parameter
+* `ℓ`: level (or the smoothed value) of the series at time t
+* `b`: trend
+* `β*`: smoothing parameter for the trend
+* `ϕ`: dampening parameter
+* `s`: seasonality
+
+The unknown parameters and initial values for any exponential smoothing method can be estimated by minimising SSE.  For SES, ℓ and α should be set this way.
+
+`Holt's linear trend` method extended SES to allow forecasting data with a trend.  Two separate smoothing equations (one for the level and one for the trend/slope) are included in this approach.  A variation called the `exponential trend` method allows the level and the slope to be multiplied rather than added.  
+
+Empirically these two methods (linear and exponential trends) tend to over-estimate as they hold the trend indefinitely into the future.  To compensate for this, the `damped trend` method dampens the trend to a flat line in the distant future.  This is a very popular method, especially when trends are projected far into the future.  ϕ  dampens the trend such that it approaches a constant in the future.  There is also a `multiplicative damped trend` variation.
+
 
 
 ARIMA features & benefits:
