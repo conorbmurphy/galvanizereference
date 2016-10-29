@@ -5,7 +5,7 @@
 
 * [Introduction](#introduction)  
 * Programming  
- * [Python](#python)  
+  * [Python](#python)  
     ** [Base Data Types](#base-data-types)  
     ** [Built-in Functions](#built---in-functions)  
 
