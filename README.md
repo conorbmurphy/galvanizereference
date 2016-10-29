@@ -78,7 +78,7 @@ The main responsibilities of a data scientist are:
 1. `Ideation` (experimental design)
 2. `Importing` (especially SQL/postgres/psycopg2)
  * defining the ideal dataset
- * understanding your data compares to the ideal
+ * understanding how your data compares to the ideal
 4. `Exploratory data analysis (EDA)` (especially pandas)
 4. `Data munging`
 5. `Feature engineering`
@@ -515,7 +515,7 @@ Steps to setting up a local database using psql (you can also access SQL using s
 
 Basic commands:
 
-* `\d`: returns the name of all tables in the database
+* `\d`: returns the schema of all tables in the database
 * `\d [table]`: returns table schema
 * `;`: excecutes a query
 * `\help` or `\?`: help
@@ -535,7 +535,8 @@ The order of evaluation of a SQL SELECT statement is as follows:
 4. `HAVING`: like the WHERE clause, but can be applied after aggregation
 5. `SELECT`: the targeted list of columns are evaluated and returned
 6. `DISTINCT`: duplicate rows are eliminated
-7. `ORDER BY`: the resulting rows are sorted
+7. `ORDER BY [value] DESC`: the resulting rows are sorted
+8. `CASE WHEN gender = 'F' THEN 'female' ELSE 'male' END AS gender_r`: this is SQL's if/else construction.  This is good for dealing with null values
 
 Here are some common commands on SELECT statements:
 
@@ -545,19 +546,12 @@ Here are some common commands on SELECT statements:
 * `DISTINCT`
 * `SUM`
 
-Other:
-
-* `GROUP BY`: subsets by this value
-* `ORDER BY [value] DESC`: orders result
-* `HAVING`:
-* `CASE WHEN gender = 'F' THEN 'female' ELSE 'male' END AS gender_r`: this is SQL's if/else construction.  This is good for dealing with null values
-
 Joins are used to query across multiple tables using foreign keys.  **Every join has two segments: the tables to join and the columns to match.**  There are three types of joins that should be imagined as a venn diagram:
 
-1. `INNER JOIN:` joins based on rows that appear in both tables.  This is the default for saying simply JOIN and would bee the center portion of the venn diagram.
-** SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name
-** SELECT c.id, v.created at FROM customers as c, visits as v WEHRE c.id = v.customer_id # joins w/o specifying it's a join
-2. `LEFT OUTER JOIN:` joins based on all rows on the left table even if there are no values on the right table.  A right join is possible too, but is only the inverse of a left join.  This would bee the left two sections of a venn diagram.
+1. `INNER JOIN:` joins based on rows that appear in both tables.  This is the default for saying simply JOIN and would be the center portion of the venn diagram.
+ * SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name;
+ * SELECT c.id, v.created at FROM customers as c, visits as v WEHRE c.id = v.customer_id; # joins w/o specifying it's a join
+2. `LEFT OUTER JOIN:` joins based on all rows on the left table even if there are no values on the right table.  A right join is possible too, but is only the inverse of a left join.  This would be the left two sections of a venn diagram.
 3. `FULL OUTER JOIN:` joins all rows from both tables even if there are some in either the left or right tables that don't match.  This would be all three sections of a venn diagram.
 
 While data scientists are mostly accessing data, it's also useful to know how to create tables.
@@ -572,15 +566,15 @@ While data scientists are mostly accessing data, it's also useful to know how to
 Data types include varchar, integer, decimal, date, etc.  The size specifies the maximum length of the column of the table.
 
 Resources:
-* http://sqlzoo.net/wiki/SELECT_basics
-* An illustrated explanation of joins: https://blog.codinghorror.com/a-visual-explanation-of-sql-joins/
-* Databases by market share: http://db-engines.com/en/ranking
-* SQL practice: https://pgexercises.com/
-* SQL data types: http://www.w3schools.com/sql/sql_datatypes.asp
+* (SQLZoo)[http://sqlzoo.net/wiki/SELECT_basics]
+* (Illustrated Example of Joins)[https://blog.codinghorror.com/a-visual-explanation-of-sql-joins/]
+* (Databases by market share)[http://db-engines.com/en/ranking]
+* (SQL practice)[https://pgexercises.com/]
+* (SQL data types)[http://www.w3schools.com/sql/sql_datatypes.asp]
 
 ### SQL using Pandas and Psycopg2 ###
 
-You can make connections to Postgres databases using psycopg2 including creating cursors for SQL queries, commit SQL actions, and close the cursor and connection.  **Commits are all or nothing: if they fail, no changes will be made to the database.**  You can set `autocommit = True` to automatticaly commit after each query.  A cursor points at the resulting output of a query and can only read each observation once.  If you want to see a previously read observation, you must rerun the query.
+You can make connections to Postgres databases using the python package psycopg2 including creating cursors for SQL queries, commit SQL actions, and close the cursor and connection.  **Commits are all or nothing: if they fail, no changes will be made to the database.**  You can set `autocommit = True` to automatically commit after each query.  A cursor points at the resulting output of a query and can only read each observation once.  If you want to see a previously read observation, you must rerun the query.
 
 **Beware of SQL injection where you add code.**  Use `%s` where possible, which will be examined by psychopg2 to make sure you're not injecting anything.  You can use ORM's like ruby on rails or the python equivalent jengo to take care of SQL injection too.
 
@@ -590,7 +584,7 @@ You can make connections to Postgres databases using psycopg2 including creating
 
 MongoDB is an open-source cross-platform document-oriented database program, classified as a NoSQL database program.  Instead of traditional, table-oriented databases, it uses the dynamic schema system similar to JSON-like documents.  It doesn't require us to define a schema, though that means that if we don't have a schema we can't do joins (its main limitation).  It's great for semi-structured data though sub-optimmal for complicated queries.  You search it with key-value pairs, like a dictionary.
 
-1. MongoDB has the same concept as a database/schema, being able to contain zero or more
+1. MongoDB has the same concept as a database/schema, being able to contain zero or more schemas
 2. Databases can have zero or more collections (i.e. tables)
 3. Collections can be made up of zero or more documents (i.e. rows)
 4. A document is made up of one or more fields (i.e. variables)
@@ -598,7 +592,7 @@ When you ask MongoDB for data, it returns a pointer to the result called a **cur
 
 The difference between a document and a table is that relational databases define columns at the table level whereas a document-oriented database defines its fields at the document level.  Each document within a collection has its own fields.
 
-`sudo mongod`
+      sudo mongod
 
 **Pymongo**, similar to psychopg, is the python interface with MongoDB.  You can also use the javascript client (the mongo shell).  Every document you insert has an ObjectId to ensure that you can distinguish between identical objects.
 
@@ -613,33 +607,34 @@ Inserting data
 
 Querying data
 
-      // find by single field db.users.find({ name: 'Jon'})
-      // find by presence of field db.users.find({ car: { $exists : true } })
-      // find by value in array db.users.find({ friends: 'Henry' })
-      // field selection (only return name from all documents)
-      db.users.find({}, { name: true })
+      db.users.find({ name: 'Jon'}) # find by single field
+      db.users.find({ car: { $exists : true } }) # find by presence of field
+      db.users.find({ friends: 'Henry' }) # find by value in array
+      db.users.find({}, { name: true }) # field selection (only return name from all documents)
 
 You use this nested structure, similar to JSON.
+
 Updating data
 
-      // replaces friends array db.users.update({name: "Jon"}, { $set: {friends: ["Phil"]}})
-      // adds to friends array db.users.update({name: "Jon"}, { $push: {friends: "Susie"}})
-      // upsert - create user if it doesn’t exist
-      db.users.update({name: "Stevie"}, { $push: {friends: "Nicks"}}, true) // multiple updates db.users.update({}, { $set: { activated : false } }, false, true)
+      db.users.update({name: "Jon"}, { $set: {friends: ["Phil"]}}) # replaces friends array
+      db.users.update({name: "Jon"}, { $push: {friends: "Susie"}}) # adds to friends array
+      db.users.update({name: "Stevie"}, { $push: {friends: "Nicks"}}, true) # upsert - create user if it doesn’t exist
+      db.users.update({}, { $set: { activated : false } }, false, true) # multiple updates
 
 Deleting data
 
       db.users.remove({})
 
-Reference: http://openmymind.net/mongodb.pdf
-Cheatsheet: https://blog.codecentric.de/files/2012/12/MongoDB-CheatSheet-v1_0.pdf
+Reference:
+* (Good reference)[http://openmymind.net/mongodb.pdf]
+* (Cheatsheet)[https://blog.codecentric.de/files/2012/12/MongoDB-CheatSheet-v1_0.pdf]
 ---
 
 ## Git ##
 
-Git is the version control software.  Github builds a UI around git.  A repo is a selection of files (usually code, not data—`data on github is not a preferred practice`).  You can fork a repo, so it becomes your copy of the repo.  Then you can clone that repo you’re making a copy of it on your local file system.  This puts it on your computer.  You now have three copies: the main repo, your repo, and your clone on your computer.  You should commit the smallest changes to the code.
+Git is the version control software.  Github builds a UI around git.  A repo is a selection of files (usually code, not data— *data on github is not a preferred practice*).  You can fork a repo, so it becomes your copy of the repo.  Then you can clone that repo you’re making a copy of it on your local file system.  This puts it on your computer.  You now have three copies: the main repo, your repo, and your clone on your computer.  You should commit the smallest changes to the code.
 
-* git add [file name] # add new files; can also use '.' instead of spcific file name
+* git add [file name] # add new files; can also use '.' instead of specific file name
 * git commit -m “message” # you have to add a message for a git commit  If you forget the message, it will open vim so type “:q” to get out of it.  This adds a commit to the code on the local file system.  You can go back if need be.
 * git commit -am “message” # commits all new files with the same message
 * git push # This pushes all commits to your repo on the cloud.  These won’t make it back to the original repo
@@ -647,7 +642,7 @@ Git is the version control software.  Github builds a UI around git.  A repo is 
 * git status # check the commit status
 * git log # shows the log status of
 
-Adding is building to a commit.  Ideally a commit would be a whole new feature/version.  `It’s only with commands that have the word ‘force’ that you risk losing data.`  When you make a pull request, it means you have a new version of a repo and you want these to be a part of the original repo.
+Adding is building to a commit.  Ideally a commit would be a whole new feature/version.  *It’s only with commands that have the word ‘force’ that you risk losing data.*  When you make a pull request, it means you have a new version of a repo and you want these to be a part of the original repo.
 
 Here's a workflow:
 
@@ -664,7 +659,8 @@ Here's a workflow:
 
 With merge issues, you'll have to write a merge message followed by, `esc`, `:wq`, and then `enter`.
 
-Centralized Git Workflow: https://www.atlassian.com/git/tutorials/comparing-workflows/
+Resources:
+* (Centralized Git Workflow)[https://www.atlassian.com/git/tutorials/comparing-workflows/]
 
 ---
 
@@ -942,13 +938,20 @@ Resources:
 
 #### Confidence Intervals ####
 
-Assuming normality, you would use the following for your 95% confidence interval:
+Assuming normality, you would use the following for your 95% confidence interval for the population mean with a known standard deviation:
 
-        xbar +- 1.96*(s / sqrt(n))
+        x̄ +- 1.96 * (s / sqrt(n))
 
-Z tests can be conducted for a smaller sample size (n < 30) while T tests are generally reserved for lager sample sizes.
+This is your sample mean +/- your critical value multiplied by the standard error.  Typical critical values for a two-sided test (known as z*) are:
 
-**Bootstraping** estimates the sampling distribution of an estimator by sampling with replacement from the original sample.  Bootstrapping is often used to estimate the standard errors and confidence intervals of an unknown parameter, but can also be used for your beta coefficients.  We bootstrap when the theoretical distribution of the statistical parameter is complicated or unknown (like wanting a confidence interval on a median or correlation), when n is too small, and we we favor accuracy over computational costs.  It comes with almost no assumptions.
+* 99%: 2.576
+* 98%: 2.326
+* 95%: 1.96
+* 90%: 1.645
+
+For an unknown standard deviation, t* is used instead of z* as the critical value.  This can be found in a t-distribution table.  The degrees of freedom is calculated by subtracting 1 from n.
+
+**Bootstraping** estimates the sampling distribution of an estimator by sampling with replacement from the original sample.  Bootstrapping is often used to estimate the standard errors and confidence intervals of an unknown parameter, but can also be used for your beta coefficients or other values as well.  We bootstrap when the theoretical distribution of the statistical parameter is complicated or unknown (like wanting a confidence interval on a median or correlation), when n is too small, and when we favor accuracy over computational costs.  It comes with almost no assumptions.
 
 1. Start with your dataset of size n
 2. Sample from your dataset with replacement to create a bootstrap sample of size n
@@ -956,6 +959,8 @@ Z tests can be conducted for a smaller sample size (n < 30) while T tests are ge
 4. Each bootstrap sample can then be used as a separate dataset for estimation and model fitting (often using percentile instead of standard error)
 
 ### Hypothesis and A/B Testing ###
+
+A hypothesis test is a method of statistical inference where, most commonly, two statistical data sets are compared or data from a sample is compared to a sythetic data set from an idealized model.  The steps are as follows:
 
 1. State the null (H<sub>0</sub>) hypothesis and the alternative (H<sub>1</sub>)
 2. Choose the level of significance (alpha)
@@ -973,21 +978,26 @@ The following maps out type I and II errors.
 
 The court of law worries about type I error while in medicine we worry about type II error.  Tech generally worries about Type I error (especially in A/B testing) since we don't want a worse product.  The **power** of a test is the probability of rejecting the null hypothesis given that it is false.  If you want a smaller type II error, you're going to get it at the expense of a larger type I error.  Power is the complement of beta.
 
+A **t-test** is any statistical hypothesis test in which the test statistic follows a **Student's t-distribution** under the null hypothesis. It can be used to determine if two sets of data are significantly different from each other.
+
+**Z-tests** can be conducted for a smaller sample size (n < 30) while t-tests are generally reserved for lager sample sizes as CLT comes into effect at around this sample size.
+
 Use a **T test** when sigma is unknown and n < 30.  If you're not sure, just use a T test.  Scipy assumes that you're talking about a population.  You must set `ddof=1` for a sample.  A **Z test** is used for estimating a proportion.  **Welch's T Test** can be used when the variance is not equal (if unsure, set `equal_var=False` since it will only have a nominal effect on the result).
 
 The **Bonferroni Correction** reduces the alpha value we use based upon the test that we're correcting.  We divide alpha by the number of tests.  It is a conservative estimate.
 
-**Chi-squared tests** estimate whether two random variables are independent and estimate how closely an observed distribution matches an expected distribution (known as a goodness-of-fit test).  `chisquare` assumes a goodness-of-fit test while `chi1_contingency` assumes a contingency table.
+**Chi-squared tests** estimate whether two random variables are independent and estimate how closely an observed distribution matches an expected distribution (known as a goodness-of-fit test).  `chisquare()` assumes a goodness-of-fit test while `chi1_contingency()` assumes a contingency table.
 
 **Experimental design** must address confounding factors that might also account for the variance.  You want to minimize confounding factors but there is such thing as controlling for too many confounding factors.  You can get to the point that you can’t have any data because you’ve over controlled, for instance women in SF in tech in start-ups post series b funding etc.
 
-Power visualized: http://rpsychologist.com/d3/NHST/
+Resources:
+* [Power visualized](http://rpsychologist.com/d3/NHST/)
 
 ### Bayesian Statistics ###
 
 The first step is always to specify a probability model for unknown parameter values that includes some prior knowledge about the parameters if available.  We then update this knowledge about the unknown parameters by conditioning this probability model on observed data.  You then evaluate the fit of the model to the data.  If you don’t specify a prior then you will likely have a very similar response than the frequentists.
 
-When we look at the posterior distribution, the denominator is just a normalizing constant.  The posterior is the new belief through the data that we’ve been given.  Priors come from published research, a researcher’s intuition, an expert option and non-informative prior.
+When we look at the posterior distribution, the denominator is just a normalizing constant.  The posterior is the new belief through the data that we’ve been given.  Priors come from published research, a researcher’s intuition, an expert option, or a non-informative prior.
 
 #### Bayesian A/B Testing ####
 
