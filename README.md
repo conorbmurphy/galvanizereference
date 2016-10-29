@@ -41,7 +41,7 @@
     ** [Hypothesis and A/B Testing](#hypothesis-and-a-b-testing)  
     ** [Bayesian Statistics](#bayesian-statistics)  
 * Modeling  
- * [Exploratory Data Analysis][#exploratory-data-analysis-EDA]  
+ * [Exploratory Data Analysis][#exploratory-data-analysis-eda]  
  * [Linear Regression Introduction and Univariate](#linear-regression-introduction-and-univariate)  
  * [Multivariate Regression](#multivariate-regression)  
  * [Logistic Regression](#logistic-regression)  
