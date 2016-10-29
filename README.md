@@ -3,15 +3,11 @@
 ## Table of Contents ##
 
 
-* [Introduction](#introduction)
-
-* Programming
-
- * [Python](#python)
-
-    ** [Base Data Types](#base-data-types)
-
-    ** [Built-in Functions](#built---in-functions)
+* [Introduction](#introduction)  
+* Programming  
+ * [Python](#python)  
+    ** [Base Data Types](#base-data-types)  
+    ** [Built-in Functions](#built---in-functions)  
 
     ** [Classes](#classes)
 
@@ -119,7 +115,7 @@
 
 ## Introduction ##
 
-This is designed to be a catch-all reference tool for my notes while in Galvanize's Data Science Immersive program.  My goal is to have a living  document that I can update with tips, tricks, and additional resources as I progress in my data science-ing.  Others might find it of use as well.
+This is designed to be a catch-all reference tool for my time as a Data Science Fellow at Galvanize.  My goal is to have a living  document that I can update with tips, tricks, and additional resources as I progress in my data science-ing.  Others might find it of use as well.
 
 The main responsibilities of a data scientist are:
 
@@ -876,37 +872,36 @@ The case of **Anscombe's quartet** shows us how statistics can often show us how
 
 ## Statistics ##
 
-Statistics is the study of the collection, analysis, interpretation, presentation, and organization of data.  There are two general camps: frequentist and Bayesian.  Bayesians are allowed to impose prior knowledge onto their analysis.  The difference between these two camps largely boils down to what is fixed versus what is not.  Frequentists think that data are a repeatable random sample where the underlying parameters remain constant.  Bayesians, by contrast, believe that the data, not the underlying parameters, are fixed.  There is an argument that the two camps are largely similar if no prior is imposed on the analysis.  Bayseian statistics require a lot of computationally intense programming.
+Statistics is the study of the collection, analysis, interpretation, presentation, and organization of data.  There are two general camps: frequentist and Bayesian.  Bayesians are allowed to impose prior knowledge onto their analysis.  The difference between these two camps largely boils down to what is fixed versus what is not.  Frequentists think that data are a repeatable random sample where the underlying parameters remain constant.  Bayesians, by contrast, believe that the data, not the underlying parameters, are fixed.  There is an argument that the two camps are largely similar if no prior is imposed on the analysis.  Bayesian statistics require a lot of computationally intense programming.
 
 * Frequentist:
-** Point estimates and standard errors
-** Deduction from P(data|H0), by setting α in advance
-** P-value determines acceptance of H0 or H1
+ * Point estimates and standard errors
+ * Deduction from P(data|H<sub>0</sub>), by setting α in advance
+ * P-value determines acceptance of H0 or H1
 * Bayesian:
-** Start with a prior π(θ) and calculate the posterior π(θ|data)
-** Broad descriptions
+ * Start with a prior π(θ) and calculate the posterior π(θ|data)
+ * Broad descriptions
 
 ### Key Definitions ###
 
 |                    | Population  | Sample   |
 |--------------------|:-----------:|---------:|
 | size               | N           | n        |
-| mean               | μ          | xbar     |
+| mean               | μ          | x̄ ('x-bar')     |
 | variance           | σ<sup>2</sup>    | s<sup>2</sup>     |
 | standard deviation | σ       | s        |
-| proportion         | π      | p ("little pea") |
+| proportion         | π      | p ('little p') |
 
-Capital letters refer to random variables; lowercase refers to a specific realization.  Variables with a hat often refer to a predicted value.  `X` refers to all possible things that can happen in the population; `x` refers to draws from X.  
+Capital letters refer to random variables; lowercase refers to a specific realization.  Variables with a hat (^) often refer to a predicted value.  `X` refers to all possible things that can happen in the population; `x` refers to draws from X.  
 
 Other vocabulary:
 
 * `S`: sample space, or a range of all possible outcomes (discrete or continuous)
-* `i.i.d.`: independent, identically distributed (refers to when draws from X are not dependent on previous draws and fall into the same distribution)
+* `i.i.d.`: independent, identically distributed - refers to when draws from X are not dependent on previous draws and fall into the same distribution
 * `α`: threshold for rejecting a hypothesis
-* `β`:
-* `λ`:
-
-Maximum Likelihood Estimation (MLE) chooses the parameter(s) that maximize the likelihood of observing our given sample.
+* `β`: the probability of Type II error in any hypothesis test–incorrectly concluding no statistical significance.  `β` is also used for your regression coefficients
+* `1 - β`: power, derived from the probability of type II error
+* `λ`: can mean many things, including the mean and variance for a poisson distribution (which are equal)
 
 ### Common distributions ###
 
@@ -917,19 +912,20 @@ Rules for choosing a good distribution:
 * What limits are there on possible values for the data?
 * How likely are extreme values?
 
-* Discrete:
- * Bernoulli: Model one instance of a success or failure trial (p)
- * Binomial: Number of successes out of a number of trials (n), each with probability of success (p)
- * Poisson: Model the number of events occurring in a fixed interval and events occur at an average rate (lambda) independently of the last event
- * Geometric: Sequence of Bernoulli trials until first success (p)
-* Continuous:
- * Uniform: Any of the values in the interval of a to b are equally likely
- * Gaussian: Commonly occurring distribution shaped like a bell curve, often comes up because of the Central Limit Theorem
- * Exponential: Model time between Poisson events where events occur continuously and independently
+* `Discrete`:
+ * `Bernoulli`: Model one instance of a success or failure trial (p)
+ * `Binomial`: Number of successes out of a number of trials (n), each with probability of success (p)
+ * `Poisson`: Model the number of events occurring in a fixed interval and events occur at an average rate (lambda) independently of the last event
+ * `Geometric`: Sequence of Bernoulli trials until first success (p)
+* `Continuous`:
+ * `Uniform`: Any of the values in the interval of a to b are equally likely
+ * `Gaussian`: Commonly occurring distribution shaped like a bell curve, often comes up because of the Central Limit Theorem.  Also known as a normal distribution
+ * `Gamma`: A two-parameter family of continuous distributions, used for cases such as rainfall and size of insurance claims
+ * `Exponential`: Model time between Poisson events where events occur continuously and independently.  This is a special case of the gamma distribution
 
 ### Frequentist Statistics ###
 
-In frequentist statistics, there are four standard methods of estimation and sampling, to be explored below.  Central to frequentist statistics is the **Central Limit Theorum (CLT)** which states that the sample mean converges on the true mean as the sample size increases.  Variance also decreases as the sample size increases.
+In frequentist statistics, there are four standard methods of estimation and sampling, to be explored below.  Central to frequentist statistics is the **Central Limit Theorum (CLT)** which states that the sample mean converges on the true mean as the sample size increases.  *Variance also decreases as the sample size increases.*
 
 #### Method of Moments (MOM) ####
 
@@ -939,39 +935,54 @@ MOM has three main steps:
 2. Compute the relevant sample moments (e.g. mean, variance)
 3. Plug those sample moments into the PMF/PDF of the assumed distribution
 
-There are four main moments, each raised to a different power:
+There are four main moments we're concerned about, each raised to a different power:
 
-1. `Mean/Expected value`: the central tendency of a distribution or random variable
-2. `Variance`: the expectation of the squared deviation of a random variable from its mean
-3. `Skewness`: a measure of asymmetry of a probability distribution about its mean.  Since it’s to the 3rd power, we care about whether it’s positive or negative.  
-4. `Kurtosis`: a measure of the "tailedness" of the probability distribution
+1. `Mean/Expected value`: base 1 - the central tendency of a distribution or random variable
+2. `Variance`: base 2 - the expectation of the squared deviation of a random variable from its mean
+3. `Skewness`: base 3 - a measure of asymmetry of a probability distribution about its mean.  Since it’s to the 3rd power, we care about whether it’s positive or negative.  
+4. `Kurtosis`: base 4 - a measure of the "tailedness" of the probability distribution
 
-Variance is calculated as the squared deviation of the mean: `var(x) = E[(x - μ)<sup>2</sup>]`.  σ<sup>2</sup> and s<sup>2</sup> are different in that s<sup>2</sup> is multiplied by 1/(n-1) because n-1 is considered to be the degrees of freedom and a sample tends to understate a true population variance.  Because you have a smaller sample, you expect the true variance to be larger.  The number of **degrees of freedom** is the number of values in the final calculation of a statistic that are free to vary.  The sample variance has N-1 degrees of freedom, since it is computed from N random scores minus the only 1 parameter estimated as intermediate step, which is the sample mean.
+Variance is calculated as the squared deviation of the mean:
 
-Example: your visitor log shows the following number of visits for each of the last seven days: [6, 4, 7, 4, 9, 3, 5].  What's the probability of have ing zero visits tomorrow?
+      var(x) = E[(x - μ)**2]
 
+σ<sup>2</sup> and s<sup>2</sup> are different in that s<sup>2</sup> is multiplied by 1/(n-1) because n-1 is considered to be the degrees of freedom and a sample tends to understate a true population variance.  Because you have a smaller sample, you expect the true variance to be larger.  The number of **degrees of freedom** is the number of values in the final calculation of a statistic that are free to vary.  The sample variance has N-1 degrees of freedom, since it is computed from N random scores minus the only 1 parameter estimated as an intermediate step, which is the sample mean.
+
+Example: your visitor log shows the following number of visits for each of the last seven days: [6, 4, 7, 4, 9, 3, 5].  What's the probability of having zero visits tomorrow?
+
+      import scipy.stats as scs
       lambda = np.mean([6, 4, 7, 4, 9, 3, 5])
       scs.poisson(0, lambda)
 
 #### Maximum Likelihood Estimation (MLE) ####
 
+**Maximum Likelihood Estimation (MLE)** is a method of estimating the parameters of a statistical model given n observations by finding the parameter values that maximize the likelihood of making the observations given the parameters.  In other words, this is the probability of observing the data we received knowing that they were drawn from a distribution with known parameters.  We're going to be testing which hypothesis maximizes a given likelihood.  For instance, if we saw 52 heads in 100 coin flips, we can evaluate the likelihood of a fair coin.
+
 MLE has three main steps:
 
 1. Assume the underlying distribution (e.g. Poisson, Gamma, Exponential)
-2. Define the likelihood function
+2. Define the likelihood function for observing the data under different parameters
 3. Choose the parameter set that maximizes the likelihood function
 
-FILL THIS IN W/ THE LECTURE RECORDING!!
+Our function is the data we received given some known parameter.  We assume that our data is i.i.d.
+
+      ƒ(x1, x2, ..., xn | θ) = ƒ(x1 | θ)ƒ(x2 | θ)...ƒ(xn | θ)
+      np.product(ƒ(xi | θ)) # for every sample in n
+
+We find the θ^ to maximize the log-likelihood function.  We want the argument that maximizes the log-likelihood equation:
+
+      θ^mle = arg max log( L(θ | x1, x2, ..., xn) )
 
 #### Maximum a Posteriori (MAP) ####
 
-This is a Bayesian method that I mention here because it is the opposite of MLE in that it looks at your parameters given that you have a certain dataset.  MAP is proportionate to MLE with information on what you thought going into the analysis.  More on this under the Bayesian section.
+This is a Bayesian method that I mention here because it is the opposite of MLE in that it looks at your parameters given that you have a certain data set.  MAP is proportionate to MLE with information on what you thought going into the analysis.  More on this under the Bayesian section.
 
 #### Kernel Density Estimation (KDE) ####
 
 Using **nonparametric** techniques allows us to model data that does not follow a known distribution.  KDE is a nonparametric technique that allows you to estimate the PDF of a random variable, making a histogram by summing kernel functions using curves instead of boxes.  In plotting with this method, there is a bias verses variance trade-off so choosing the best representation of the data is relatively subjective.  
 
-http://glowingpython.blogspot.com/2012/08/kernel-density-estimation-with-scipy.html
+Resources:
+* [Kernel Desnsity Estimation example](http://glowingpython.blogspot.com/2012/08/kernel-density-estimation-with-scipy.html)
 
 #### Confidence Intervals ####
 
