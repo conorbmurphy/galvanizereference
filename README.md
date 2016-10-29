@@ -59,7 +59,7 @@
 
     ** [Frequentist Statistics](#frequentist-statistics)
 
-    ** [Hypothesis Testing](#hypothesis-testing)
+    ** [Hypothesis and A/B Testing](#hypothesis-and-a-b-testing)
 
     ** [Bayesian Statistics](#bayesian-statistics)
 
@@ -966,7 +966,7 @@ Z tests can be conducted for a smaller sample size (n < 30) while T tests are ge
 3. Repeat step 2 a number of times (50 is good, though you often see 1k-10k)
 4. Each bootstrap sample can then be used as a separate dataset for estimation and model fitting (often using percentile instead of standard error)
 
-### Hypothesis Testing ###
+### Hypothesis and A/B Testing ###
 
 1. State the null (H<sub>0</sub>) hypothesis and the alternative (H<sub>1</sub>)
 2. Choose the level of significance (alpha)
@@ -975,8 +975,8 @@ Z tests can be conducted for a smaller sample size (n < 30) while T tests are ge
 
 The following maps out type I and II errors.
 
-|                     | H<sub>0</sub> is true    | H<sub>0</sub> is false  |
-| ------------------- |:-------------:| -----:|
+|                       | H<sub>0</sub> is true | H<sub>0</sub> is false |
+| ------------------------------ |:----------------:| ----------------:|
 | Fail to reject H<sub>0</sub>   | correctly accept | Type II error/beta |
 | Reject H<sub>0</sub>           | Type I error/alpha      |   correctly reject* |
 
@@ -984,7 +984,7 @@ The following maps out type I and II errors.
 
 The court of law worries about type I error while in medicine we worry about type II error.  Tech generally worries about Type I error (especially in A/B testing) since we don't want a worse product.  The **power** of a test is the probability of rejecting the null hypothesis given that it is false.  If you want a smaller type II error, you're going to get it at the expense of a larger type I error.  Power is the complement of beta.
 
-Use a **T test** when sigma is unknown and n < 30.  If you're not sure, just use a T test.  Scipy assumes that you're talking about a population.  You must set ddof = 1 for a sample.  A **Z test** is used for estimating a proportion.  **Welch's T Test** can be used when the variance is not equal (if unsure, set equal_var = False since it will only have a nominal effect on the result).
+Use a **T test** when sigma is unknown and n < 30.  If you're not sure, just use a T test.  Scipy assumes that you're talking about a population.  You must set `ddof=1` for a sample.  A **Z test** is used for estimating a proportion.  **Welch's T Test** can be used when the variance is not equal (if unsure, set `equal_var=False` since it will only have a nominal effect on the result).
 
 The **Bonferroni Correction** reduces the alpha value we use based upon the test that we're correcting.  We divide alpha by the number of tests.  It is a conservative estimate.
 
@@ -1006,7 +1006,7 @@ In frequentist A/B testing, you can only reject or fail to reject.  You can't am
 
 The **multi-armed bandit** is the question of which option you take given prior knowledge.  There are two operative terms.  **Exploitation** leverages your current knowledge in order to get the highest expected reward at that time.  **Exploration** is testing other options to determine how good each one is.  Multi-armed bandit is now a big part of reinforcement learning (a branch of AI) more than it is part of stats.  You can use this for dynamic A/B testing, budget allocation amongst competing projects, clinical trials, adaptive routing for networks minimizing delays, and reinforcement learning.
 
-**Regret** is teh difference between the maximal reward mean and the reward at time t.  You can never know what our actual regret is.  We don't know the true mean of a click-through rate, for instance.  Regret can be seen as how often you choose the suboptimal bandit (a cost function to minimize).
+**Regret** is the difference between the maximal reward mean and the reward at time t.  You can never know what our actual regret is.  We don't know the true mean of a click-through rate, for instance.  Regret can be seen as how often you choose the suboptimal bandit (a cost function to minimize).
 
 There are four main multi-armed bandit algorithms:
 
@@ -1352,7 +1352,7 @@ MIT lecture on SVM's: https://www.youtube.com/watch?v=_PwhiWxHK8o
 
 ## Unsupervised Learning ##
 
-Unsupervised learning is of more interest to computer science than for stats.  It uses a lot of computing power to find the underlying structure of data set.  In supervised learning, you cross-validate *with y (our target) as our supervisor*.  In unsupervised, we don't have a y and we therefore can't cross-valilidate.  There are two common and contrasting unsupervised techniques: principle component analysis and clustering.
+Unsupervised learning is of more interest to computer science than for stats.  It uses a lot of computing power to find the underlying structure of data set.  In supervised learning, you cross-validate *with y (our target) as our supervisor*.  In unsupervised, we don't have a y and we therefore can't cross-validate.  There are two common and contrasting unsupervised techniques: principle component analysis and clustering.
 
 ### KMeans Clustering ###
 
