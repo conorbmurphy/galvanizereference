@@ -746,15 +746,17 @@ You can also access your bash profile with `atom ~/.bash_profile`
 
 Linear algebra is about being able to solve equations in a more efficient manner.  A **scalar** (denoted by a lower-case, unbolded letter) has only magnitude (denoted as ||a||).  A **vector** (denoted by a lower-case, bold letter) is a one-dimensional matrix that has both magnitude and a heading.  **Distance** is the total area covered while **displacement** is the direct distance between your start and your end point.  A **matrix** is a m row by n column brick of numbers.  
 
-You can initialize matrices and vectors using numpy as follows:
+You can initialize matrices and vectors using NumPy as follows:
 
         mat = np.array([[4, -5], [-2, 3]])
         vect = np.array([-13, 9])
         column_vect = np.array([[13], [9]])
         np.ones((2, 4)) # Creates a 2 x 4 matrix of ones
         np.zeros((3, 2))
+        np.arange(2, 20) # Creates a row vector from 2:19
         mat.shape() # Returns the dimensions
         vect.reshape(2, 1) # Transposes the column vector vect
+        vect.reshape(2, -1) # Returns the same
         mat' # Aliases the transpose (switches columns and rows) of mat
         np.transpose(mat) # Copies the transpose
         mat[1, 0] # returns -2
@@ -765,44 +767,49 @@ You can initialize matrices and vectors using numpy as follows:
 
 Matrix multiplication can only happen when *the number of columns of the first matrix equals the number of rows in the second*.  The inner product, or **dot product**, for vectors is the summation of the corresponding entities of the two sequences of numbers (returning a single, scalar value).  This can be accomplished with `np.dot(A, B)`.  The **outer product** of a 4-dimensional column vector and a 4-dimensional row vector is a 4x4 matrix where each value is the product of the corresponding column/vector value.
 
-**Matrix-matrix multiplication** is a series of vector-vector products and is not communicative (meaning A*B != B*A).  A 2x3 matrix times 3x2 matrix gives a 2x2 result where 1,1 of the result is the dot product of the first row of the first matrix and the first column of the second matrix:
+**Matrix-matrix multiplication** is a series of vector-vector products and is not communicative (meaning A*B != B*A).  *A 2x3 matrix times 3x2 matrix gives a 2x2 result* where 1,1 of the result is the dot product of the first row of the first matrix and the first column of the second matrix:
 
-        A = [1, 2]
-            [3, 4]
-        B = [9, 7]
-            [5, 8]
-        AB = [1*9+2*5, 1*7+2*8]  =  [19, 23]
-            [3*9+4*5, 3*7+4*8]     [47, 53]
+        A = [1, 2, 3]
+            [4, 5, 6]
+        B = [7,   8]
+            [9,  10]
+            [11, 12]
+        AB = [1*7+2*9+3*11, 1*8+2*10+3*12] = [58, 64]
+             [4*7+5*9+6*11, 4*8+5*10+6*12]   [139, 154]
+
+        A = np.arange(1, 7).reshape(2, 3)
+        B = np.arange(7, 13).reshape(3, 2)
+        np.dot(A, B)
 
 An **identity matrix** is a square matrix with 1's along the diagonal and 0's everywhere else.  If you multiply any matrix by an identity matrix of the same size, you get the same matrix back.  There is no matrix division.  The **inverse** of a matrix is an alternative to division where you do 1 over the value of the given location.  A matrix multiplied by its inverse gives you an identity matrix.  A **transpose** is where the rows are exchanged for columns.
 
-**Axis-wise** operations aggregate over the whole matrix.  For example, `A.mean()` returns the mean for the whole matrix.  `A.mean(axis = 0)` returns a mean for every column.  **Rank** is defined as the number of linearly dependent rows or columns in a matrix, such as a column that's the summation of two others or a multiple of another.  A **feature matrix** is a matrix where each column represents a variable and each row a datapoint.  By convention, we use X to be our feature matrix and y to be our dependent variable.  
+**Axis-wise** operations aggregate over the whole matrix.  For example, `A.mean()` returns the mean for the whole matrix.  `A.mean(axis = 0)` returns a mean for every column.  **Rank** is defined as the number of linearly dependent rows or columns in a matrix, such as a column that's the summation of two others or a multiple of another.  A **feature matrix** is a matrix where each column represents a variable and each row a datapoint.  By convention, we use `X` to be our feature matrix and `y` to be our dependent variable.  
 
-An **orthogonal matrix** is important for statement of preference surveys. **Eigenvectors** and **eigenvalues** are good for page rank analysis.  The **stochastic matrix** is central to the Markov process, or a square matrix specifying the probabilities of going from one state to another such that every column of the matrix sums to 1.
+There are a few important types of matrices that we will discuss in more detail below.  An **orthogonal matrix** is important for statement of preference surveys. **Eigenvectors** and **eigenvalues** are good for page rank analysis.  The **stochastic matrix** is central to the Markov process, or a square matrix specifying the probabilities of going from one state to another such that every column of the matrix sums to 1.
 
 
 ---
 
 ## Probability ##
 
-**Probability** is the measure of the likelihood that an event will occur written as the number of successes over the number of trials.  **Odds** are the number of successes over the number of failures.  Probability takes a value between 0 and 1 and odds usually take the form successes:failures.  
+**Probability** is the measure of the likelihood that an event will occur written as the number of successes over the number of trials.  **Odds** are the number of successes over the number of failures.  Probability takes a value between 0 and 1 and odds usually take the form `successes:failures`.  
 
 ### Set Operations and Notation ###
 
-A set is a range of all possible outcomes or events, also called the sampling space and can be discrete or continuous.  It is useful to think of set operations in the context of venn diagram.  Union is all of a venn diagram of A and B, intersection is the center portion, difference is the A portion and complement is the B portion.
+A set is a range of all possible outcomes or events, also called the sampling space.  It can be discrete or continuous.  It is useful to think of set operations in the context of a venn diagram.  Union is all of a venn diagram of A and B, intersection is the center portion, difference is the A portion and complement is the B portion.
 
 * `Union`: A ∪ B = {x: x ∈ A ∨ x ∈ B} - The union of sets A and B is x such that x is in A or x is in B.
 * `Intersection`: A ∩ B = {x: x ∈ A ∧ x ∈ B } - The intersection is x such that x is in A and in B.
 * `Difference`: A ∖ B = {x: x ∈ A ∧ x ∉ B } - The difference is x such that x is in A and not in B.
-* `Complement`: A <sup>C</sup> = {x: x ∉ A} - The complement is x such that x is in A and in B.
+* `Complement`: A <sup>C</sup> = {x: x ∉ A} - The complement is x such that x is in A and not in B.
 * `Null (empty) set`: ∅
 
 DeMorgan's Law converts and's to or's.  The tetris-looking symbol is for 'not.'
 
-* ¬(A ∨ B) ⟺ ¬A ∧ ¬B
-* ¬(A ∧ B) ⟺ ¬A ∨ ¬B
+* ¬(A ∨ B) ⟺ ¬A ∧ ¬B - Not A and B is equal to not A or not B
+* ¬(A ∧ B) ⟺ ¬A ∨ ¬B - Not A or B is equal to not A and not B
 
-Events are independent (A ⊥ B) if P(A ∩ B) = P(A)P(B) or (equivalently) P(A|B)=P(A).  Remember to think of a Venn Diagram in conceptualizing this.  This is conditional probaiblity.  
+Events A and B are independent (A ⊥ B) if P(A ∩ B) = P(A)P(B) or (equivalently) P(A|B)=P(A).  Remember to think of a Venn Diagram in conceptualizing this.  This is conditional probability.  
 
 ### Combinatorics ###
 
@@ -813,7 +820,20 @@ Combinatorics is the mathematics of ordering and choosing sets.  There are three
 3. `Permutations`: The number of ways to choose k things given n options and that the order does matter.
 
 Combinations: `n! / ((n-k)! * k!)`
+
+      from itertools import combinations
+      comb = [i for i in combinations('abcd', 2)] # n = 4; k = 2
+      len(comb) # returns 6 possible combinations
+
+This would be spoken as `n choose k` or `4 choose 2` in this example.
+
 Permutations: `n! / (n-k)!`
+
+      from itertools import permutations
+      perm = [i for i in permutations('abcd', 2)] # n = 4; k = 2
+      len(perm) # returns 12 possible permutations
+
+This would be spoken as `n permutations of size k` or `4 permutations of size 2` in this example.  It is twice the length of the combinations of the same string because of the fact that the ordering creates more possible outputs.
 
 ### Bayes Theorum ###
 
@@ -826,13 +846,13 @@ The probability of a positive test result from a drug test given that one has do
       P(doped) - .005
 
       P(doped|+) = P(+|doped) * P(doped) / P(+)
-       = P(+|doped) * P(doped) / P(doped) * P(+|uses) + P(clean) * P(+|clean)
-       = (.99 * .005) / (.005 * .99 + (1-.005) * .05 )
-       = .09
+          = P(+|doped) * P(doped) / P(doped) * P(+|uses) + P(clean) * P(+|clean)
+          = (.99 * .005) / (.005 * .99 + (1-.005) * .05 )
+          = .09
 
-It's helpful to write this out a decision tree.  The denominator is the sum of all the possible ways you can get A, which means it's the sum of each final branch of the tree.
+It's helpful to write this out a decision tree.  The denominator is the sum of all the possible ways you can get A, which means it's the sum of each final branch of the tree.  In this case, it's all the ways you can have a positive test result: by having doped and getting a positive test result given that you use and the probability of being clean multiplied by the probability of a positive result given that you're clean.
 
-The **base rate fallacy** is the effect of a small population that has a disease on your ability to accurately predict it.  For rare diseases, multiple tests must be done in order to accurately evaluate if a person has the disease due to this fallacy.  
+The **base rate fallacy** is the effect of a small population that has a disease on your ability to accurately predict it.  If only a small population has a given disease, your likelihood of accurately predicting a case of the disease goes down.  For rare diseases, multiple tests must be done in order to accurately evaluate if a person has the disease due to this fallacy.  This is also why testing is only conducted when you are already in a population that is more likely to have a disease, such as testing people who have come in contact with ebola.
 
 ### Random Variables ###
 
@@ -844,11 +864,13 @@ A **random variable** is a function that maps events in our sample space to some
 
 We can compute the **covariance** of two different variables using the following: `Cov[X,Y] = E[(x−E[X]) (y−E[Y])]`.  This is related to the **correlation** which is the covariance over the multiplication of their standard deviations: `Cov(X,Y) / σ(X)σ(Y)`.  Correlation puts covariance on a -1 to 1 scale, allowing you to see proportion.  These look uniquely at linear relationships.
 
-**Marginal distributions** take a possibly not independent multivariate distribution and considers only a single dimension.  By looking at the marginal distribution, you are able to **marginalize out** variables that have little covariance.  We always need to be thinking about the histograms of the two variables we're comparing as well as their intersect.
+**Marginal distributions** take a possibly not independent multivariate distribution and considers only a single dimension.  It is a subset of a collection of random variables is the probability distribution of the variables contained in the subset. It gives the probabilities of various values of the variables in the subset without reference to the values of the other variables.  By looking at the marginal distribution, you are able to **marginalize out** variables that have little covariance.  We always need to be thinking about the histograms of the two variables we're comparing as well as their intersect.
 
-The **conditional distribution** is the joint distribution divided by the marginal distribution evaluated at a given point.  The conditional distribution says that we know a height, what's the distribution of weight given that height?  In data science, this is *the* thing we want to know.
+This contrasts with a conditional distribution, which gives the probabilities contingent upon the values of the other variables.  The **conditional distribution** is the joint distribution divided by the marginal distribution evaluated at a given point.  The conditional distribution says that we know a height, what's the distribution of weight given that height?  In data science, this is *the* thing we want to know.
 
 The case of **Anscombe's quartet** shows us how statistics can often show us how poorly these statistics account for variance.  Correlation captures direction, not non-linearity, steep slopes, etc. This is why want to know the conditional distribution, not just summary stats.
+
+![Anscombes_quartet] (https://github.com/conorbmurphy/galvanizereference/blob/master/images/anscombesquartet.png)
 
 **Pearson correlation** evaluates linear relationships between two continuous variables.  The **Spearman correlation** evaluates the monotonic relationship between two continuous or ordinal variables without assuming the linearity of the variables.
 
