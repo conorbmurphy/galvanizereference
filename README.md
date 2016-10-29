@@ -41,7 +41,7 @@
     ** [Hypothesis and A/B Testing](#hypothesis-and-a-b-testing)  
     ** [Bayesian Statistics](#bayesian-statistics)  
 * Modeling  
- * [Exploratory Data Analysis][#exploratory-data-analysis-eda]  
+ * [Exploratory Data Analysis][#exploratory-data-analysis]  
  * [Linear Regression Introduction and Univariate](#linear-regression-introduction-and-univariate)  
  * [Multivariate Regression](#multivariate-regression)  
  * [Logistic Regression](#logistic-regression)  
@@ -1008,7 +1008,7 @@ There are four main multi-armed bandit algorithms:
 
 ## Modeling ##
 
-## Exploratory Data Analysis (EDA) ##
+## Exploratory Data Analysis ##
 
 EDA is the first cut analysis where you evaluate the following points:
 
