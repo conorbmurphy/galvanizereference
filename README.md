@@ -8,42 +8,24 @@
   * [Python](#python)  
     ** [Base Data Types](#base-data-types)  
     ** [Built-in Functions](#built---in-functions)  
-
-    ** [Classes](#classes)
-
-    ** [Loops and List Comprehension](#loops-and-list-comprehension)
-
-    ** [File I/O](#file-i-o)
-
-    ** [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)
-
-    ** [Testing and Debugging](#testing-and-debugging)
-
-    ** [A Note on Style](#a-note-on-style)
-
-    ** [Common Errors](#common-errors)
-
- * [Python Packages](#python-packages)
-
-    ** [pandas](#pandas)
-
-    ** [numpy](#numpy)
-
-    ** [scipy](#scipy)
-
-    ** [statsmodels](#statsmodels)
-
-    ** [sklearn](#sklearn)
-
-    ** [Plotting with matplotlib and seaborn](#plotting-with-matplotlib-and-seaborn)
-
- * [SQL](#sql)
-
- * [MongoDB and Pymongo](#mongodb-and-pymongo)
-
- * [Git](#git)
-
- * [Command Line](#command-line)
+    ** [Classes](#classes)  
+    ** [Loops and List Comprehension](#loops-and-list-comprehension)  
+    ** [File I/O](#file-i-o)  
+    ** [Lambda Functions in Map, Filter, and Reduce](#lambda-functions-in-map-filter-and-reduce)  
+    ** [Testing and Debugging](#testing-and-debugging)  
+    ** [A Note on Style](#a-note-on-style)  
+    ** [Common Errors](#common-errors)  
+ * [Python Packages](#python-packages)  
+    ** [pandas](#pandas)  
+    ** [numpy](#numpy)  
+    ** [scipy](#scipy)  
+    ** [statsmodels](#statsmodels)  
+    ** [sklearn](#sklearn)  
+    ** [Plotting with matplotlib and seaborn](#plotting-with-matplotlib-and-seaborn)  
+ * [SQL](#sql)  
+ * [MongoDB and Pymongo](#mongodb-and-pymongo)  
+ * [Git](#git)  
+ * [Command Line](#command-line)  
 
 * Linear Algebra, Probability, and Statistics
 
