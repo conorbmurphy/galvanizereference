@@ -26,36 +26,21 @@
  * [MongoDB and Pymongo](#mongodb-and-pymongo)  
  * [Git](#git)  
  * [Command Line](#command-line)  
-
 * Linear Algebra, Probability, and Statistics
-
- * [Linear Algebra](#linear-algebra)
-
- * [Probability](#probability)
-
+ * [Linear Algebra](#linear-algebra)  
+ * [Probability](#probability)  
  * [Statistics](#statistics)
-
-    ** [Frequentist Statistics](#frequentist-statistics)
-
-    ** [Hypothesis and A/B Testing](#hypothesis-and-a-b-testing)
-
-    ** [Bayesian Statistics](#bayesian-statistics)
-
-* Modeling
-
- * [Exploratory Data Analysis][#exploratory-data-analysis-(EDA)]
-
- * [Linear Regression Introduction and Univariate](#linear-regression-introduction-and-univariate)
-
- * [Multivariate Regression](#multivariate-regression)
-
- * [Logistic Regression](#logistic-regression)
-
- * [Cross-validation](#cross-validation)
-
- * [Bias/Variance Tradeoff](#bias/variance-tradeoff)
-
- * [Gradient Ascent](#gradient-ascent)
+    ** [Frequentist Statistics](#frequentist-statistics)  
+    ** [Hypothesis and A/B Testing](#hypothesis-and-a-b-testing)  
+    ** [Bayesian Statistics](#bayesian-statistics)  
+* Modeling  
+ * [Exploratory Data Analysis][#exploratory-data-analysis-(EDA)]  
+ * [Linear Regression Introduction and Univariate](#linear-regression-introduction-and-univariate)  
+ * [Multivariate Regression](#multivariate-regression)  
+ * [Logistic Regression](#logistic-regression)  
+ * [Cross-validation](#cross-validation)  
+ * [Bias/Variance Tradeoff](#bias/variance-tradeoff)  
+ * [Gradient Ascent](#gradient-ascent)  
 
 * [Machine Learning](#machine-learning-(ml))
 
