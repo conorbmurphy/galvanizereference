@@ -29,19 +29,19 @@
 * Linear Algebra, Probability, and Statistics
  * [Linear Algebra](#linear-algebra)  
  * [Probability](#probability)  
-    ** [Set Operations and Notation](#set-operations-and-notation)
+    ** [Set Operations and Notation](#set-operations-and-notation)  
     ** [Combinatorics](#combinatorics)  
     ** [Bayes Theorum](#bayes-theorum)  
     ** [Random Variables](#random-variables)    
  * [Statistics](#statistics)  
     ** [Key Definitions](#key-definitions)  
     ** [Common Distributions](#common-distributions)  
-    ** [Frequentist Statistics](#frequentist-statistics)
+    ** [Frequentist Statistics](#frequentist-statistics)  
     ** [Confidence Intervals](#confidence-intervals)  
     ** [Hypothesis and A/B Testing](#hypothesis-and-a-b-testing)  
     ** [Bayesian Statistics](#bayesian-statistics)  
 * Modeling  
- * [Exploratory Data Analysis][#exploratory-data-analysis-(EDA)]  
+ * [Exploratory Data Analysis][#exploratory-data-analysis-EDA]  
  * [Linear Regression Introduction and Univariate](#linear-regression-introduction-and-univariate)  
  * [Multivariate Regression](#multivariate-regression)  
  * [Logistic Regression](#logistic-regression)  
