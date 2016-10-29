@@ -29,7 +29,7 @@
 * Linear Algebra, Probability, and Statistics
  * [Linear Algebra](#linear-algebra)  
  * [Probability](#probability)  
- * [Statistics](#statistics)
+ * [Statistics](#statistics)  
     ** [Frequentist Statistics](#frequentist-statistics)  
     ** [Hypothesis and A/B Testing](#hypothesis-and-a-b-testing)  
     ** [Bayesian Statistics](#bayesian-statistics)  
@@ -41,42 +41,24 @@
  * [Cross-validation](#cross-validation)  
  * [Bias/Variance Tradeoff](#bias/variance-tradeoff)  
  * [Gradient Ascent](#gradient-ascent)  
-
-* [Machine Learning](#machine-learning-(ml))
-
+* [Machine Learning](#machine-learning-(ml))  
  * [Supervised Learning](#supervised-learning)
-
-    ** [k-Nearest Neighbors (KNN)](#k-nearest-neighbors-(knn))
-
-    ** [Decision Trees](#decision-trees)
-
-    ** [Bagging and Random Forests](#bagging-and-random-forests)
-
-    ** [Boosting](#boosting)
-
-    ** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)
-
- * [Unsupervised Learning](#unsupervised-learning)
-
-    ** [KMeans Clustering](#kmeans-clustering)
-
-* Special Topics
-
- * [Natural Language Processing](#natural-language-processing)
-
- * [Time Series](#time-series)
-
- * [Web-Scraping](#web---scraping)
-
- * [Profit Curves](#profit-curves)
-
- * [Imbalanced Classes](#imbalanced-classes)
-
- * [Helpful Visualization](#helpful-visualizations)
-
- * [Note on Style and Other Tools](#note-on-style-and-other-tools)
-
- * [Career Points](#career-pointers)
+    ** [k-Nearest Neighbors (KNN)](#k-nearest-neighbors-(knn))  
+    ** [Decision Trees](#decision-trees)  
+    ** [Bagging and Random Forests](#bagging-and-random-forests)  
+    ** [Boosting](#boosting)  
+    ** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)    
+ * [Unsupervised Learning](#unsupervised-learning)  
+    ** [KMeans Clustering](#kmeans-clustering)  
+* Special Topics  
+ * [Natural Language Processing](#natural-language-processing)  
+ * [Time Series](#time-series)  
+ * [Web-Scraping](#web---scraping)  
+ * [Profit Curves](#profit-curves)  
+ * [Imbalanced Classes](#imbalanced-classes)  
+ * [Helpful Visualization](#helpful-visualizations)  
+ * [Note on Style and Other Tools](#note-on-style-and-other-tools)  
+ * [Career Points](#career-pointers)  
 
 ---
 
