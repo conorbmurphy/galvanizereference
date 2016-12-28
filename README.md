@@ -54,7 +54,8 @@
     ** [Decision Trees](#decision-trees)  
     ** [Bagging and Random Forests](#bagging-and-random-forests)  
     ** [Boosting](#boosting)  
-    ** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)    
+    ** [Maximal Margin Classifier, Support Vector Classifiers, Support Vector Machines](#maximal-margin-classifier,-support-vector-classifiers,-support-vector-machines)  
+    ** [Neural Networks](#neural-networks)  
  * [Unsupervised Learning](#unsupervised-learning)  
     ** [KMeans Clustering](#kmeans-clustering)  
 * Special Topics  
@@ -63,6 +64,7 @@
  * [Web-Scraping](#web---scraping)  
  * [Profit Curves](#profit-curves)  
  * [Imbalanced Classes](#imbalanced-classes)  
+ * [Parallelization](#parallelization)
  * [Helpful Visualization](#helpful-visualizations)  
  * [Note on Style and Other Tools](#note-on-style-and-other-tools)  
  * [Career Points](#career-pointers)  
@@ -91,6 +93,7 @@ While these represent the core competencies of a data scientist, the method for 
 
 This system helps refocus our process on business understanding and business needs.  Always ask what your ideal data set is before moving into the data understanding stage, then approach the data you do have in that light.  Always, always, always focus on business solutions.  
 
+(Data Science Use Cases)[https://www.kaggle.com/wiki/DataScienceUseCases]
 
 ---
 
@@ -108,6 +111,9 @@ There are many different programming paradigms such as declarative, functional, 
 OOP has classes and objects.  A class is a combination of state and behaviors.  Python has a logic where everybody can access anything, making it difficult to obfuscate code.  This makes Python particularly adept for the open source community.
 
 There are a number of topics that I won't address here such as control structures, functions, and modules.
+
+Reference:
+* [Visualizing a python script](http://www.pythontutor.com/)
 
 ### Base Data Types ###
 
@@ -550,7 +556,7 @@ Joins are used to query across multiple tables using foreign keys.  **Every join
 
 1. `INNER JOIN:` joins based on rows that appear in both tables.  This is the default for saying simply JOIN and would be the center portion of the venn diagram.
  * SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name;
- * SELECT c.id, v.created at FROM customers as c, visits as v WEHRE c.id = v.customer_id; # joins w/o specifying it's a join
+ * SELECT c.id, v.created at FROM customers as c, visits as v WHERE c.id = v.customer_id; # joins w/o specifying it's a join
 2. `LEFT OUTER JOIN:` joins based on all rows on the left table even if there are no values on the right table.  A right join is possible too, but is only the inverse of a left join.  This would be the left two sections of a venn diagram.
 3. `FULL OUTER JOIN:` joins all rows from both tables even if there are some in either the left or right tables that don't match.  This would be all three sections of a venn diagram.
 
@@ -667,6 +673,7 @@ Resources:
 ## Command Line ##
 
 * `ls`: list files in current directory
+* `ls -la`: list all files including hidden directories
 * `cd directory`: change directories to directory
 * `cd ..`: navigate up one directory
 * `mkdir new-dir`: create a directory called new-dir
@@ -674,6 +681,7 @@ Resources:
 * `man some-cmd`: pull up the manual for some-cmd
 * `pwd`: find the path of the current directory
 * `mv path/to/file new/path/to/file`: move a file or directory (also used for renaming)
+* `cp path/to/file new/path/to/file`: copy a file or directory
 * `find . -name blah`: find files in the current directory (and children) that have blah in their name
 * To jump to beginning of line: __CTRL__ + __a__
 * To jump to end of line: __CTRL__ + __e__
@@ -684,6 +692,7 @@ Resources:
 * `fg`: brings the suspended process to the foreground
 * `ps waux`: shows you all current processes (helpful for finding open databases)
 * `xcode-select --install`: updates command line tools (often needed after an OS update)
+* `wget [url]`: downloads a given file
 
 You can also access your bash profile with `atom ~/.bash_profile`
 
@@ -1160,6 +1169,7 @@ Cross-validation is a model validation technique for assessing how the results o
 
 When training hyperparameters, set aside another subset of the data for testing at the end.  
 
+SKlearns CV description: http://scikit-learn.org/stable/modules/cross_validation.html
 Time series cross-validation example: http://robjhyndman.com/hyndsight/tscvexample/
 
 ### Bias/Variance Tradeoff ###
@@ -1348,6 +1358,38 @@ There are many *differences between logisic regression and SVM's*.  A logistic r
 
 MIT lecture on SVM's: https://www.youtube.com/watch?v=_PwhiWxHK8o
 
+### Neural Networks ###
+
+Neural networks, initially inspired to emulate the function of the brain, have a lot of flexibility in modeling different data types.  They are particularly adept at multi-class classification.  Neural nets have very high variance, have long training time, and are not great with little data.
+
+Let's take linear regression as a jumping off point.  Here, we put weights on each of our features to predict y-hat.  We use gradient descent on our loss function to look at the derrivative (and therefore the direction of the slope) and minizie the coefficients.  Instead of weights coming through one node like in linear regression, neural nets have multiple nodes, each which combines all of the inputs in a slightly different way.  This adds non-linearity.  THere's a sigmoid that squashes the sums before these values are sent to another node.
+
+**Back propagation** is an application of the chain rule.  The forward pass over the neurons predicts based upon its values.  The backwards pass takes a gradient of the loss and pushes that gradient back through the nodes and uses the chain rule to calculate partial gradients.  A **densly connected node** is when when all connections go to a given node.
+
+You can *initialize neural nets* in a number of ways such as sigmoids however (ReLU)[https://en.wikipedia.org/wiki/Rectifier_(neural_networks)] has been shown to have faster training times by taking the max of 0 and x.  This helps prevent 'dead neurons' where its weight will go to zero and become inactive.  A really accurate layer should be 5 to 6 layers deep.  If you crash, remove one layer at a time and add width.
+
+There are a number of different types of neural nets including:
+
+* `Recurrent`: flexible, often used in NLP
+* `Recursive`: often used in time series
+* `Convolutional`: designed for image data
+* `Adverserial`:
+
+**Convolutional neural nets** take their name from the filters that are passed over data.  They take a smaller filter and shift it over the image, multiplying it continuously over the image's values and summing the response.  This process, called **convolution,** blurs the image and reduces dimensions.  We used to code these convolutions by hand; now neural nets can do this automatically with back propogation.  Pooling is another approach to reducing dimensionality.  An **epoch** is when a neural net sees every point in your data set.
+
+![Image of CNNs](https://github.com/conorbmurphy/galvanizereference/blob/master/images/cnns.png)
+
+Stanford course: http://cs231n.stanford.edu/
+
+TensorFlow is the most prominent package with high-level API's like Lasagne and Keras that wrap it.  ImageNet and MNIST are standard sources of machine vision data.
+
+http://www.deeplearningbook.org/
+http://neuralnetworksanddeeplearning.com/
+https://gym.openai.com/
+
+TensorFlow Tutorials:
+* https://www.tensorflow.org/tutorials/mnist/beginners/
+* https://www.tensorflow.org/tutorials/mnist/pros/
 
 ## Unsupervised Learning ##
 
@@ -1819,6 +1861,81 @@ Resources:
 * Gephi for graphing
 
 ---
+## Big Data ##
+
+---
+
+### Parallelization ###
+
+CPython, the C interpretation of Python and the most common installation, uses a **Global interpreter lock (GIL)**, or a mechanism used in computer language interpreters to synchronize the execution of threads so that only one native thread can execute at a time.  If a global variable is being accessed by multiple threads, it can excecute wrongly.  Given this limitation, there are three options for processes:
+
+1. `Serial`: processes happen in serial succession, preventing conflicts between threads.
+2. `Multi-threaded`: operating out of shared memory, multi-threaded tasks can be pictured as sub-tasks of a single process farmed out to different threads.  If you're CPU-bound, you can only create as many threads as you have cores.  If you're I/O bound, threading can help you run many things at once (e.g. webscraping if you're not rate limited)
+3. `Multi-processing`: operating out of distributed memory, this submits multiple processes to completely separate memory locations meaning each process will run completely independently from the next.  This has the overhead of communicating between multiple processes.  If you're CPU-bound, this will significantly increase your speed.  It isn't helpful for I/O bound problems.
+
+A simple example of threading:
+
+      from threading import Thread
+      def worker(num):
+          """thread worker function"""
+          print 'Worker: %s' % num
+          return
+      threads = []
+      for i in range(5):
+          t = threading.Thread(target=worker, args=(i,))
+          threads.append(t)
+          t.start()
+
+A simple example of multiprocessing:
+
+      import multiprocessing as mp
+      processes = [mp.Process(target=rand_string, args=(5, output)) for x in range(4)] # define processes
+      for p in processes:
+        p.start() # start processes
+      for p in processes:
+        p.join() # exit them
+
+A simpler way than to maintain a list of processes is using the `Pool` class:
+
+      pool = mp.Pool(processes=4)
+      results = pool.map(function, range(1,7))
+      results2 = pool.apply(function, range(1,7)) # Another option
+      results = [pool.apply_async(function, args=(samples, x, w)) for w in widths] # asychronous application
+      print(results)
+
+
+“Premature optimization is the root of all evil” - Computer Scientists
+
+Resources:
+* [Multiprocessing in Python](https://www.youtube.com/watch?v=X2mO1O5Nuwg)
+* [Intro to Multiprocessing](http://sebastianraschka.com/Articles/2014_multiprocessing.html)
+* [Threading](https://pymotw.com/2/threading/)
+
+---
+
+### Apache Hadoop ###
+
+Apache Hadoop is an open-source software framework for distributed storage and distributed processing of very large data sets on computer clusters built from commodity hardware.  The core of Apache Hadoop consists of a storage part, known as **Hadoop Distributed File System (HDFS)**, and a processing part called **MapReduce**.
+
+---
+
+### Apache Spark ###
+
+Apache Spark is a cluster computing platform designed to be fast and general-purpose.  Spark extends the popular MapReduce model to efficiently sup‐port more types of computations, including interactive queries and stream processing.  Spark is designed to cover a wide range of workloads that previously required separate distributed systems, including batch applications, iterative algorithms, interactive queries, and streaming.  It powers multiple higher-level components specialized for various workloads, such as SQL or machine learning.
+
+The Spark stack is as follows:
+
+* `core`: Spark Core is also home to the API that defines resilient distributed datasets (RDDs), which are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel. Spark Core provides many APIs for building and manipulating these collections.
+* `Spark SQL`: a package for working with structured data
+* `Streaming`: enables the processing of live streams of data
+* `MLlib`: common machine learning functionality designed to scale
+* `GraphX`: library for manipulating graphs
+* `Cluster managers`: Spark can run over a variety of cluster managers such as Hadoop YARN and Apache Mesos
+
+References
+* [RDD Tranformations](http://spark.apache.org/docs/0.7.3/api/pyspark/pyspark.rdd.RDD-class.html)
+
+---
 
 ## Helpful Visualizations ##
 
@@ -1852,6 +1969,24 @@ Visualization:
 
 ## Career Pointers ##
 
+Common themes:
+
+* SQL
+  * SELECT statements
+* Linear models
+  * How to interpret coefficients
+  * How to find the values of the coefficients
+* Probability
+  * May involve counting, distributions, Bayes, and other rules
+  * Expectations, variance
+* Open ended questions on business problems
+* Case studies/take homes
+* Computational complexity
+* Coding questions
+  * mergesort
+  * Fizzbuzz
+  * Palandromes
+
 Common Interview Questions:
 
 * Narrative: why do you want to be a data scientist?
@@ -1873,4 +2008,5 @@ Common Interview Questions:
 * Why would you choose breadth first search over depth first search in graph theory?
 * What's NMF and how does the math work?
 
+Cracking the Coding Interview
 O'Reilly (Including salary averages): https://www.oreilly.com
