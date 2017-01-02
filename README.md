@@ -26,6 +26,7 @@
  * [MongoDB and Pymongo](#mongodb-and-pymongo)  
  * [Git](#git)  
  * [Command Line](#command-line)  
+ * [Development and Virtual Environments](#development-and-virtual-environments)  
 * Linear Algebra, Probability, and Statistics
  * [Linear Algebra](#linear-algebra)  
  * [Probability](#probability)  
@@ -114,6 +115,7 @@ There are a number of topics that I won't address here such as control structure
 
 Reference:
 * [Visualizing a python script](http://www.pythontutor.com/)
+* [Dan's video on settung up a dev environment](https://www.youtube.com/watch?v=TyPGcnkkheQ&t=391s)
 
 ### Base Data Types ###
 
@@ -632,8 +634,8 @@ Deleting data
       db.users.remove({})
 
 Reference:
-* (Good reference)[http://openmymind.net/mongodb.pdf]
-* (Cheatsheet)[https://blog.codecentric.de/files/2012/12/MongoDB-CheatSheet-v1_0.pdf]
+* [Good reference](http://openmymind.net/mongodb.pdf)
+* [Cheatsheet](https://blog.codecentric.de/files/2012/12/MongoDB-CheatSheet-v1_0.pdf)
 ---
 
 ## Git ##
@@ -666,7 +668,7 @@ Here's a workflow:
 With merge issues, you'll have to write a merge message followed by, `esc`, `:wq`, and then `enter`.
 
 Resources:
-* (Centralized Git Workflow)[https://www.atlassian.com/git/tutorials/comparing-workflows/]
+* [Centralized Git Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/)
 
 ---
 
@@ -678,6 +680,7 @@ Resources:
 * `cd ..`: navigate up one directory
 * `mkdir new-dir`: create a directory called new-dir
 * `rm some-file`: remove some-file
+* `rm -rf some-dir`: remove some-dir
 * `man some-cmd`: pull up the manual for some-cmd
 * `pwd`: find the path of the current directory
 * `mv path/to/file new/path/to/file`: move a file or directory (also used for renaming)
@@ -693,8 +696,27 @@ Resources:
 * `ps waux`: shows you all current processes (helpful for finding open databases)
 * `xcode-select --install`: updates command line tools (often needed after an OS update)
 * `wget [url]`: downloads a given file
+* `df`: checks disk usage
 
 You can also access your bash profile with `atom ~/.bash_profile`
+
+---
+
+## Development and Virtual Environments ##
+
+Here are a few tools for setting up a developing environment and creating virtual environments.
+
+[Virtual Environments using Conda](https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/) is a good starting point for using conda.  Here are a few commands:
+
+* `conda create -n yourenvname python=x.x anaconda`
+* `source activate yourenvname`
+* `conda install -n yourenvname [package]`
+* `source deactivate`
+* `conda remove -n yourenvname -all`
+
+[Virtualenv](https://virtualenv.pypa.io/en/stable/) is a tool to accomplish similar outcomes.
+
+[Oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) is a tool for zsh config and command line themes.
 
 ---
 
