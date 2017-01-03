@@ -29,6 +29,7 @@
  * [Development and Virtual Environments](#development-and-virtual-environments)  
 * Linear Algebra, Probability, and Statistics
  * [Linear Algebra](#linear-algebra)  
+ * [Calculus](#calculus)  
  * [Probability](#probability)  
     ** [Set Operations and Notation](#set-operations-and-notation)  
     ** [Combinatorics](#combinatorics)  
@@ -114,8 +115,10 @@ OOP has classes and objects.  A class is a combination of state and behaviors.  
 There are a number of topics that I won't address here such as control structures, functions, and modules.
 
 Reference:
+* [Free, temporary hosting of a notebook](https://tmpnb.org/)
 * [Visualizing a python script](http://www.pythontutor.com/)
-* [Dan's video on settung up a dev environment](https://www.youtube.com/watch?v=TyPGcnkkheQ&t=391s)
+* [Dan's video on setting up a dev environment](https://www.youtube.com/watch?v=TyPGcnkkheQ&t=391s)
+* [CoderPad, for collaborative coding](https://coderpad.io/)
 
 ### Base Data Types ###
 
@@ -143,6 +146,9 @@ Python has a few base datatypes whose different characteristics can be leveraged
   * Counter(dict).most_common(1) # (also from collections) orders dict values
 * `set`: mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set) in that they allow only one of a given value.
   * s = set([1, 2, 3])
+  * s2 = {3, 4, 5} # equivalanetly
+  * s & s2 # returns the intersection (3)
+  * set.intersection(*[s, s2]) # equivalently, where * is list expansion
   * s.add(4) # in place operation
 
 ### Built-in Functions ###
@@ -295,6 +301,7 @@ Here are some common errors to avoid:
 
 * `AttributeError`: Thrown when you call an attribute an object doesn't have
 * `ZeroError`: Thrown when dividing by a zero
+* `AssertionError`: Thrown when code fails an `assert` line such as `assert multiply_numbers(2, 2) == 4`
 
 ---
 
@@ -668,6 +675,7 @@ Here's a workflow:
 With merge issues, you'll have to write a merge message followed by, `esc`, `:wq`, and then `enter`.
 
 Resources:
+* [Git School](https://try.github.io/levels/1/challenges/1)
 * [Centralized Git Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/)
 
 ---
@@ -766,6 +774,16 @@ An **identity matrix** is a square matrix with 1's along the diagonal and 0's ev
 
 There are a few important types of matrices that we will discuss in more detail below.  An **orthogonal matrix** is important for statement of preference surveys. **Eigenvectors** and **eigenvalues** are good for page rank analysis.  The **stochastic matrix** is central to the Markov process, or a square matrix specifying the probabilities of going from one state to another such that every column of the matrix sums to 1.
 
+
+---
+
+## Calculus ##
+
+There are two main operations of calculus and therefore two essential tools needed in data science: differentiation and integration.
+
+In graphing a straight line, the slope is often thought of as rise over run where in `f(x) = mx + b`, `m` is the slope of the line.  The **slope** of a function is the rate of change with respect to itself at a given point.  The **derivative** of a function is a function that gives the slope of the tangent line.  This has to do with the function's limit, also known as the **instantaneous rate of change**.  The derivative is also denoted by `dy/dx`.  A **second derivative** measures how the rate of change of a quantity is itself changing.
+
+An **integral** assigns numbers to functions in a way that can describe displacement, area, volume, and other concepts that arise by combining infinitesimal data.  There are two main types of integrals.  An **indefinite integral** simply reverses a derivative.  A **definite integral** has an upper and lower bound.
 
 ---
 
@@ -1137,7 +1155,7 @@ A **leverage point** is an observation with an unusual X value.  We calculate le
 
 **QQ plots** allow you to test normality by dividing your normal curve into n + 1 sections, giving you a visual for normality.  **Omitted variable bias** is when a variable you leave out of the model inflates the value of other variables which should be omitted had the original variable been included.
 
-**Categorical variables** take a non-numeric value such as gender.  When using a categorical variable, you use a constant of all ones and then other variables (such as removing one ethnicity as the constant and adding two new variables for two other ethnicities).  To vary the slop, you can add an **interaction term** such as income multiplied by whether they're a student.  An **interaction effect** would be, for instance, when radio advertisements combined with tv has a more pronounced effect than separate.  This can be dealt with by multplying the two.  
+**Categorical variables** take a non-numeric value such as gender.  When using a categorical variable, you use a constant of all ones and then other variables (such as removing one ethnicity as the constant and adding two new variables for two other ethnicities).  To vary the slop, you can add an **interaction term** such as income multiplied by whether they're a student.  An **interaction effect** would be, for instance, when radio advertisements combined with tv has a more pronounced effect than separate.  This can be dealt with by multiplying the two.  
 
 Here are some potential transformations:
 
@@ -1150,9 +1168,17 @@ Here are some potential transformations:
 | Logarithmic | Independent variable = log(x) |y = β0 + β1log(x) | y^ = β0 + β1log(x) |
 | Power | Dep and Ind variables = log(y) and log(x) |log(y) = β0 + β1log(x) | y^ = 10**(β0 + β1log(x)) |
 
+Note that a logarithm is the inverse operation to exponentiation.  That means the logarithm of a number is the exponent to which another fixed number, the base, must be raised to produce that number.  In stats and math, we often assume the natural log.  In computer science, we often assume log base 2
+
 ![Transformations] (https://github.com/conorbmurphy/galvanizereference/blob/master/images/transformations.png)
 
-Reference: http://emp.byui.edu/brownd/stats-intro/dscrptv/graphs/qq-plot_egs.htm
+This is closely related to **conic sections**.  A conic is the intersection of a plane and a right circular cone.  The four basic types of conics are parabolas, ellipses, circles, and hyperbolas.
+
+![Conics](https://github.com/conorbmurphy/galvanizereference/blob/master/images/conics.png)
+
+Reference:
+* [Interpreting Q-Q plots](http://emp.byui.edu/brownd/stats-intro/dscrptv/graphs/qq-plot_egs.htm)
+* [Introduction to Conics](http://www.sparknotes.com/math/precalc/conicsections/section1.rhtml)
 
 
 ### Logistic Regression ###
