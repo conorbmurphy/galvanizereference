@@ -21,6 +21,7 @@
     ** [scipy](#scipy)  
     ** [statsmodels](#statsmodels)  
     ** [sklearn](#sklearn)  
+    ** [boto](#boto)
     ** [Plotting with matplotlib and seaborn](#plotting-with-matplotlib-and-seaborn)  
  * [SQL](#sql)  
  * [MongoDB and Pymongo](#mongodb-and-pymongo)  
@@ -475,6 +476,27 @@ A few other fun tools:
 
 ---
 
+### boto ###
+
+Boto is the python interface to Amazon Web Services.  Let's walk through an example of saving files to s3 assuming that kinks of setting up AWS creditials have already been worked out.
+
+      import boto
+      conn = boto.connect_s3() # make sure boto is up to date for this to work on ec2
+      print conn # confirms connection
+
+      conn.get_all_buckets() # prints all buckets
+      new_bucket = conn.create_bucket('new_bucket') # creates new bucket
+      new_key = new_bucket.new_key('new_file.txt')
+      new_key.set_contents_from_string('file content here')
+      new_bucket.get_all_keys() # lists all files
+
+      for key in new_bucket.get_all_keys(): # can only delete empty buckets
+        key.delete()
+      new_bucket.delete()
+
+
+---
+
 ### Plotting with matplotlib and seaborn ###
 
 Matplotlib is the defacto choice for plotting in python.  There's also Plotly, Bokeh, Seaborne, Pandas, and ggplot.  Seaborne and Pandas were both built on matplotlib.
@@ -649,13 +671,14 @@ Reference:
 
 Git is the version control software.  Github builds a UI around git.  A repo is a selection of files (usually code, not data— *data on github is not a preferred practice*).  You can fork a repo, so it becomes your copy of the repo.  Then you can clone that repo you’re making a copy of it on your local file system.  This puts it on your computer.  You now have three copies: the main repo, your repo, and your clone on your computer.  You should commit the smallest changes to the code.
 
-* git add [file name] # add new files; can also use '.' instead of specific file name
-* git commit -m “message” # you have to add a message for a git commit  If you forget the message, it will open vim so type “:q” to get out of it.  This adds a commit to the code on the local file system.  You can go back if need be.
-* git commit -am “message” # commits all new files with the same message
-* git push # This pushes all commits to your repo on the cloud.  These won’t make it back to the original repo
-* git clone [url] # clones repo to your machine
-* git status # check the commit status
-* git log # shows the log status of
+* `git add [file name]`: add new files; can also use '.' instead of specific file name
+* `git commit -m “message”`: you have to add a message for a git commit  If you forget the message, it will open vim so type “:q” to get out of it.  This adds a commit to the code on the local file system.  You can go back if need be.
+* `git commit -am “message”`: commits all new files with the same message
+* `git push`: This pushes all commits to your repo on the cloud.  These won’t make it back to the original repo
+* `git clone [url]`: clones repo to your machine
+* `git status`: check the commit status
+* `git log`: shows the log status of
+* `git fetch upstream`: fetches upstream changes
 
 Adding is building to a commit.  Ideally a commit would be a whole new feature/version.  *It’s only with commands that have the word ‘force’ that you risk losing data.*  When you make a pull request, it means you have a new version of a repo and you want these to be a part of the original repo.
 
@@ -704,6 +727,7 @@ Resources:
 * `ps waux`: shows you all current processes (helpful for finding open databases)
 * `xcode-select --install`: updates command line tools (often needed after an OS update)
 * `wget [url]`: downloads a given file
+* `curl -v -X GET [website]`: makes a GET HTTP request
 * `df`: checks disk usage
 
 You can also access your bash profile with `atom ~/.bash_profile`
@@ -725,6 +749,10 @@ Here are a few tools for setting up a developing environment and creating virtua
 [Virtualenv](https://virtualenv.pypa.io/en/stable/) is a tool to accomplish similar outcomes.
 
 [Oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) is a tool for zsh config and command line themes.
+
+Vagrant is also a tool for virtual environments.  Install [Virtual Box](https://www.virtualbox.org/wiki/Downloads) first with the gist [coe here](https://gist.github.com/learncodeacademy/5f84705f2229f14d758d).  You can follow this [tutorial](https://www.youtube.com/watch?v=PmOMc4zfCSw).
+
+Docker provides a container for a given application.  A container is different from a vitual machine in that a container virtualizes the operating system as well so that different containers cannot see one another.
 
 ---
 
@@ -1708,7 +1736,7 @@ https://www.analyticsvidhya.com/blog/2015/12/complete-tutorial-time-series-model
 
 ### Web-Scraping ###
 
-The general rule of thumb for web-scraping is that if you can see it, you can scrape it.  HTTP is the hypertext transfer protocol, or the protocol for transfering documents across the internet.  There are other protocols like git, smtp (for emails), ftp, etc.  The internet is these connections.  HTTP can't do much: it's a stateless and dumb framework and it's hard for a site to know the specifics of your traffic to the site.  There are four actions in HTTP with little preconceived notion of how these work:
+The general rule of thumb for web-scraping is that if you can see it, you can scrape it.  **HTTP** is the hypertext transfer protocol, or the protocol for transfering documents across the internet.  There are other protocols like git, smtp (for emails), ftp, etc.  The internet is these connections.  HTTP can't do much: it's a stateless and dumb framework and it's hard for a site to know the specifics of your traffic to the site.  There are four actions in HTTP with little preconceived notion of how these work:
 
 * `GET`: think of it as to read.  This is most of what you do
 * `PUT`: think of it like an edit, such as editing a picture
