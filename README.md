@@ -26,7 +26,7 @@
  * [SQL](#sql)  
  * [MongoDB and Pymongo](#mongodb-and-pymongo)  
  * [Git](#git)  
- * [Command Line](#command-line)  
+ * [Unix](#unix)  
  * [Development and Virtual Environments](#development-and-virtual-environments)  
 * Linear Algebra, Probability, and Statistics
  * [Linear Algebra](#linear-algebra)  
@@ -703,19 +703,32 @@ Resources:
 
 ---
 
-## Command Line ##
+## Unix ##
 
 * `ls`: list files in current directory
 * `ls -la`: list all files including hidden directories
 * `cd directory`: change directories to directory
 * `cd ..`: navigate up one directory
-* `mkdir new-dir`: create a directory called new-dir
+* `mkdir new-dir new-dir2`: create a directory called new-dir and new-dir2
 * `rm some-file`: remove some-file
 * `rm -rf some-dir`: remove some-dir
+* `rmdir some-dir`: remove some-dir
 * `man some-cmd`: pull up the manual for some-cmd
 * `pwd`: find the path of the current directory
 * `mv path/to/file new/path/to/file`: move a file or directory (also used for renaming)
-* `cp path/to/file new/path/to/file`: copy a file or directory
+* `cp path/to/file new/path/to/file`: copy a file or directory (use -r for recursive when copying a directory)
+* `cat`: reads a file
+* `cat > text.txt`: opens file to input text (close with CTRL+D); use `>>` to append to end of the text
+* `head`: reads the first few lines of a file (use flag of number of words to show)
+* `tail`: reads the last few lines of a file
+* `diff`: looks at the difference between two files
+* `wc`: word count
+* `uniq`: unique values
+* `grep`: search
+* `cat text.txt | sort > text2.txt`: pipes the output of cat through sort and saves it to text2.txt
+* `ls */file`: * is a wildcard; this could be used to find a file
+* `cut`
+* `paste`
 * `find . -name blah`: find files in the current directory (and children) that have blah in their name
 * To jump to beginning of line: __CTRL__ + __a__
 * To jump to end of line: __CTRL__ + __e__
@@ -725,6 +738,7 @@ Resources:
 * `Ctr-Z`: puts current process to the background.  
 * `fg`: brings the suspended process to the foreground
 * `ps waux`: shows you all current processes (helpful for finding open databases)
+* `top`: gives you the processes too
 * `xcode-select --install`: updates command line tools (often needed after an OS update)
 * `wget [url]`: downloads a given file
 * `curl -v -X GET [website]`: makes a GET HTTP request
