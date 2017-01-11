@@ -61,7 +61,12 @@
     ** [Neural Networks](#neural-networks)  
  * [Unsupervised Learning](#unsupervised-learning)  
     ** [KMeans Clustering](#kmeans-clustering)  
-* Special Topics  
+    ** [Hierarchical Clustering](#hierarchical-clustering)  
+    ** [Dimension Reduction](#dimension-reduction)  
+    ** [Principle Component Analysis](#principle-component-analysis)  
+    ** [Singular Value Decomposition](#singular-value-decomposition)  
+    ** [Non-Negative Matrix Factorization](#non---negative-matrix-factorization)  
+* [Special Topics](#special-topics)  
  * [Natural Language Processing](#natural-language-processing)  
  * [Time Series](#time-series)  
  * [Web-Scraping](#web---scraping)  
@@ -1515,6 +1520,9 @@ In this method, you decide two things: your **linkage**, or how you choose the p
 
 Take for instance grouping customers by online purchases.  If one customer buys many pairs of socks and one computer, the computer will not show up as significant when in reality it could be the most important purchase.  This can be corrected by subtracting the mean and scaling by the standard deviation (see pg. 399 of ISLR).
 
+Resources:
+* [Maximally Informative Hierarchical Representations of High-Dimensional Data](http://www.jmlr.org/proceedings/papers/v38/versteeg15.pdf)
+
 ### Dimension Reduction ###
 
 So far, we've used the following techniques for reducing dimensionality:
@@ -1539,7 +1547,7 @@ A **scree plot** shows the eigenvalues in non-increasing order with lambda on th
 
 PCA weakness: https://gist.github.com/lemonlaug/976543b650e53db24ab2
 
-### Singular Value Decomposition (SVD) ###
+### Singular Value Decomposition ###
 
 **Singular value decomposition (SVD)** is a factorization of a real or complex matrix.  We can use SVD to determine what we call **latent features**.  Every matrix X has a unique decomposition and SVD returns three matrices:
 
@@ -1570,6 +1578,10 @@ Here is the process:
 
 You can use this strategy for a number of things such as theme analysis by having movies as your columns and users as your rows with the intersect being their rating.  You can also have pixel values flattened on the columns and the image as the row.  Part of the original motivation behind NMF was wanting to know the parts that contribute to an image where PCA would give a result but you couldn't see recognizable features in the result.  This is good for textual analysis too because it can't have anti-values (e.g. this text is negative eggplant).
 
+
+---
+
+## Special Topics ##
 
 ---
 
