@@ -150,12 +150,14 @@ Python has a few base datatypes whose different characteristics can be leveraged
   * dict['newkey'] = 'value'
   * defaultdict (from collections) can be used to avoid key errors
   * Counter(dict).most_common(1) # (also from collections) orders dict values
-* `set`: mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set) in that they allow only one of a given value.
+* `set`: mutable, uses append, also uses hashing.  Sets are like dict's without values (similar to a mathematical set) in that they allow only one of a given value.  You can do set operations on them
   * s = set([1, 2, 3])
   * s2 = {3, 4, 5} # equivalanetly
   * s & s2 # returns the intersection (3)
   * set.intersection(*[s, s2]) # equivalently, where * is list expansion
   * s.add(4) # in place operation
+  * s.union(s2)
+
 
 ### Built-in Functions ###
 
@@ -286,6 +288,9 @@ nosetests
 
 You need assertions in unittest in order to test things.
 
+Resources:
+* (Debugging exeercises for pdb)[http://tjelvarolsson.com/blog/five-exercises-to-master-the-python-debugger/]
+
 ### A Note on Style ###
 
 Classes are capitalized LikeThis (camel case) and functions like_this (snake case).
@@ -315,36 +320,36 @@ Here are some common errors to avoid:
 
 Python offers an array of packages instrumental in its rise as one of the leading languages for data science.  Here are some useful packages, some of which will be explored in detail below:
 
-* Fundamental Libraries for Scientific Computing
-  ** `IPython Notebook`: an alternative Python command line shell for interactive computing
-  ** `NumPy`: the most fundamental package for efficient scientific computing through linear algebra routines
-  ** `pandas`: a library for operating with table-like structures and data munging
-  ** `SciPy`: one of the core packages for scientific computing routines
-* Math and Statistics
-  ** `Statsmodels`: statistical data analysis mainly through linear models and includes a variety of statistical tests
-  ** `SymPy`: symbolic mathematical computations
-  ** `Itertools`: combinatorics generators
-* Machine Learning
-  ** `Scikit-learn`: includes a broad range of different classifiers, cross-validation and other model selection methods, dimensionality reduction techniques, modules for regression and clustering analysis, and a useful data-preprocessing module
-  ** `Shogun`: ML library focussed on large-scale kernel methods
-  ** `PyBrain`: Python-Based Reinforcement Learning, Artificial Intelligence and Neural Network Library
-  ** `PyLearn2`: research library
-  ** `PyMC`: Bayesian statistics library
-* Plotting and Visualization
-  ** `matplotlib`: the defacto plotting library
-  ** `seaborn`: adds features to matplotlib like violin plots and more appealing aesthetics
-  ** `ggplot`: a port of R's ggplot2
-  ** `plotly`: focus on interactivity
-  ** `Bokeh`: aesthetic layouts and interactivity to produce high-quality plots for web browsers
-  ** `d3py`: creates interactive data visualizations based on d3
-  ** `prettyplotlib`: enhancement library for matplotlib (good for presentations)
-* Database Interaction
-  ** `Psycopg2`: access to postgres databases
-  ** `Pymongo`: access to MongoDB databases
-  ** `sqlite3`: access to SQLite databases
-* Data formatting and storage
-  ** `bs4`: defacto library for parsing content from webscraping
-  ** `csvkit`: has some functionality beyond pandas for csv's
+* Fundamental Libraries for Scientific Computing  
+  ** `IPython Notebook`: an alternative Python command line shell for interactive computing  
+  ** `NumPy`: the most fundamental package for efficient scientific computing through linear algebra routines  
+  ** `pandas`: a library for operating with table-like structures and data munging  
+  ** `SciPy`: one of the core packages for scientific computing routines  
+* Math and Statistics  
+  ** `Statsmodels`: statistical data analysis mainly through linear models and includes a variety of statistical tests  
+  ** `SymPy`: symbolic mathematical computations  
+  ** `Itertools`: combinatorics generators  
+* Machine Learning  
+  ** `Scikit-learn`: includes a broad range of different classifiers, cross-validation and other model selection methods, dimensionality reduction techniques, modules for regression and clustering analysis, and a useful data-preprocessing module  
+  ** `Shogun`: ML library focussed on large-scale kernel methods  
+  ** `PyBrain`: Python-Based Reinforcement Learning, Artificial Intelligence and Neural Network Library  
+  ** `PyLearn2`: research library  
+  ** `PyMC`: Bayesian statistics library  
+* Plotting and Visualization  
+  ** `matplotlib`: the defacto plotting library  
+  ** `seaborn`: adds features to matplotlib like violin plots and more appealing aesthetics  
+  ** `ggplot`: a port of R's ggplot2  
+  ** `plotly`: focus on interactivity  
+  ** `Bokeh`: aesthetic layouts and interactivity to produce high-quality plots for web browsers  
+  ** `d3py`: creates interactive data visualizations based on d3  
+  ** `prettyplotlib`: enhancement library for matplotlib (good for presentations)  
+* Database Interaction  
+  ** `Psycopg2`: access to postgres databases  
+  ** `Pymongo`: access to MongoDB databases  
+  ** `sqlite3`: access to SQLite databases  
+* Data formatting and storage  
+  ** `bs4`: defacto library for parsing content from webscraping  
+  ** `csvkit`: has some functionality beyond pandas for csv's  
   ** `PyTables`: good for large datasets
 
 ### pandas ###
@@ -583,7 +588,7 @@ The order of evaluation of a SQL SELECT statement is as follows:
 Here are some common commands on SELECT statements:
 
 * `*`
-* `COUNT`
+* `COUNT`: `COUNT(*)` is slower than counting a specific column.  `COUNT(1)` is fastest, as it's only counting rows
 * `MAX or MIN`
 * `DISTINCT`
 * `SUM`
@@ -607,6 +612,8 @@ While data scientists are mostly accessing data, it's also useful to know how to
 
 Data types include varchar, integer, decimal, date, etc.  The size specifies the maximum length of the column of the table.
 
+Use `ALTER TABLE` to add indexes.
+
 Resources:
 * (SQLZoo)[http://sqlzoo.net/wiki/SELECT_basics]
 * (Illustrated Example of Joins)[https://blog.codinghorror.com/a-visual-explanation-of-sql-joins/]
@@ -619,6 +626,10 @@ Resources:
 You can make connections to Postgres databases using the python package psycopg2 including creating cursors for SQL queries, commit SQL actions, and close the cursor and connection.  **Commits are all or nothing: if they fail, no changes will be made to the database.**  You can set `autocommit = True` to automatically commit after each query.  A cursor points at the resulting output of a query and can only read each observation once.  If you want to see a previously read observation, you must rerun the query.
 
 **Beware of SQL injection where you add code.**  Use `%s` where possible, which will be examined by psychopg2 to make sure you're not injecting anything.  You can use ORM's like ruby on rails or the python equivalent jengo to take care of SQL injection too.
+
+Resources:
+* (pgAdmin for connecting to databases)[https://www.pgadmin.org/]
+* (Amazon Relational Database Service for setting up databases)[https://aws.amazon.com/rds/]
 
 ---
 
@@ -649,12 +660,20 @@ Inserting data
 
 Querying data
 
-      db.users.find({ name: 'Jon'}) # find by single field
-      db.users.find({ car: { $exists : true } }) # find by presence of field
-      db.users.find({ friends: 'Henry' }) # find by value in array
-      db.users.find({}, { name: true }) # field selection (only return name from all documents)
+      db.users.find({'name': 'Jon'}) # find by single field
+      db.users.find({'name': 'Jon', 'sex': 'male'}) # multi-field query
+      db.users.find({}, { name: true }) # field selection (only return name from all documents).  Also known as projection
+      db.users.find_one({'name': 'Jon'}) # only returns the first response
 
-You use this nested structure, similar to JSON.
+      db.users.find({'age': {'$gt': 25}}) # age > 25 (see below for inequality operators)
+      db.users.find({'car': {'$exists' : True}}) # find by presence of field
+      db.users.find({'name': {'$regex' : "[Cc]ar | [Tt]im"}}) # regulary expressions (regex)
+      db.users.find({'birthyear': {'$in': [1988, 1991, 2002]}}).count() # number of people born in one of those years
+      db.users.find({'cities_lived': {'$all': ['Portland', 'Houston']}}) # unlike $in, must match all values in the array
+      db.users.find({'user.name': 'tim'}) # dot notation queries into the subfield name in user
+
+
+You use this nested structure, similar to JSON.  Use `.pretty()` at the end of a query for a more readable format.
 
 Updating data
 
@@ -666,6 +685,14 @@ Updating data
 Deleting data
 
       db.users.remove({})
+
+Inequality operators:
+* `$gt`: greater than
+* `$lt`: less than
+* `$gte`: greater than or equal to
+* `$lte`: less than or equal to
+* `$ne`: not equal
+
 
 Reference:
 * [Good reference](http://openmymind.net/mongodb.pdf)
@@ -701,6 +728,18 @@ Here's a workflow:
 10. Repeat
 
 With merge issues, you'll have to write a merge message followed by, `esc`, `:wq`, and then `enter`.
+
+To keep your fork up to date (courtesy of [ChristinaSolana](https://gist.github.com/CristinaSolana/1885435)):
+
+Clone and add remote from original repo in your forked repo:
+
+        git clone git@github.com:YOUR-USERNAME/YOUR-FORKED-REPO.git
+        git remote add upstream git://github.com/ORIGINAL-DEV-USERNAME/REPO-YOU-FORKED-FROM.git
+        git fetch upstream
+
+Update your fork from the original repo:
+
+        git pull upstream master
 
 Resources:
 * [Git School](https://try.github.io/levels/1/challenges/1)
@@ -748,6 +787,7 @@ Resources:
 * `wget [url]`: downloads a given file
 * `curl -v -X GET [website]`: makes a GET HTTP request
 * `df`: checks disk usage
+* `kill`: kills a process.  Use a numerical flag for priority (9 for highest)
 
 You can also access your bash profile with `atom ~/.bash_profile`
 
@@ -1673,21 +1713,21 @@ For EDA, you want to plot time series, ACF and PACF.  You want hypotheses which 
 
 Estimating ARIMA models using Box-Jenkins: here's the main Box-Jenkins methodology:
 
-1. Exploratory data analysis (EDA):
-** plot time series, ACF, PACF
-** identify hypotheses, models, and data issues
-** aggregate to an appropriate grain
-2. Fit model(s)
-** Difference until stationary (possibly at different seasonalities!)
-** Test for a unit root (Augmented Dicky-Fuller (ADF)): if found, is evidence data still has trend
-** However: too much differencing causes other problems
-** Transform until variance is stable
-3. Examine residuals: are they white noise?
-4. Test and evaluate on out of sample data
-5. Worry about:
-** structural breaks
-** forecasting for large h with limited data needs a "panel of experts"
-** seasonality, periodicity
+1. Exploratory data analysis (EDA):  
+** plot time series, ACF, PACF  
+** identify hypotheses, models, and data issues  
+** aggregate to an appropriate grain  
+2. Fit model(s)  
+** Difference until stationary (possibly at different seasonalities!)  
+** Test for a unit root (Augmented Dicky-Fuller (ADF)): if found, is evidence data still has trend  
+** However: too much differencing causes other problems  
+** Transform until variance is stable  
+3. Examine residuals: are they white noise?  
+4. Test and evaluate on out of sample data  
+5. Worry about:  
+** structural breaks  
+** forecasting for large h with limited data needs a "panel of experts"  
+** seasonality, periodicity  
 
 An Autocorrelation Function (ACF) is a function of lag, or a difference in time.  The autocorrelation will start at 1 because everything is self-correlated and then we'll see put a confidence interval over it.  You want to address this seasonality in your model.  A Partial Autocorrelation Function (PACF) looks at what wasn't picked up by the ACF.  ACF goes with MA; PACF goes with AR.  *In a certain sense, all we're doing is taking care of ACF and PACF until we just see noise, then we run it through ARIMA.*  You deal with trends first through linear models, clustering on segments, or whatever other method.  Then you deal with perodicity using ACF and PACF.  You then deal with cycles until you see only noise.
 
@@ -1969,7 +2009,7 @@ Resources:
 
 ### Parallelization ###
 
-CPython, the C interpretation of Python and the most common installation, uses a **Global interpreter lock (GIL)**, or a mechanism used in computer language interpreters to synchronize the execution of threads so that only one native thread can execute at a time.  If a global variable is being accessed by multiple threads, it can excecute wrongly.  Given this limitation, there are three options for processes:
+CPython, the C interpretation of Python and the most common installation, uses a **Global interpreter lock (GIL)**, or a mechanism used in computer language interpreters to synchronize the execution of threads so that only one native thread can execute at a time.  If a global variable is being accessed by multiple threads, it can excecute wrongly.  This is a substantial limitation for python.  Given this limitation, there are three options for processes:
 
 1. `Serial`: processes happen in serial succession, preventing conflicts between threads.
 2. `Multi-threaded`: operating out of shared memory, multi-threaded tasks can be pictured as sub-tasks of a single process farmed out to different threads.  If you're CPU-bound, you can only create as many threads as you have cores.  If you're I/O bound, threading can help you run many things at once (e.g. webscraping if you're not rate limited)
@@ -2017,22 +2057,37 @@ Resources:
 
 ### Apache Hadoop ###
 
-Apache Hadoop is an open-source software framework for distributed storage and distributed processing of very large data sets on computer clusters built from commodity hardware.  The core of Apache Hadoop consists of a storage part, known as **Hadoop Distributed File System (HDFS)**, and a processing part called **MapReduce**.
+Apache Hadoop is an open-source software framework for distributed storage and distributed processing of very large data sets on computer clusters built from commodity hardware.  The core of Apache Hadoop consists of a storage part, known as **Hadoop Distributed File System (HDFS)**, and a processing part called **MapReduce**.  This framework addresses both the storage and processing problems.  **MRJob** is the python package that allows you to interact with Hadoop.
+
+Hadoop defaults to splitting data into 64mb chunks spread across 3 machines at random.  The NameNode is knows how to put all of these chunks back together.  While this used to be a single point of failure, there is now at least one secondary NameNode that can be used in case the main node fails.
+
+MapReduce is commonly summarized by the phrase *bring the code to the data.*  MapReduce has four stages:
+
+1. `Mapping`: Maps a function on given nodes
+2. `Combining`: Combines results on those given nodes
+2. `Shufflesort`: Moves results between nodes
+3. `Reducing`: Reduces final result
+
+Use `hadoop fs -ls` to see your data.  You can run jobs with `hs mapper_script.py reducer_script.py destination_directory`
 
 ---
 
 ### Apache Spark ###
 
-Apache Spark is a cluster computing platform designed to be fast and general-purpose.  Spark extends the popular MapReduce model to efficiently sup‐port more types of computations, including interactive queries and stream processing.  Spark is designed to cover a wide range of workloads that previously required separate distributed systems, including batch applications, iterative algorithms, interactive queries, and streaming.  It powers multiple higher-level components specialized for various workloads, such as SQL or machine learning.
+Apache Spark is a cluster computing platform designed to be fast and general-purpose.  Spark extends the popular MapReduce model to efficiently support more types of computations, including interactive queries and stream processing.  Spark is designed to cover a wide range of workloads that previously required separate distributed systems, including batch applications, iterative algorithms, interactive queries, and streaming.  It powers multiple higher-level components specialized for various workloads, such as SQL or machine learning.  Spark can sit on top of hadoop.
 
-The Spark stack is as follows:
+`pyspark` allows for interaction with Spark within python.  The Spark stack is as follows:
 
-* `core`: Spark Core is also home to the API that defines resilient distributed datasets (RDDs), which are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel. Spark Core provides many APIs for building and manipulating these collections.
+* `core`: Spark Core is also home to the API that defines **resilient distributed datasets (RDDs)**, which are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel.  RDDs are immutable. Spark Core provides many APIs for building and manipulating these collections.
 * `Spark SQL`: a package for working with structured data
 * `Streaming`: enables the processing of live streams of data
 * `MLlib`: common machine learning functionality designed to scale
 * `GraphX`: library for manipulating graphs
 * `Cluster managers`: Spark can run over a variety of cluster managers such as Hadoop YARN and Apache Mesos
+
+A **wide transformation** shuffles data across nodes while a **narrow transformation** keeps the transformation on a given node.  Using `reduceByKey` is comparable to a shufflesort where you reduce on a node before sending data across nodes.  When there is data loss, Spark will analyze the **Directed Acyclic Graph (DAG) ** to trace back the analysis to through its dependencies to see where a given partition was loss.  This also allows Spark to run operations in parallel.
+
+**Caching** is an important tool with Spark where you can speed up your analysis by reading data out of memory instead of disk.  **Broadcast variables** allows peer-to-peer transfer to speed up transfering data across nodes.
 
 References
 * [RDD Tranformations](http://spark.apache.org/docs/0.7.3/api/pyspark/pyspark.rdd.RDD-class.html)
@@ -2112,3 +2167,12 @@ Common Interview Questions:
 
 Cracking the Coding Interview
 O'Reilly (Including salary averages): https://www.oreilly.com
+
+## Notes for future expansion
+
+* Summarize ML approaches
+* Week 8 notes
+* Week 9 - Data Products
+* Week 10 - Runtime Complexity
+* Add more info on regularization
+* Derive linear regression and PCA
