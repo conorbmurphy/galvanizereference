@@ -66,13 +66,19 @@
     ** [Principle Component Analysis](#principle-component-analysis)  
     ** [Singular Value Decomposition](#singular-value-decomposition)  
     ** [Non-Negative Matrix Factorization](#non---negative-matrix-factorization)  
+* [Data Engineering](#data-engineering)  
+ * [Parallelization](#parallelization)  
+ * [Apache Hadoop](#apache-hadoop)  
+ * [Apache Spark](#apache-spark)  
 * [Special Topics](#special-topics)  
  * [Natural Language Processing](#natural-language-processing)  
  * [Time Series](#time-series)  
  * [Web-Scraping](#web---scraping)  
  * [Profit Curves](#profit-curves)  
  * [Imbalanced Classes](#imbalanced-classes)  
- * [Parallelization](#parallelization)
+ * [Parallelization](#parallelization)  
+ * [Recommender systems](#recommender-systems)  
+ * [Graph Theory](#graph-theory)  
  * [Helpful Visualization](#helpful-visualizations)  
  * [Note on Style and Other Tools](#note-on-style-and-other-tools)  
  * [Career Points](#career-pointers)  
@@ -1620,6 +1626,125 @@ You can use this strategy for a number of things such as theme analysis by havin
 
 
 ---
+## Data Engineering
+---
+
+### Parallelization ###
+
+CPython, the C interpretation of Python and the most common installation, uses a **Global interpreter lock (GIL)**, or a mechanism used in computer language interpreters to synchronize the execution of threads so that only one native thread can execute at a time.  If a global variable is being accessed by multiple threads, it can excecute wrongly.  This is a substantial limitation for python.  Given this limitation, there are three options for processes:
+
+1. `Serial`: processes happen in serial succession, preventing conflicts between threads.
+2. `Multi-threaded`: operating out of shared memory, multi-threaded tasks can be pictured as sub-tasks of a single process farmed out to different threads.  If you're CPU-bound, you can only create as many threads as you have cores.  If you're I/O bound, threading can help you run many things at once (e.g. webscraping if you're not rate limited)
+3. `Multi-processing`: operating out of distributed memory, this submits multiple processes to completely separate memory locations meaning each process will run completely independently from the next.  This has the overhead of communicating between multiple processes.  If you're CPU-bound, this will significantly increase your speed.  It isn't helpful for I/O bound problems.
+
+A simple example of threading:
+
+      from threading import Thread
+      def worker(num):
+          """thread worker function"""
+          print 'Worker: %s' % num
+          return
+      threads = []
+      for i in range(5):
+          t = threading.Thread(target=worker, args=(i,))
+          threads.append(t)
+          t.start()
+
+A simple example of multiprocessing:
+
+      import multiprocessing as mp
+      processes = [mp.Process(target=rand_string, args=(5, output)) for x in range(4)] # define processes
+      for p in processes:
+        p.start() # start processes
+      for p in processes:
+        p.join() # exit them
+
+A simpler way than to maintain a list of processes is using the `Pool` class:
+
+      pool = mp.Pool(processes=4)
+      results = pool.map(function, range(1,7))
+      results2 = pool.apply(function, range(1,7)) # Another option
+      results = [pool.apply_async(function, args=(samples, x, w)) for w in widths] # asychronous application
+      print(results)
+
+
+“Premature optimization is the root of all evil” - Computer Scientists
+
+Resources:
+* [Multiprocessing in Python](https://www.youtube.com/watch?v=X2mO1O5Nuwg)
+* [Intro to Multiprocessing](http://sebastianraschka.com/Articles/2014_multiprocessing.html)
+* [Threading](https://pymotw.com/2/threading/)
+
+---
+
+### Apache Hadoop ###
+
+Apache Hadoop is an open-source software framework for distributed storage and distributed processing of very large data sets on computer clusters built from commodity hardware.  It is the open-source implementation of the MapReduce paradigm coming from a paper published by Google and development by Yahoo.  The core of Apache Hadoop consists of a storage system, known as **Hadoop Distributed File System (HDFS)**, and a processing paradigm called **MapReduce**.  This framework addresses both the storage and processing problems.  **MRJob** is the python package that allows you to interact with Hadoop originating from Yelp.
+
+Hadoop defaults to splitting data into 64mb chunks spread across 3 machines at random.  The NameNode is knows how to put all of these chunks back together.  While this used to be a single point of failure, there is now at least one secondary NameNode that can be used in case the main node fails.
+
+MapReduce is commonly summarized by the phrase *bring the code to the data.*  MapReduce has four stages:
+
+1. `Mapping`: Maps a function on given nodes
+2. `Combining`: Combines results on those given nodes
+2. `Shufflesort`: Moves results between nodes
+3. `Reducing`: Reduces final result
+
+Use `hadoop fs -ls` to see your data.  You can run jobs with `hs mapper_script.py reducer_script.py destination_directory`
+
+---
+
+### Apache Spark ###
+
+Apache Spark is a cluster computing platform designed to be fast and general-purpose.  Spark extends the popular MapReduce model to efficiently support more types of computations, including interactive queries and stream processing.  Spark is designed to cover a wide range of workloads that previously required separate distributed systems, including batch applications, iterative algorithms, interactive queries, and streaming.  It powers multiple higher-level components specialized for various workloads, such as SQL or machine learning.  Spark can sit on top of hadoop.  Spark is significantly faster than hadoop because it is saving computation in memory rather than to disk and thanks to its understanding of directed, acyclic tasks.
+
+`pyspark` allows for interaction with Spark within python.  The Spark stack is as follows:
+
+* `core`: Spark Core is also home to the API that defines resilient distributed datasets and dataframe.
+* `Spark SQL`: a package for working with structured data.  It puts a schema on RDDs, enabling you to use SQL and DataFrame syntax.
+* `Streaming`: enables the processing of live streams of data
+* `MLlib`: common machine learning functionality designed to scale
+* `GraphX`: library for manipulating graphs
+* `Cluster managers`: Spark can run over a variety of cluster managers such as Hadoop YARN and Apache Mesos
+
+**Resilient distributed datasets (RDDs)** are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel.  RDDs are immutable. Spark Core provides many APIs for building and manipulating these collections.  Use RDDs when you need low-level transformations and actions on your data and are working with unstructured or schema-less data.  
+
+There are two types of operations on your data.  A **transformation** like `filter` or `map` return a new RDD.  Its evaluation is **lazy** so it does not take place immediately.  Rather, an **action** triggers the execution of your transformations.  This includes operations such as `take` or `collect`.
+
+Here's some starter code:
+
+        # Creating RDDs
+        rDD = sc.parallelize(data, 4) # Creates an RDD from data with 4 partitions.
+        rDD2 = sc.textFile('readme.md', 4) # creates and RDD from a text file.  Can also use s3, hadoop hdfs, etc.
+
+        # Some transformations
+        rDD.map(lambda x: x*2) # maps a function to the elements
+        rDD.flatMat(lambda x: [x, x+5]) # computes the same as map but flattens the result
+        rDD.filter(lambda x: x % 2 == 0) # returns the element if it evaluates to True
+        rDD.distinct() # returns unique elements
+
+        # Some actions
+        rDD.reduce(lambda a, b: a * b) # aggregates the datasets by taking two elements and returning one (returns the product of all elements).  This must be communicative and associative
+        rDD.take(n) # returns first n results
+        rDD.collect() # returns all elements (be careful with this)
+        rDD.takeOrdered(n, key=func)
+        rDD.sortByKey()
+        rDD.reduceByKey()
+        rDD.groupByKey() # be careful since this can move a lot of data
+
+
+The other main abstraction is a Spark **DataFrame**, which offers speed-ups over RDDs.  A **Dataset** is a distributed collection of data.  A DataFrame is a Dataset organized into named columns.
+
+A **wide transformation** shuffles data across nodes while a **narrow transformation** keeps the transformation on a given node.  Using `reduceByKey` is comparable to a shufflesort where you reduce on a node before sending data across nodes.  When there is data loss, Spark will analyze the **Directed Acyclic Graph (DAG)** to trace back the analysis to through its dependencies to see where a given partition was loss.  This also allows Spark to run operations in parallel.
+
+**Caching** is an important tool with Spark where you can speed up your analysis by reading data out of memory instead of disk.  **Broadcast variables** allows peer-to-peer transfer to speed up transfering data across nodes.
+
+Tools like **Ganglia** help monitor EMR activity.
+
+References
+* [RDD Tranformations](http://spark.apache.org/docs/0.7.3/api/pyspark/pyspark.rdd.RDD-class.html)
+
+---
 
 ## Special Topics ##
 
@@ -2001,126 +2126,6 @@ You can find communities in your network using the following:
 Resources:
 * NetworkX for a python package
 * Gephi for graphing
-
----
-## Big Data ##
-
----
-
-### Parallelization ###
-
-CPython, the C interpretation of Python and the most common installation, uses a **Global interpreter lock (GIL)**, or a mechanism used in computer language interpreters to synchronize the execution of threads so that only one native thread can execute at a time.  If a global variable is being accessed by multiple threads, it can excecute wrongly.  This is a substantial limitation for python.  Given this limitation, there are three options for processes:
-
-1. `Serial`: processes happen in serial succession, preventing conflicts between threads.
-2. `Multi-threaded`: operating out of shared memory, multi-threaded tasks can be pictured as sub-tasks of a single process farmed out to different threads.  If you're CPU-bound, you can only create as many threads as you have cores.  If you're I/O bound, threading can help you run many things at once (e.g. webscraping if you're not rate limited)
-3. `Multi-processing`: operating out of distributed memory, this submits multiple processes to completely separate memory locations meaning each process will run completely independently from the next.  This has the overhead of communicating between multiple processes.  If you're CPU-bound, this will significantly increase your speed.  It isn't helpful for I/O bound problems.
-
-A simple example of threading:
-
-      from threading import Thread
-      def worker(num):
-          """thread worker function"""
-          print 'Worker: %s' % num
-          return
-      threads = []
-      for i in range(5):
-          t = threading.Thread(target=worker, args=(i,))
-          threads.append(t)
-          t.start()
-
-A simple example of multiprocessing:
-
-      import multiprocessing as mp
-      processes = [mp.Process(target=rand_string, args=(5, output)) for x in range(4)] # define processes
-      for p in processes:
-        p.start() # start processes
-      for p in processes:
-        p.join() # exit them
-
-A simpler way than to maintain a list of processes is using the `Pool` class:
-
-      pool = mp.Pool(processes=4)
-      results = pool.map(function, range(1,7))
-      results2 = pool.apply(function, range(1,7)) # Another option
-      results = [pool.apply_async(function, args=(samples, x, w)) for w in widths] # asychronous application
-      print(results)
-
-
-“Premature optimization is the root of all evil” - Computer Scientists
-
-Resources:
-* [Multiprocessing in Python](https://www.youtube.com/watch?v=X2mO1O5Nuwg)
-* [Intro to Multiprocessing](http://sebastianraschka.com/Articles/2014_multiprocessing.html)
-* [Threading](https://pymotw.com/2/threading/)
-
----
-
-### Apache Hadoop ###
-
-Apache Hadoop is an open-source software framework for distributed storage and distributed processing of very large data sets on computer clusters built from commodity hardware.  It is the open-source implementation of the MapReduce paradigm coming from a paper published by Google and development by Yahoo.  The core of Apache Hadoop consists of a storage system, known as **Hadoop Distributed File System (HDFS)**, and a processing paradigm called **MapReduce**.  This framework addresses both the storage and processing problems.  **MRJob** is the python package that allows you to interact with Hadoop originating from Yelp.
-
-Hadoop defaults to splitting data into 64mb chunks spread across 3 machines at random.  The NameNode is knows how to put all of these chunks back together.  While this used to be a single point of failure, there is now at least one secondary NameNode that can be used in case the main node fails.
-
-MapReduce is commonly summarized by the phrase *bring the code to the data.*  MapReduce has four stages:
-
-1. `Mapping`: Maps a function on given nodes
-2. `Combining`: Combines results on those given nodes
-2. `Shufflesort`: Moves results between nodes
-3. `Reducing`: Reduces final result
-
-Use `hadoop fs -ls` to see your data.  You can run jobs with `hs mapper_script.py reducer_script.py destination_directory`
-
----
-
-### Apache Spark ###
-
-Apache Spark is a cluster computing platform designed to be fast and general-purpose.  Spark extends the popular MapReduce model to efficiently support more types of computations, including interactive queries and stream processing.  Spark is designed to cover a wide range of workloads that previously required separate distributed systems, including batch applications, iterative algorithms, interactive queries, and streaming.  It powers multiple higher-level components specialized for various workloads, such as SQL or machine learning.  Spark can sit on top of hadoop.  Spark is significantly faster than hadoop because it is saving computation in memory rather than to disk and thanks to its understanding of directed, acyclic tasks.
-
-`pyspark` allows for interaction with Spark within python.  The Spark stack is as follows:
-
-* `core`: Spark Core is also home to the API that defines resilient distributed datasets and dataframe.
-* `Spark SQL`: a package for working with structured data.  It puts a schema on RDDs, enabling you to use SQL and DataFrame syntax.
-* `Streaming`: enables the processing of live streams of data
-* `MLlib`: common machine learning functionality designed to scale
-* `GraphX`: library for manipulating graphs
-* `Cluster managers`: Spark can run over a variety of cluster managers such as Hadoop YARN and Apache Mesos
-
-**Resilient distributed datasets (RDDs)** are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel.  RDDs are immutable. Spark Core provides many APIs for building and manipulating these collections.  Use RDDs when you need low-level transformations and actions on your data and are working with unstructured or schema-less data.  
-
-There are two types of operations on your data.  A **transformation** like `filter` or `map` return a new RDD.  Its evaluation is **lazy** so it does not take place immediately.  Rather, an **action** triggers the execution of your transformations.  This includes operations such as `take` or `collect`.
-
-Here's some starter code:
-
-        # Creating RDDs
-        rDD = sc.parallelize(data, 4) # Creates an RDD from data with 4 partitions.
-        rDD2 = sc.textFile('readme.md', 4) # creates and RDD from a text file.  Can also use s3, hadoop hdfs, etc.
-
-        # Some transformations
-        rDD.map(lambda x: x*2) # maps a function to the elements
-        rDD.flatMat(lambda x: [x, x+5]) # computes the same as map but flattens the result
-        rDD.filter(lambda x: x % 2 == 0) # returns the element if it evaluates to True
-        rDD.distinct() # returns unique elements
-
-        # Some actions
-        rDD.reduce(lambda a, b: a * b) # aggregates the datasets by taking two elements and returning one (returns the product of all elements).  This must be communicative and associative
-        rDD.take(n) # returns first n results
-        rDD.collect() # returns all elements (be careful with this)
-        rDD.takeOrdered(n, key=func)
-        rDD.sortByKey()
-        rDD.reduceByKey()
-        rDD.groupByKey() # be careful since this can move a lot of data
-
-
-The other main abstraction is a Spark **DataFrame**, which offers speed-ups over RDDs.  A **Dataset** is a distributed collection of data.  A DataFrame is a Dataset organized into named columns.
-
-A **wide transformation** shuffles data across nodes while a **narrow transformation** keeps the transformation on a given node.  Using `reduceByKey` is comparable to a shufflesort where you reduce on a node before sending data across nodes.  When there is data loss, Spark will analyze the **Directed Acyclic Graph (DAG)** to trace back the analysis to through its dependencies to see where a given partition was loss.  This also allows Spark to run operations in parallel.
-
-**Caching** is an important tool with Spark where you can speed up your analysis by reading data out of memory instead of disk.  **Broadcast variables** allows peer-to-peer transfer to speed up transfering data across nodes.
-
-Tools like **Ganglia** help monitor EMR activity.
-
-References
-* [RDD Tranformations](http://spark.apache.org/docs/0.7.3/api/pyspark/pyspark.rdd.RDD-class.html)
 
 ---
 
