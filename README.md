@@ -76,12 +76,11 @@
  * [Web-Scraping](#web---scraping)  
  * [Profit Curves](#profit-curves)  
  * [Imbalanced Classes](#imbalanced-classes)  
- * [Parallelization](#parallelization)  
  * [Recommender systems](#recommender-systems)  
  * [Graph Theory](#graph-theory)  
  * [Helpful Visualization](#helpful-visualizations)  
  * [Note on Style and Other Tools](#note-on-style-and-other-tools)  
- * [Career Points](#career-pointers)  
+ * [Career Pointers](#career-pointers)  
 
 ---
 
