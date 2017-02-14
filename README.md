@@ -2057,7 +2057,7 @@ Resources:
 
 ### Apache Hadoop ###
 
-Apache Hadoop is an open-source software framework for distributed storage and distributed processing of very large data sets on computer clusters built from commodity hardware.  The core of Apache Hadoop consists of a storage part, known as **Hadoop Distributed File System (HDFS)**, and a processing part called **MapReduce**.  This framework addresses both the storage and processing problems.  **MRJob** is the python package that allows you to interact with Hadoop.
+Apache Hadoop is an open-source software framework for distributed storage and distributed processing of very large data sets on computer clusters built from commodity hardware.  It is the open-source implementation of the MapReduce paradigm coming from a paper published by Google and development by Yahoo.  The core of Apache Hadoop consists of a storage system, known as **Hadoop Distributed File System (HDFS)**, and a processing paradigm called **MapReduce**.  This framework addresses both the storage and processing problems.  **MRJob** is the python package that allows you to interact with Hadoop originating from Yelp.
 
 Hadoop defaults to splitting data into 64mb chunks spread across 3 machines at random.  The NameNode is knows how to put all of these chunks back together.  While this used to be a single point of failure, there is now at least one secondary NameNode that can be used in case the main node fails.
 
@@ -2074,20 +2074,50 @@ Use `hadoop fs -ls` to see your data.  You can run jobs with `hs mapper_script.p
 
 ### Apache Spark ###
 
-Apache Spark is a cluster computing platform designed to be fast and general-purpose.  Spark extends the popular MapReduce model to efficiently support more types of computations, including interactive queries and stream processing.  Spark is designed to cover a wide range of workloads that previously required separate distributed systems, including batch applications, iterative algorithms, interactive queries, and streaming.  It powers multiple higher-level components specialized for various workloads, such as SQL or machine learning.  Spark can sit on top of hadoop.
+Apache Spark is a cluster computing platform designed to be fast and general-purpose.  Spark extends the popular MapReduce model to efficiently support more types of computations, including interactive queries and stream processing.  Spark is designed to cover a wide range of workloads that previously required separate distributed systems, including batch applications, iterative algorithms, interactive queries, and streaming.  It powers multiple higher-level components specialized for various workloads, such as SQL or machine learning.  Spark can sit on top of hadoop.  Spark is significantly faster than hadoop because it is saving computation in memory rather than to disk and thanks to its understanding of directed, acyclic tasks.
 
 `pyspark` allows for interaction with Spark within python.  The Spark stack is as follows:
 
-* `core`: Spark Core is also home to the API that defines **resilient distributed datasets (RDDs)**, which are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel.  RDDs are immutable. Spark Core provides many APIs for building and manipulating these collections.
-* `Spark SQL`: a package for working with structured data
+* `core`: Spark Core is also home to the API that defines resilient distributed datasets and dataframe.
+* `Spark SQL`: a package for working with structured data.  It puts a schema on RDDs, enabling you to use SQL and DataFrame syntax.
 * `Streaming`: enables the processing of live streams of data
 * `MLlib`: common machine learning functionality designed to scale
 * `GraphX`: library for manipulating graphs
 * `Cluster managers`: Spark can run over a variety of cluster managers such as Hadoop YARN and Apache Mesos
 
-A **wide transformation** shuffles data across nodes while a **narrow transformation** keeps the transformation on a given node.  Using `reduceByKey` is comparable to a shufflesort where you reduce on a node before sending data across nodes.  When there is data loss, Spark will analyze the **Directed Acyclic Graph (DAG) ** to trace back the analysis to through its dependencies to see where a given partition was loss.  This also allows Spark to run operations in parallel.
+**Resilient distributed datasets (RDDs)** are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel.  RDDs are immutable. Spark Core provides many APIs for building and manipulating these collections.  Use RDDs when you need low-level transformations and actions on your data and are working with unstructured or schema-less data.  
+
+There are two types of operations on your data.  A **transformation** like `filter` or `map` return a new RDD.  Its evaluation is **lazy** so it does not take place immediately.  Rather, an **action** triggers the execution of your transformations.  This includes operations such as `take` or `collect`.
+
+Here's some starter code:
+
+        # Creating RDDs
+        rDD = sc.parallelize(data, 4) # Creates an RDD from data with 4 partitions.
+        rDD2 = sc.textFile('readme.md', 4) # creates and RDD from a text file.  Can also use s3, hadoop hdfs, etc.
+
+        # Some transformations
+        rDD.map(lambda x: x*2) # maps a function to the elements
+        rDD.flatMat(lambda x: [x, x+5]) # computes the same as map but flattens the result
+        rDD.filter(lambda x: x % 2 == 0) # returns the element if it evaluates to True
+        rDD.distinct() # returns unique elements
+
+        # Some actions
+        rDD.reduce(lambda a, b: a * b) # aggregates the datasets by taking two elements and returning one (returns the product of all elements).  This must be communicative and associative
+        rDD.take(n) # returns first n results
+        rDD.collect() # returns all elements (be careful with this)
+        rDD.takeOrdered(n, key=func)
+        rDD.sortByKey()
+        rDD.reduceByKey()
+        rDD.groupByKey() # be careful since this can move a lot of data
+
+
+The other main abstraction is a Spark **DataFrame**, which offers speed-ups over RDDs.  A **Dataset** is a distributed collection of data.  A DataFrame is a Dataset organized into named columns.
+
+A **wide transformation** shuffles data across nodes while a **narrow transformation** keeps the transformation on a given node.  Using `reduceByKey` is comparable to a shufflesort where you reduce on a node before sending data across nodes.  When there is data loss, Spark will analyze the **Directed Acyclic Graph (DAG)** to trace back the analysis to through its dependencies to see where a given partition was loss.  This also allows Spark to run operations in parallel.
 
 **Caching** is an important tool with Spark where you can speed up your analysis by reading data out of memory instead of disk.  **Broadcast variables** allows peer-to-peer transfer to speed up transfering data across nodes.
+
+Tools like **Ganglia** help monitor EMR activity.
 
 References
 * [RDD Tranformations](http://spark.apache.org/docs/0.7.3/api/pyspark/pyspark.rdd.RDD-class.html)
@@ -2143,6 +2173,7 @@ Common themes:
   * mergesort
   * Fizzbuzz
   * Palandromes
+  * Anagrams
 
 Common Interview Questions:
 
@@ -2176,3 +2207,6 @@ O'Reilly (Including salary averages): https://www.oreilly.com
 * Week 10 - Runtime Complexity
 * Add more info on regularization
 * Derive linear regression and PCA
+
+List of data engineering tools:
+* https://github.com/igorbarinov/awesome-data-engineering
