@@ -21,7 +21,7 @@
     ** [scipy](#scipy)  
     ** [statsmodels](#statsmodels)  
     ** [sklearn](#sklearn)  
-    ** [boto](#boto)
+    ** [boto](#boto)  
     ** [Plotting with matplotlib and seaborn](#plotting-with-matplotlib-and-seaborn)  
  * [SQL](#sql)  
  * [MongoDB and Pymongo](#mongodb-and-pymongo)  
@@ -44,7 +44,7 @@
     ** [Hypothesis and A/B Testing](#hypothesis-and-a-b-testing)  
     ** [Bayesian Statistics](#bayesian-statistics)  
 * Modeling  
- * [Exploratory Data Analysis][#exploratory-data-analysis]  
+ * [Exploratory Data Analysis](#exploratory-data-analysis)  
  * [Linear Regression Introduction and Univariate](#linear-regression-introduction-and-univariate)  
  * [Multivariate Regression](#multivariate-regression)  
  * [Logistic Regression](#logistic-regression)  
