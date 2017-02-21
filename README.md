@@ -1706,9 +1706,9 @@ Apache Spark is a cluster computing platform designed to be fast and general-pur
 * `GraphX`: library for manipulating graphs
 * `Cluster managers`: Spark can run over a variety of cluster managers such as Hadoop YARN and Apache Mesos
 
-**Resilient distributed datasets (RDDs)** are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel.  RDDs are immutable. Spark Core provides many APIs for building and manipulating these collections.  Use RDDs when you need low-level transformations and actions on your data and are working with unstructured or schema-less data.  
+**Resilient distributed datasets (RDDs)** are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel.  RDDs are immutable. Spark Core provides many APIs for building and manipulating these collections.  Use RDDs when you need low-level transformations and actions on your data and are working with unstructured or schema-less data.  Think of RDDs like a set of instructions rather than stores of data.
 
-There are two types of operations on your data.  A **transformation** like `filter` or `map` return a new RDD.  Its evaluation is **lazy** so it does not take place immediately.  Rather, an **action** triggers the execution of your transformations.  This includes operations such as `take` or `collect`.
+There are two types of operations on your data.  A **transformation** like `filter` or `map` return a new RDD.  Its evaluation is **lazy** so it does not take place immediately.  Rather, an **action** triggers the execution of your transformations.  This includes operations such as `take` or `collect`.  If you do not persist your data using `cache`, you will have to recalculate your RDD entirely for each new action.
 
 Here's some starter code:
 
@@ -1718,30 +1718,58 @@ Here's some starter code:
 
         # Some transformations
         rDD.map(lambda x: x*2) # maps a function to the elements
-        rDD.flatMat(lambda x: [x, x+5]) # computes the same as map but flattens the result
+        rDD.flatMap(lambda x: [x, x+5]) # computes the same as map but flattens the result
+        rDD.flapMapValues() # returns an iterator (often used for tokenization)
         rDD.filter(lambda x: x % 2 == 0) # returns the element if it evaluates to True
-        rDD.distinct() # returns unique elements
+        rDD.distinct() # returns unique elements--this is very expensive
+        rDD.sample() # samples with or without replacement
+        rDD.reduceByKey() # combine values with the same key.  This sends less data over the netork than goupByKey()
+        rDD.groupByKey() # be careful since this can move a lot of data
+        rDD.combineByKey() # combine values with the same key
+        rDD.sortByKey()
+        rDD.keys() # returns just the keys
+        rDD.values() # returns just the values
+
+        # Set operations (transformations)
+        rDD.union(rdd2)
+        rDD.intersection(rdd2)
+        rDD.subtract(rdd2)
+        rDD.subtractByKey
+        rDD.cartesian(rdd2)
+
+        # Joins (transformations).  
+        rDD.join(rDD2)
+        rDD.rightOuterJoin(rDD2)
+        rDD.leftOuterJoin(rDD2)
+        rDD.cogroup(rDD2) # group data from both RDD's sharing the same value
+
+        # Aggregations (transformations)
+        rDD.fold() / rDD.foldByKey()
+        rDD.aggregate()
+        rDD.reduce() / rDD.reduceByKey() # using `ByKey` runs parallel operations for each key and a built-in combiner step
+
 
         # Some actions
         rDD.reduce(lambda a, b: a * b) # aggregates the datasets by taking two elements and returning one (returns the product of all elements).  This must be communicative and associative
         rDD.take(n) # returns first n results
+        rDD.top(n) # returns top n results
         rDD.collect() # returns all elements (be careful with this)
-        rDD.takeOrdered(n, key=func)
-        rDD.sortByKey()
-        rDD.reduceByKey()
-        rDD.groupByKey() # be careful since this can move a lot of data
+        rDD.count()
+        rDD.countByValue()
+        rDD.takeOrdered(n, key=func) # returns n elements based on provided ordering
 
 
 The other main abstraction is a Spark **DataFrame**, which offers speed-ups over RDDs.  A **Dataset** is a distributed collection of data.  A DataFrame is a Dataset organized into named columns.
 
 A **wide transformation** shuffles data across nodes while a **narrow transformation** keeps the transformation on a given node.  Using `reduceByKey` is comparable to a shufflesort where you reduce on a node before sending data across nodes.  When there is data loss, Spark will analyze the **Directed Acyclic Graph (DAG)** to trace back the analysis to through its dependencies to see where a given partition was loss.  This also allows Spark to run operations in parallel.
 
-**Caching** is an important tool with Spark where you can speed up your analysis by reading data out of memory instead of disk.  **Broadcast variables** allows peer-to-peer transfer to speed up transfering data across nodes.
+**Caching** is an important tool with Spark where you can speed up your analysis by reading data out of memory instead of disk.  **Broadcast variables** allows peer-to-peer transfer to speed up transfering data across nodes.  Note that a **BroadcastHashJoin** is a way to join tables when one table is very small.  This is more efficient than a **ShuffleHashJoin**.  *Most latency issues can find their roots in shuffling too much data across the network.*
 
-Tools like **Ganglia** help monitor EMR activity.
+Tools like **Ganglia** help monitor EMR activity.  Apache also has a tool called **Oozie** for queing Spark jobs.  **Airflow** is a prefered tool over Oozie.  AWS also provides a queing solution called **Data Pipeline**.
 
 References
 * [RDD Tranformations](http://spark.apache.org/docs/0.7.3/api/pyspark/pyspark.rdd.RDD-class.html)
+* [Everyday I'm Shuffling (Tips for writing better Spark jobs)](https://www.youtube.com/watch?v=Wg2boMqLjCg)
 
 ---
 
