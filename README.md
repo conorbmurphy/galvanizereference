@@ -1710,13 +1710,13 @@ Apache Spark is a cluster computing platform designed to be fast and general-pur
 
 There are two types of operations on your data.  A **transformation** like `filter` or `map` return a new RDD.  Its evaluation is **lazy** so it does not take place immediately.  Rather, an **action** triggers the execution of your transformations.  This includes operations such as `take` or `collect`.  If you do not persist your data using `cache`, you will have to recalculate your RDD entirely for each new action.
 
-Here's some starter code:
+Here's some starter code.  Creating RDDs:
 
-        # Creating RDDs
         rDD = sc.parallelize(data, 4) # Creates an RDD from data with 4 partitions.
         rDD2 = sc.textFile('readme.md', 4) # creates and RDD from a text file.  Can also use s3, hadoop hdfs, etc.
 
-        # Some transformations
+Some transformations:
+
         rDD.map(lambda x: x*2) # maps a function to the elements
         rDD.flatMap(lambda x: [x, x+5]) # computes the same as map but flattens the result
         rDD.flapMapValues() # returns an iterator (often used for tokenization)
@@ -1730,26 +1730,29 @@ Here's some starter code:
         rDD.keys() # returns just the keys
         rDD.values() # returns just the values
 
-        # Set operations (transformations)
+Set operations (transformations):
+
         rDD.union(rdd2)
         rDD.intersection(rdd2)
         rDD.subtract(rdd2)
         rDD.subtractByKey
         rDD.cartesian(rdd2)
 
-        # Joins (transformations).  
+Joins (transformations):
+
         rDD.join(rDD2)
         rDD.rightOuterJoin(rDD2)
         rDD.leftOuterJoin(rDD2)
         rDD.cogroup(rDD2) # group data from both RDD's sharing the same value
 
-        # Aggregations (transformations)
+Aggregations (transformations):
+
         rDD.fold() / rDD.foldByKey()
         rDD.aggregate()
         rDD.reduce() / rDD.reduceByKey() # using `ByKey` runs parallel operations for each key and a built-in combiner step
 
+Some actions:
 
-        # Some actions
         rDD.reduce(lambda a, b: a * b) # aggregates the datasets by taking two elements and returning one (returns the product of all elements).  This must be communicative and associative
         rDD.take(n) # returns first n results
         rDD.top(n) # returns top n results
@@ -1759,7 +1762,14 @@ Here's some starter code:
         rDD.takeOrdered(n, key=func) # returns n elements based on provided ordering
 
 
-The other main abstraction is a Spark **DataFrame**, which offers speed-ups over RDDs.  A **Dataset** is a distributed collection of data.  A DataFrame is a Dataset organized into named columns.
+The other main abstraction is a Spark **DataFrame**, which offers speed-ups over RDDs.  A **Dataset** is a distributed collection of data.  A DataFrame is a Dataset organized into named columns.  There are some optimizations that are built into DataFrames that are not built into RDDs.  Spark is moving more towards DataFrames than RDDs.  This will get you started with DataFrames:
+
+        df = spark.read.json("examples/src/main/resources/people.json")
+        df.show()
+        df.printSchema()
+        df.select(df['name'], df['age'] + 1).show()
+        df.filter(df['age'] > 21).show()
+        df.groupBy("age").count().show()
 
 A **wide transformation** shuffles data across nodes while a **narrow transformation** keeps the transformation on a given node.  Using `reduceByKey` is comparable to a shufflesort where you reduce on a node before sending data across nodes.  When there is data loss, Spark will analyze the **Directed Acyclic Graph (DAG)** to trace back the analysis to through its dependencies to see where a given partition was loss.  This also allows Spark to run operations in parallel.
 
