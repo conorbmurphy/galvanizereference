@@ -1708,7 +1708,7 @@ Apache Spark is a cluster computing platform designed to be fast and general-pur
 
 **Resilient distributed datasets (RDDs)** are Spark’s main programming abstraction. RDDs represent a collection of items distributed across many compute nodes that can be manipulated in parallel.  RDDs are immutable. Spark Core provides many APIs for building and manipulating these collections.  Use RDDs when you need low-level transformations and actions on your data and are working with unstructured or schema-less data.  Think of RDDs like a set of instructions rather than stores of data.
 
-There are two types of operations on your data.  A **transformation** like `filter` or `map` return a new RDD.  Its evaluation is **lazy** so it does not take place immediately.  Rather, an **action** triggers the execution of your transformations.  This includes operations such as `take` or `collect`.  If you do not persist your data using `cache`, you will have to recalculate your RDD entirely for each new action.
+There are two types of operations on your data.  A **transformation** like `filter` or `map` return a new RDD.  Its evaluation is **lazy** so it does not take place immediately.  Rather, an **action** triggers the execution of your transformations.  This includes operations such as `take` or `collect`.  If you do not persist your data using `cache` or `persist` (an alias for `cache` with memory only), you will have to recalculate your RDD entirely for each new action.
 
 Here's some starter code.  Creating RDDs:
 
@@ -1775,11 +1775,17 @@ A **wide transformation** shuffles data across nodes while a **narrow transforma
 
 **Caching** is an important tool with Spark where you can speed up your analysis by reading data out of memory instead of disk.  **Broadcast variables** allows peer-to-peer transfer to speed up transfering data across nodes.  Note that a **BroadcastHashJoin** is a way to join tables when one table is very small.  This is more efficient than a **ShuffleHashJoin**.  *Most latency issues can find their roots in shuffling too much data across the network.*
 
+**Spark Streaming** uses **DStreams or Discretized streams** for stream processing.  A new abstraction here is a **receiver** that receives data from any source that can stream data like Kinesis, Kafka, Twitter, etc and creates a DStream.  Basic sources for stream processing include file systems, socket connections, and Akka.  More advanced sources are Kafka, Flume, Kinesis, Twitter, etc.  A reliable receiver will send an acknowledgement of data receipt where as an unreliable one will not.  *On DStreams, you can conduct transformations (both stateless and stateful transformations) and output operations.*  The former is lazily evaluated and the latter creates an output.  **Window transformations** will count the elements within a given window.
+
+**Structured Streaming** looks to relieve the user from having to reason about streaming.  This allows you to, among other things, combine static and streaming datasets.  It is still in Alpha in 2.1.
+
 Tools like **Ganglia** help monitor EMR activity.  Apache also has a tool called **Oozie** for queing Spark jobs.  **Airflow** is a prefered tool over Oozie.  AWS also provides a queing solution called **Data Pipeline**.
 
 References
 * [RDD Tranformations](http://spark.apache.org/docs/0.7.3/api/pyspark/pyspark.rdd.RDD-class.html)
 * [Everyday I'm Shuffling (Tips for writing better Spark jobs)](https://www.youtube.com/watch?v=Wg2boMqLjCg)
+* [Spark Streaming Videos from Datastax](https://academy.datastax.com/resources/getting-started-apache-spark?unit=spark-streaming-discretized-stream)
+* [Databricks on Structured Streaming](https://www.slideshare.net/databricks/a-deep-dive-into-structured-streaming)
 
 ---
 
