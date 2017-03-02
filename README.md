@@ -78,7 +78,8 @@
  * [Imbalanced Classes](#imbalanced-classes)  
  * [Recommender systems](#recommender-systems)  
  * [Graph Theory](#graph-theory)  
- * [Helpful Visualization](#helpful-visualizations)  
+ * [Probabilitic Data Structures](#probabilitic-data-structures)  
+ * [Helpful Visualizations](#helpful-visualizations)  
  * [Note on Style and Other Tools](#note-on-style-and-other-tools)  
  * [Career Pointers](#career-pointers)  
 
@@ -2169,6 +2170,23 @@ You can find communities in your network using the following:
 Resources:
 * NetworkX for a python package
 * Gephi for graphing
+
+
+---
+
+## Probabilitic Data Structures ##
+
+At a high level, **probabilistic data structures** are algorithms that use randomness to improve its efficiency.  There are two classes of these.  The **Las Vegas type** is guarunteed to find the right answer but has a random element in its runtime.  The **Monte Carlo type** may not find the right answer but has a fixed runtime.  For instance, the former would look at random indices in order to find a result until it finds it while the latter would look at random for a certain number of iterations before completing.  **HyperLogLog**, **locality-sensitive hashing**, and count-min sketch are common implementations of these data structures.  Think of hashing instead of sampling.
+
+A **bloom filter** is a super-fast and space-efficient data structure used to check for set membership.  It can tell you if an item is not in a set or if it probably is in a set, but it can't say for sure if it is in the set.  It also can't be changed.  You use a number of hash functions to see about whether a given item is in a set.  This is a lean way of filtering data that allows you to call more expensive operation on what is not filtered out, such as when Google Chrome filters out malicious websites.
+
+In Spark, actions like `approxCountDistinct` and `approxQuantile` are implementations of this approach, also known as approximative algorithms.
+
+Resources:
+* [It Probably Works](https://www.youtube.com/watch?v=FSlPU5Nrvds)
+* [Bloom filters](https://www.youtube.com/watch?v=-SuTGoFYjZs)
+* [Approximative Algorithms in Spark](https://databricks.com/blog/2016/05/19/approximate-algorithms-in-apache-spark-hyperloglog-and-quantiles.html)
+* [Original count-min paper](http://www.sciencedirect.com/science/article/pii/S0196677403001913)
 
 ---
 
