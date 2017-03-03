@@ -1548,6 +1548,8 @@ The group sum of squares tells you the spread of your clusters.  This both indic
 
 You can use standard distance metrics like Euclidean, Manhattan, and cosine similarity.  Other options like **DBSCAN** or **OPTICS** does clustering while dealing with the noise.
 
+See also *Locality-sensitive hashing* for a comparable clustering method.
+
 ![Image of Time DBSCAN](https://github.com/conorbmurphy/galvanizereference/blob/master/images/dbscan.png)
 
 Resources:
@@ -2176,9 +2178,28 @@ Resources:
 
 ## Probabilitic Data Structures ##
 
-At a high level, **probabilistic data structures** are algorithms that use randomness to improve its efficiency.  There are two classes of these.  The **Las Vegas type** is guarunteed to find the right answer but has a random element in its runtime.  The **Monte Carlo type** may not find the right answer but has a fixed runtime.  For instance, the former would look at random indices in order to find a result until it finds it while the latter would look at random for a certain number of iterations before completing.  **HyperLogLog**, **locality-sensitive hashing**, and count-min sketch are common implementations of these data structures.  Think of hashing instead of sampling.
+At a high level, **probabilistic data structures** are algorithms that use randomness to improve its efficiency.  There are two classes of these.  The **Las Vegas type** is guaranteed to find the right answer but has a random element in its runtime.  The **Monte Carlo type** may not find the right answer but has a fixed runtime.  For instance, the former would look at random indices in order to find a result until it finds it while the latter would look at random indices for a certain number of iterations before completing.  Bloom filters, HyperLogLog, locality-sensitive hashing, and count-min sketch are common implementations of these data structures.  Think of using hashing with a large n instead of sampling.
 
-A **bloom filter** is a super-fast and space-efficient data structure used to check for set membership.  It can tell you if an item is not in a set or if it probably is in a set, but it can't say for sure if it is in the set.  It also can't be changed.  You use a number of hash functions to see about whether a given item is in a set.  This is a lean way of filtering data that allows you to call more expensive operation on what is not filtered out, such as when Google Chrome filters out malicious websites.
+A **bloom filter** is a super-fast and space-efficient probabilitic data structure used to check for *set membership*.  It can tell you if an item is not in a set or if it probably is in a set, but it can't say for sure if it is in the set.  It also can't be changed without using a more advanced algorithm.  You use a number of hash functions to see about whether a given item is in a set.  This is a lean way of filtering data that allows you to call more expensive operation on what is not filtered out, such as when Google Chrome filtering out malicious websites.  With bloom filters, you define two variables: `m` (your number of bits) and `k` (the number of different hash functions defined).  Here's an example:
+
+        import numpy as np
+
+        m = 18 # number of bits
+        k = 3 # constant, smaller than m and determined by intended false positive rate
+
+        x, y, z = np.zeros(m), np.zeros(m), np.zeros(m)
+        x[1], x[5], x[13], y[4], y[11], y[16], z[3], z[5], z[11] = np.ones(9)
+        print("\x1b[34;1m"); print('x', x); print('y', y); print('z', z)
+
+        w = np.zeros(m)
+        w[4], w[13], w[15] = np.ones(3)
+        print("\x1b[31;1mw", w, "\x1b[0m")
+
+A bloom filter will look for the membership of `w` within the set {x, y, z}.
+
+**HyperLogLog** is an algorithm for *counting distinct values*, approximating the number of distinct elements in a multiset (a multiset is a set that allows duplicate values).  It evolved from the observation that the cardinality, or number of elements, of a multiset of uniformly distributed random numbers can be estimated by calculating the maximum number of leading zeros in the binary representation of each number in the set.  If the maximum number of leading zeros is `n` then an estimate for the number of distinct elements in the set is `2**n`.  This approach has high variance so HyperLogLog minimizes this by using multiple subsets of the multiset, calculating the max number of leading zeros, and using the harmonic mean to combine the estimates to estimate the total cardinality.
+
+**Locality-sensitive hashing** addresses the curse of dimensionality by hashing input items so that similar items map to the same buckets with high probability.  Its aim is to maximize the probability of collisions for similar items.  This approach has great similarities to clustering and KNN
 
 In Spark, actions like `approxCountDistinct` and `approxQuantile` are implementations of this approach, also known as approximative algorithms.
 
@@ -2187,6 +2208,7 @@ Resources:
 * [Bloom filters](https://www.youtube.com/watch?v=-SuTGoFYjZs)
 * [Approximative Algorithms in Spark](https://databricks.com/blog/2016/05/19/approximate-algorithms-in-apache-spark-hyperloglog-and-quantiles.html)
 * [Original count-min paper](http://www.sciencedirect.com/science/article/pii/S0196677403001913)
+* [Locality-Sensiteve Hashing at Uber on Spark](https://www.youtube.com/watch?v=Ha7_Vf2eZvQ&feature=youtu.be)
 
 ---
 
