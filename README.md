@@ -2187,27 +2187,30 @@ A **bloom filter** is a super-fast and space-efficient probabilitic data structu
         m = 18 # number of bits
         k = 3 # constant, smaller than m and determined by intended false positive rate
 
-        x, y, z = np.zeros(m), np.zeros(m), np.zeros(m)
+        x, y, z = np.zeros(m), np.zeros(m), np.zeros(m) # suppose these are IP address of website visitors
         x[1], x[5], x[13], y[4], y[11], y[16], z[3], z[5], z[11] = np.ones(9)
         print("\x1b[34;1m"); print('x', x); print('y', y); print('z', z)
 
-        w = np.zeros(m)
+        w = np.zeros(m) # suppose this is somebody who hasn't visited a website yet
         w[4], w[13], w[15] = np.ones(3)
         print("\x1b[31;1mw", w, "\x1b[0m")
 
-A bloom filter will look for the membership of `w` within the set {x, y, z}.
+A bloom filter will look for the membership of `w` within the set {x, y, z}.  *HBase and Cassandra use them to avoid expensive lookups.*
 
-**HyperLogLog** is an algorithm for *counting distinct values*, approximating the number of distinct elements in a multiset (a multiset is a set that allows duplicate values).  It evolved from the observation that the cardinality, or number of elements, of a multiset of uniformly distributed random numbers can be estimated by calculating the maximum number of leading zeros in the binary representation of each number in the set.  If the maximum number of leading zeros is `n` then an estimate for the number of distinct elements in the set is `2**n`.  This approach has high variance so HyperLogLog minimizes this by using multiple subsets of the multiset, calculating the max number of leading zeros, and using the harmonic mean to combine the estimates to estimate the total cardinality.
+**HyperLogLog** is an algorithm for *counting distinct values*, approximating the number of distinct elements in a multiset (a multiset is a set that allows duplicate values).  It evolved from the observation that the cardinality, or number of elements, of a multiset of uniformly distributed random numbers can be estimated by calculating the maximum number of leading zeros in the binary representation of each number in the set.  If the maximum number of leading zeros is `n` then an estimate for the number of distinct elements in the set is `2**n`.  This approach has high variance so HyperLogLog minimizes this by using multiple subsets of the multiset, calculating the max number of leading zeros, and using the harmonic mean to combine the estimates to estimate the total cardinality.  In Spark, actions like `approxCountDistinct` and `approxQuantile` are implementations of this approach, also known as approximative algorithms.
 
 **Locality-sensitive hashing** addresses the curse of dimensionality by hashing input items so that similar items map to the same buckets with high probability.  Its aim is to maximize the probability of collisions for similar items.  This approach has great similarities to clustering and KNN
 
-In Spark, actions like `approxCountDistinct` and `approxQuantile` are implementations of this approach, also known as approximative algorithms.
+Finally, **count-min sketch** serves as a frequency table of events in a stream of data.  It uses hash functions to map events to frequencies.  This is a slight derivation on counting bloom filters.  Instead of bits like we had with bloom filters, we have counters.  We use rows of counters where each row has a different hash function.  Each time you see a value, you increment each of the rows, which hash differently for different values.  When recalling a count, you take the minimum of the values for the counters hashed to the value you're trying to count.  You can set the width and the depth of your counters (basically how many bits and how many counters) based upon your accepted epsilon, or error rate.  This is great for any kind of frequency tracking, NLP, etc.
 
 Resources:
 * [It Probably Works](https://www.youtube.com/watch?v=FSlPU5Nrvds)
-* [Bloom filters](https://www.youtube.com/watch?v=-SuTGoFYjZs)
+* [Bloom filters](http://www.lsi.upc.es/~diaz/p422-bloom.pdf)
+* [Original Bloom Filter Paper](http://dl.acm.org/citation.cfm?id=362692)
 * [Approximative Algorithms in Spark](https://databricks.com/blog/2016/05/19/approximate-algorithms-in-apache-spark-hyperloglog-and-quantiles.html)
 * [Original count-min paper](http://www.sciencedirect.com/science/article/pii/S0196677403001913)
+* [Later Count-Min Paper (easy to read)](https://www.computer.org/csdl/mags/so/2012/01/mso2012010064.pdf)
+* [Probabilistic Data Structures - bloom, count-min and hyperloglog](https://www.youtube.com/watch?v=F7EhDBfsTA8)
 * [Locality-Sensiteve Hashing at Uber on Spark](https://www.youtube.com/watch?v=Ha7_Vf2eZvQ&feature=youtu.be)
 
 ---
@@ -2295,6 +2298,7 @@ O'Reilly (Including salary averages): https://www.oreilly.com
 * Week 10 - Runtime Complexity
 * Add more info on regularization
 * Derive linear regression and PCA
+* LDA
 
 List of data engineering tools:
 * https://github.com/igorbarinov/awesome-data-engineering
