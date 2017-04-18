@@ -620,12 +620,15 @@ Data types include varchar, integer, decimal, date, etc.  The size specifies the
 
 Use `ALTER TABLE` to add indexes.
 
+In **Relational Database Modeling** it's important to have normalized data.  Think of this saying: "The key, the whole key, and nothing but the key, so help me Codd."  First normal form is ensured by atomistic data and having a key.  Second normal form is where each non-key value in your table refers to the whole key (which could be multiple keys).  Third normal form refers to nothing but the key.
+
 Resources:
 * (SQLZoo)[http://sqlzoo.net/wiki/SELECT_basics]
 * (Illustrated Example of Joins)[https://blog.codinghorror.com/a-visual-explanation-of-sql-joins/]
 * (Databases by market share)[http://db-engines.com/en/ranking]
 * (SQL practice)[https://pgexercises.com/]
 * (SQL data types)[http://www.w3schools.com/sql/sql_datatypes.asp]
+* (Normalization)[http://www.bkent.net/Doc/simple5.htm]
 
 ### SQL using Pandas and Psycopg2 ###
 
